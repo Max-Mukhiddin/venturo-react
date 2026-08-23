@@ -110,7 +110,7 @@ export default function OrdersPage() {
                 <img
                   className=""
                   src={
-                    authMember?.memberType === MemberType.RESTAURANT
+                    authMember?.memberType === MemberType.ADMIN
                       ? "/icons/restaurant.svg"
                       : "/icons/user-badge.svg"
                   }
@@ -118,15 +118,17 @@ export default function OrdersPage() {
                 />
               </span>
               <p>{authMember?.memberNick}</p>
-              <p>  {authMember?.memberType}</p>
+              <p> {authMember?.memberType}</p>
             </Stack>
             <Stack className="address">
               <Divider width="100%" height="2" bg="#A1A1A1" />
               <Box className="address-box">
                 <LocationOnIcon />
-                <p>{authMember?.memberAddress
+                <p>
+                  {authMember?.memberAddress
                     ? authMember.memberAddress
-                    : "no adress"}</p>
+                    : "no adress"}
+                </p>
               </Box>
             </Stack>
           </Stack>

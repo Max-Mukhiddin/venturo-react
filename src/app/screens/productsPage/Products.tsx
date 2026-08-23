@@ -49,7 +49,7 @@ export default function Products(props: ProDuctsProps) {
     order: "createdAt",
     page: 1,
     limit: 8,
-    productCollection: ProductCollection.DISH,
+    productCollection: ProductCollection.CLIMBING,
     search: "",
   });
   const [searchText, setSearchText] = useState<string>("");
@@ -112,7 +112,7 @@ export default function Products(props: ProDuctsProps) {
     <div className="products">
       <Container>
         <Stack className="title-container">
-          <Typography className="products-title">Burak Restaurant</Typography>
+          <Typography className="products-title">Venturo</Typography>
           <Box className="search-container">
             <input
               type="text"
@@ -187,48 +187,93 @@ export default function Products(props: ProDuctsProps) {
               <Button
                 variant="contained"
                 color={
-                  productSearch.productCollection === ProductCollection.DISH
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() => searchCollectionHandler(ProductCollection.DISH)}
-              >
-                DISH
-              </Button>
-              <Button
-                variant="contained"
-                color={
-                  productSearch.productCollection === ProductCollection.SALAD
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() => searchCollectionHandler(ProductCollection.SALAD)}
-              >
-                SALAD
-              </Button>
-              <Button
-                variant="contained"
-                color={
-                  productSearch.productCollection === ProductCollection.DRINK
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() => searchCollectionHandler(ProductCollection.DRINK)}
-              >
-                DRINK
-              </Button>
-              <Button
-                variant="contained"
-                color={
-                  productSearch.productCollection === ProductCollection.DESSERT
+                  productSearch.productCollection === ProductCollection.CLIMBING
                     ? "primary"
                     : "secondary"
                 }
                 onClick={() =>
-                  searchCollectionHandler(ProductCollection.DESSERT)
+                  searchCollectionHandler(ProductCollection.CLIMBING)
                 }
               >
-                DESERT
+                CLIMBING
+              </Button>
+              <Button
+                variant="contained"
+                color={
+                  productSearch.productCollection === ProductCollection.CAMPING
+                    ? "primary"
+                    : "secondary"
+                }
+                onClick={() =>
+                  searchCollectionHandler(ProductCollection.CAMPING)
+                }
+              >
+                CAMPING
+              </Button>
+              <Button
+                variant="contained"
+                color={
+                  productSearch.productCollection === ProductCollection.HIKING
+                    ? "primary"
+                    : "secondary"
+                }
+                onClick={() =>
+                  searchCollectionHandler(ProductCollection.HIKING)
+                }
+              >
+                HIKING
+              </Button>
+              <Button
+                variant="contained"
+                color={
+                  productSearch.productCollection === ProductCollection.TREKKING
+                    ? "primary"
+                    : "secondary"
+                }
+                onClick={() =>
+                  searchCollectionHandler(ProductCollection.TREKKING)
+                }
+              >
+                TREKKING
+              </Button>
+              <Button
+                variant="contained"
+                color={
+                  productSearch.productCollection === ProductCollection.CYCLING
+                    ? "primary"
+                    : "secondary"
+                }
+                onClick={() =>
+                  searchCollectionHandler(ProductCollection.CYCLING)
+                }
+              >
+                CYCLING
+              </Button>
+              <Button
+                variant="contained"
+                color={
+                  productSearch.productCollection === ProductCollection.APPAREL
+                    ? "primary"
+                    : "secondary"
+                }
+                onClick={() =>
+                  searchCollectionHandler(ProductCollection.APPAREL)
+                }
+              >
+                APPAREL
+              </Button>
+              <Button
+                variant="contained"
+                color={
+                  productSearch.productCollection === ProductCollection.FOOTWEAR
+                    ? "primary"
+                    : "secondary"
+                }
+                onClick={() =>
+                  searchCollectionHandler(ProductCollection.FOOTWEAR)
+                }
+              >
+                FOOTWEAR
               </Button>
               <Button
                 variant="contained"
@@ -248,17 +293,16 @@ export default function Products(props: ProDuctsProps) {
                 {products.length !== 0 ? (
                   products.map((product: Product) => {
                     const imagePath = `${serverApi}/${product.productImages[0]}`;
-                    const sizeVolume =
-                      product.productCollection === ProductCollection.DRINK
-                        ? product.productVolume + " litr"
-                        : product.productSize + " size";
+                    const sizeLabel = product.productSize
+                      ? `${product.productSize} size`
+                      : "Standard";
                     return (
                       <Stack
                         key={product._id}
                         className="card"
                         onClick={() => chooseDishHandler(product._id)}
                       >
-                        <Chip label={sizeVolume} size="small" />
+                        <Chip label={sizeLabel} size="small" />
 
                         <CardMedia
                           component="img"

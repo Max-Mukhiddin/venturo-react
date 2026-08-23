@@ -16,10 +16,9 @@ import { ProductCollection } from "../../../lib/enums/product.enum";
 import { serverApi } from "../../../lib/config";
 
 /** REDUX SLICE & SELECTOR **/
-const newDishRetriever = createSelector(
-  retrieveNewDishes,
-  (newDishes) => ({ newDishes })
-);
+const newDishRetriever = createSelector(retrieveNewDishes, (newDishes) => ({
+  newDishes,
+}));
 
 export default function NewDishes() {
   const { newDishes } = useSelector(newDishRetriever);
@@ -35,13 +34,19 @@ export default function NewDishes() {
             <CssVarsProvider>
               {newDishes.length !== 0 ? (
                 newDishes.map((product: Product) => {
-                   const imagePath = `${serverApi}/${product.productImages[0]}`;
-                   const sizeVolume = product.productCollection === ProductCollection.DRINK ? product.productVolume + "l" : product.productSize + " size";
-                  
+                  const imagePath = `${serverApi}/${product.productImages[0]}`;
+                  const sizeLabel = product.productSize
+                    ? `${product.productSize} size`
+                    : "Standard";
+
                   return (
-                    <Card key={product._id} variant="outlined" className={"card"}>
+                    <Card
+                      key={product._id}
+                      variant="outlined"
+                      className={"card"}
+                    >
                       <CardOverflow>
-                        <div className="product-sale">{sizeVolume}</div>
+                        <div className="product-sale">{sizeLabel}</div>
                         <AspectRatio ratio="1">
                           <img src={imagePath} alt="" />
                         </AspectRatio>
@@ -54,11 +59,13 @@ export default function NewDishes() {
                               {product.productName}
                             </Typography>
                             <Divider width="2" height="24" bg="#d9d9d9" />
-                            <Typography className={"price"}>${product.productPrice}</Typography>
+                            <Typography className={"price"}>
+                              ${product.productPrice}
+                            </Typography>
                           </Stack>
                           <Stack>
                             <Typography className={"views"}>
-                             {product.productViews}
+                              {product.productViews}
                               <VisibilityIcon
                                 sx={{ fontSize: 20, marginLeft: "5px" }}
                               />

@@ -23,9 +23,8 @@ export default function Footer() {
               <img width={"100px"} src={"/icons/burak.svg"} />
             </Box>
             <Box className={"foot-desc-txt"}>
-              Focusing on the gourmet Turkish breakfast as well as the youth
-              society, CZN Burak Gurme aims to bring Turkish cuisine back. CZN
-              Burak Gurme creates an illusion with its cuisine.
+              Venturo brings together quality gear, outdoor essentials, and
+              everyday adventure in one place.
             </Box>
             <Box className="sns-context">
               <img src={"/icons/facebook.svg"} />
