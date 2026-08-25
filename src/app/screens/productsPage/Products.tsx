@@ -368,7 +368,10 @@ export default function Products(props: ProDuctsProps) {
           <Stack className={"pagination-section"}>
             <Pagination
               count={
-                products.length !== 0
+                // Backend doesn't return a total count, so a full page
+                // (products.length === limit) is the only signal that a
+                // next page might exist; a short page is the real last one.
+                products.length === productSearch.limit
                   ? productSearch.page + 1
                   : productSearch.page
               }

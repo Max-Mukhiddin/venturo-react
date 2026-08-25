@@ -5,6 +5,23 @@ This repo's own next-steps log — separate from the backend's
 execution (see `docs/ai/COMPLETED_TASKS.md`) but explicitly deferred, not
 fixed, at the time they were found.
 
+## Backend gap: no price-range filtering on `GET /product/all`
+
+Checked directly, not assumed: `../venturo/docs/ai/API_REFERENCE.md`
+documents this route's full query param list (`page`, `limit`, `order`,
+`sortDirection`, `productCollection`, `search`) with no min/max price
+param, and `Product.service.ts`'s `getProducts` confirms it at the code
+level — the aggregation's `match` object only ever sets `productStatus`,
+`productCollection`, and a `productName` regex; there's no `productPrice`
+range logic (`$gte`/`$lte` or otherwise) anywhere in the function.
+
+If the Shop List (Products) page needs a price filter UI, the backend
+route needs min/max query param support added first — that's backend
+work to scope, not something to fake with a client-side workaround
+(fetching everything and filtering in the browser would break pagination
+and defeat the point of server-side filtering). Flagged here so it isn't
+assumed to already exist when that page's functionality is next touched.
+
 ## `CI=true npm run build` fails on pre-existing ESLint warnings
 
 Plain `npm run build` succeeds (exit 0) and is what this repo's documented
@@ -214,3 +231,28 @@ copy was invented.
   `docs/ai/COMPLETED_TASKS.md`)
 - `lib/data/plans.ts`: events copy ("Hot Discount Days", "Chef Deming",
   "New Restaurant is opening in Florida") consumed by `Events.tsx`
+
+### Phase 2 — Products list
+- `src/css/products.css` and card/grid imagery: full re-theme for the
+  outdoor-gear look
+- `Products.tsx`'s "Our Family Brands" section (lines ~392–408): four
+  Burak-branded images (`gurme.webp`, `seafood.webp`, `sweets.webp`,
+  `doner.webp`) and heading — food-domain content with no clear outdoor-gear
+  equivalent decided yet; not part of the original migration-plan text for
+  this phase, flagging now that it was found
+- `Products.tsx`'s "Our address" section (lines ~410–425): an embedded
+  Google Maps iframe pointing at a placeholder South Korea location —
+  content-only, no API key/dependency involved (this is the no-key embed
+  URL format, not the JS Maps API), so no blocker like the Contact Us map
+  decision — just needs real content or a decision to remove it
+
+### Phase 3 — Product detail
+- `ChosenProduct.tsx`/`css/products.css`: full re-theme for the
+  outdoor-gear look (slider/card styling, "Product Detail" heading, etc.)
+- No Burak-specific hardcoded copy found in this component beyond
+  generic styling — the rating hardcode was the one non-visual issue and
+  is already fixed (see `docs/ai/COMPLETED_TASKS.md`)
+- `reviewCount` is now on the `Product` type (added alongside
+  `averageRating`) but not yet surfaced anywhere in the UI (e.g. a
+  "(N reviews)" label next to the stars) — noting as available for a
+  future targeted addition, not implemented since it wasn't asked for

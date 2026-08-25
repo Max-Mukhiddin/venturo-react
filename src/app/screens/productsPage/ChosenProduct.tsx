@@ -61,7 +61,7 @@ export default function ChosenProduct(props: ChosenProDuctProps) {
       .getRestaurant()
       .then((data) => setRestaurant(data))
       .catch((err) => console.log(err));
-  }, []);
+  }, [productsId]);
 
   if (!chosenProduct) return null;
   return (
@@ -94,7 +94,12 @@ export default function ChosenProduct(props: ChosenProDuctProps) {
             <span className={"resto-name"}>{restaurant?.memberNick}</span>
             <span className={"resto-name"}>{restaurant?.memberPhone}</span>
             <Box className={"rating-box"}>
-              <Rating name="half-rating" defaultValue={2.5} precision={0.5} />
+              <Rating
+                name="half-rating-read"
+                value={chosenProduct.averageRating ?? 0}
+                precision={0.5}
+                readOnly
+              />
               <div className={"evaluation-box"}>
                 <div className={"product-view"}>
                   <RemoveRedEyeIcon sx={{ mr: "10px" }} />

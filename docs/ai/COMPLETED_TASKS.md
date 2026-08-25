@@ -54,3 +54,58 @@ event copy) and is deferred to `docs/ai/NEXT_STEPS.md`'s new "Visual pass
 - Live check (Playwright, real headless Chromium): loaded `/`, confirmed zero failed requests (previously one `FAILED GET http://localhost:3005/undefined`), and confirmed the `ActiveUsers` card's `<img>` now renders `src="/icons/default-user.svg"` for `qa_tester_002` (the only top user, who has no `memberImage`).
 
 **Not done in this session** (deferred to a later visual-design pass, see `docs/ai/NEXT_STEPS.md`): `HomeNavbar.tsx` hero copy, `Statistics.tsx` stats/labels, `Advertisement.tsx` video asset, any remaining `Events.tsx`/`plans.ts` copy, the `burak.svg` logo reference.
+
+## Session — Phase 2: Products List (functional-only pass)
+
+**Type**: One logic bug fix. Category filters, search, sort, and the page
+title were already contract-fixed in an earlier commit (`6ae04fe`) — this
+session's job was to live-verify that wiring against the real backend and
+fix any actual logic bugs found, not re-theme.
+
+| Change | File(s) | What changed |
+|---|---|---|
+| Pagination "phantom next page" fix | `src/app/screens/productsPage/Products.tsx` | `Pagination`'s `count` was `products.length !== 0 ? page + 1 : page` — always offered one more page than the current one, even when the current page had already returned fewer items than `limit` (i.e., was genuinely the last page). The backend's `GET /product/all` returns no total-count field, so there's no authoritative page count to read — fixed using the one signal that is available client-side: `count = products.length === limit ? page + 1 : page`. A full page still offers a tentative next page (unavoidable without backend support); a short page now correctly stops offering one. |
+
+**Verification**:
+- `npx tsc --noEmit` — zero errors.
+- `npm run build` — succeeds (exit 0).
+- Live check (Playwright, real headless Chromium) against `/products`:
+  - All 8 category buttons (CLIMBING/CAMPING/HIKING/TREKKING/CYCLING/APPAREL/FOOTWEAR/OTHER) send correct `productCollection` query values.
+  - Search box (type + Enter) sends a correctly URL-encoded `search` param; the clear (×) button resets it.
+  - All three sort buttons (NEW/PRICE/VIEWS) send the correct `order` value.
+  - **Pagination fix confirmed live with 0 results**: the control renders only page `1` with the next-page button disabled, instead of the old bug's phantom enabled next page.
+  - Zero failed requests, zero console errors throughout.
+
+**Full-page → short-page transition, re-verified with real data (follow-up)**: the dev DB had only 1 product total at the time of the check above (`PAUSE` status, not even publicly visible), so the transition itself hadn't been observed, only code-reviewed. 5 `qa_`-tagged `PROCESS`-status test products were added directly to MongoDB (`qa_pagination_test_1` CAMPING/$45, `_2` HIKING/$60, `_3` APPAREL/$30, `_4` CAMPING/$55, `_5` CAMPING/$65 — 3 of the 5 share the CAMPING category, since the UI's category buttons are the only way to view a filtered subset and each of 3 lone categories alone wouldn't have enough volume). This went through direct DB insertion, not `POST /admin/product/create` — the two existing `ADMIN` accounts' credentials aren't known/documented anywhere in this repo or the backend's, and creating a third is blocked by the single-tenant constraint; confirmed with the user this fallback was acceptable, so the real admin endpoint/auth/multer path was **not** exercised, only `GET /product/all` + the frontend's pagination logic.
+
+`Products.tsx`'s `limit` was temporarily changed from `8` to `2` (no UI control exists to adjust it) to make the transition observable with a small dataset, then reverted immediately after — confirmed via `git diff` that only the real pagination fix remains, and `tsc`/build re-run clean post-revert.
+
+Real click-through result, filtering to CAMPING (3 `PROCESS` products, `limit=2`):
+- Page 1: `GET /product/all/?...&page=1&limit=2&productCollection=CAMPING` → 2 products, pagination shows `["1", "2"]`, next-page button **enabled**.
+- Clicked next → Page 2: `GET /product/all/?...&page=2&limit=2&productCollection=CAMPING` → 1 product (`qa_pagination_test_1`), next-page button **correctly disabled** — screenshotted, confirmed visually (the `→` arrow greyed out vs. the active `←`).
+
+The `qa_pagination_test_1`–`_5` products are left in the dev database intentionally, matching the backend's own prior-session convention for `qa_`-tagged test data — not cleaned up.
+
+**Not done in this session** (deferred to a later visual-design pass, see `docs/ai/NEXT_STEPS.md`): `products.css`/grid imagery re-theme, the "Our Family Brands" Burak-image section, the "Our address" placeholder map section.
+
+## Session — Phase 3: Product Detail (functional-only pass)
+
+**Type**: Two fixes — the planned rating-wiring fix, plus one additional
+latent bug found while in the file per the standing "flag, don't ignore
+what's sitting right there" rule.
+
+| Change | File(s) | What changed |
+|---|---|---|
+| Real rating fields on `Product` type | `src/lib/types/product.ts` | Added `averageRating: number` and `reviewCount: number` — both genuinely exist on the backend schema (added in the backend's Session 6) but were missing from this frontend's `Product` interface entirely. |
+| Wired real rating display | `src/app/screens/productsPage/ChosenProduct.tsx` | `<Rating defaultValue={2.5} precision={0.5} />` (hardcoded, and — since it had no `readOnly`/controlled `value` — silently interactive with no submit handler, i.e. a second decorative/misleading control) replaced with `<Rating value={chosenProduct.averageRating ?? 0} precision={0.5} readOnly />`. Now reads real backend data and can no longer be clicked to show a fake, unsubmitted rating change. |
+| Stale-product-on-navigation bug (found, not planned) | `src/app/screens/productsPage/ChosenProduct.tsx` | The data-fetch `useEffect` had `productsId` read via closure but an empty `[]` dependency array — if a future feature ever links from one product detail page directly to another (no such link exists today, so currently dormant/unreachable, but React Router v5 does *not* remount this component on a params-only route change), the page would keep showing the previous product's data forever. Added `productsId` to the dependency array. Did **not** add the `setChosenProduct`/`setRestaurant` dispatch-wrapper functions the ESLint rule also flags — those are reconstructed on every render by this file's `actionDispatch(useDispatch())` pattern, so including them would refetch on every render instead of only when the id changes; that's pre-existing lint debt already tracked in `docs/ai/NEXT_STEPS.md`'s ESLint section, not part of this fix. |
+
+**Explicitly not built** (per instruction): a review-*submission* UI (`POST /review/create`) — a new feature, not a fix to existing UI, out of scope for this pass.
+
+**Verification**:
+- `npx tsc --noEmit` — zero errors.
+- `npm run build` — succeeds (exit 0).
+- Live check (Playwright, real headless Chromium) against `qa_pagination_test_4` (0 reviews at the time): rating renders `aria-label="0 Stars"`, 0 filled star icons, 0 `<input type=radio>` elements present (confirms genuinely read-only, not just visually static) — the empty-state path renders correctly, no crash, no fallback to the old hardcoded `2.5`.
+- **End-to-end confirmation**: logged in as `qa_tester_002` (real credentials from Phase 0), submitted a real review via `POST /review/create` (`rating: 4`, `qa_`-tagged comment) — `201 Created`. Reloaded the product detail page: rating now renders `aria-label="4 Stars"`, screenshot confirms 4 filled / 1 empty star. The review is left in place as `qa_`-tagged test data, matching this repo's established convention for such data (see Phase 2).
+
+**Not done in this session** (deferred to a later visual-design pass, see `docs/ai/NEXT_STEPS.md`): `ChosenProduct.tsx`/`products.css` re-theme; `reviewCount` is now on the `Product` type but not yet surfaced in the UI (no "(N reviews)" label) — available for a future targeted addition, not built since it wasn't asked for.

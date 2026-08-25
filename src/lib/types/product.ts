@@ -15,6 +15,8 @@ export interface Product {
   productDesc?: string;
   productImages: string[];
   productViews: number;
+  averageRating: number;
+  reviewCount: number;
   createdAt: Date;
   updatedAt: Date;
 }
