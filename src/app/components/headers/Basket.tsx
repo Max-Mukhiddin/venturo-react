@@ -11,7 +11,6 @@ import { CartItem } from "../../../lib/types/search";
 import { Messages, serverApi } from "../../../lib/config";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
-import OrderService from "../../services/OrderService";
 
 interface BasketProps {
   cartItems: CartItem[];
@@ -23,7 +22,7 @@ interface BasketProps {
 
 export default function Basket(props: BasketProps) {
   const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
-  const { authMember, setOrderBuilder } = useGlobals();
+  const { authMember } = useGlobals();
   const history = useHistory();
   const itemsPrice = cartItems.reduce(
     (a: number, c: CartItem) => a + c.quantity * c.price,
@@ -43,27 +42,12 @@ export default function Basket(props: BasketProps) {
     setAnchorEl(null);
   };
 
-  const proceedOrderHandler = async () => {
+  const proceedOrderHandler = () => {
     try {
       handleClose();
       if (!authMember) throw new Error(Messages.error2);
 
-      const order = new OrderService();
-      // TODO(Phase 4 — checkout): placeholder address, replace once the
-      // dedicated /checkout screen collects a real ShippingAddress.
-      await order.createOrder(cartItems, {
-        street: "",
-        city: "",
-        state: "",
-        zip: "",
-        country: "",
-      });
-
-      onDeleteAll();
-
-      setOrderBuilder(new Date());
-
-      history.push("/orders");
+      history.push("/checkout");
     } catch (err) {
       console.log(err);
       sweetErrorHandling(err).then();

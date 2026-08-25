@@ -9,6 +9,7 @@ import OtherNavbar from "./components/headers/OtherNavbar";
 import HomeNavbar from "./components/headers/HomeNavbar";
 import Footer from "./components/footer";
 import HelpPage from "./screens/helpPage";
+import CheckoutPage from "./screens/checkoutPage";
 import useBasket from "./hooks/useBasket";
 import AuthenticationModal from "./components/auth";
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../lib/sweetAlert";
@@ -93,6 +94,9 @@ function App() {
         <Switch>
           <Route path="/products">
             <ProductsPage onAdd={onAdd} />
+          </Route>
+          <Route path="/checkout">
+            <CheckoutPage cartItems={cartItems} onDeleteAll={onDeleteAll} />
           </Route>
           <Route path="/orders">
             <OrdersPage />

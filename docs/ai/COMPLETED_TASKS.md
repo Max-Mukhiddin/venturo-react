@@ -109,3 +109,44 @@ what's sitting right there" rule.
 - **End-to-end confirmation**: logged in as `qa_tester_002` (real credentials from Phase 0), submitted a real review via `POST /review/create` (`rating: 4`, `qa_`-tagged comment) — `201 Created`. Reloaded the product detail page: rating now renders `aria-label="4 Stars"`, screenshot confirms 4 filled / 1 empty star. The review is left in place as `qa_`-tagged test data, matching this repo's established convention for such data (see Phase 2).
 
 **Not done in this session** (deferred to a later visual-design pass, see `docs/ai/NEXT_STEPS.md`): `ChosenProduct.tsx`/`products.css` re-theme; `reviewCount` is now on the `Product` type but not yet surfaced in the UI (no "(N reviews)" label) — available for a future targeted addition, not built since it wasn't asked for.
+
+## Session — Phase 4: Cart / Checkout (functional-only pass)
+
+**Type**: New page + two existing files rewired. Highest-risk phase so
+far — the previous "dropdown → immediate order" pattern was already
+confirmed hard-broken by Phase 0 (backend requires `shippingAddress`,
+which nothing collected), so this replaces it with a real checkout step
+per the plan's locked decisions.
+
+| Change | File(s) | What changed |
+|---|---|---|
+| New checkout screen | `src/app/screens/checkoutPage/index.tsx` (new) | Single page — address form (street/city/state/zip/country, all required, never pre-filled from `Member.memberAddress` per the locked decision, since that field is free-text and doesn't match the backend's structured `ShippingAddress` shape) + order summary (items, delivery-fee-inclusive total, same calc as `Basket.tsx`) + one submit button. Auth-gated the same way `ordersPage`/`userPage` already are (`if (!authMember) history.push("/")`). Empty-cart state shows a plain message instead of a broken form. No custom CSS file — relies on MUI component defaults only, deliberately, since this pass is functional-only. |
+| Route wired | `src/app/App.tsx` | Added `/checkout` → `CheckoutPage`, passed `cartItems`/`onDeleteAll` (same props `Basket.tsx` already receives). |
+| Basket simplified | `src/app/components/headers/Basket.tsx` | `proceedOrderHandler` no longer calls `OrderService.createOrder` (removed the now-unused import), no longer calls `onDeleteAll()`, no longer pushes to `/orders` — it now just does `history.push("/checkout")`. The `authMember` check was **kept** (not explicitly named in the instructions as something to preserve, but removing it would have silently regressed the UX: an unauthenticated user clicking "Order" would previously get an immediate clear "Please login first!" toast; without the check they'd instead flash through to `/checkout` and get silently bounced back to `/` with no message, since the new page has its own auth-redirect. Flagging this as a deliberate small preservation, not scope creep — happy to remove it if unintended.) |
+| Phase 0's placeholder removed | `src/app/components/headers/Basket.tsx` | The `TODO(Phase 4)`-marked empty placeholder `ShippingAddress` (`street: "", city: "", ...`) that Phase 0 left in `createOrder`'s call site is gone entirely, along with the call itself — the real address now comes from `CheckoutPage`'s form. |
+
+**Explicitly not touched** (per instruction): the decorative payment-card `<input>` fields in `ordersPage/index.tsx:136-157` — unrelated to this phase, Phase 5's job.
+
+**Verification**:
+- `npx tsc --noEmit` — zero errors.
+- `npm run build` — succeeds (exit 0). Also confirmed via a `CI=true` build that the new `checkoutPage/index.tsx` introduces zero new ESLint warnings, and `App.tsx`/`Basket.tsx`'s existing warnings are unchanged in kind (same pre-existing ones, no new ones added by this session's edits).
+- **Full live end-to-end flow** (Playwright, real headless Chromium, real backend, real `qa_tester_002` login):
+  1. Logged in — confirmed authed UI state.
+  2. Added 2 real products to cart from `/products` (CAMPING category, `qa_pagination_test_4`/`_5`) via the actual "add to cart" button — confirmed cart badge shows `2` and `localStorage.cartData` holds both real items.
+  3. Opened the basket dropdown, clicked "Order" — confirmed it navigated to `/checkout` **and that zero `POST /order/create` calls had fired yet** (proving the create-order call genuinely moved out of `Basket.tsx`, not just UI navigation).
+  4. Filled a real address (street/city/state/zip/country) on `/checkout` — screenshotted.
+  5. Submitted — `POST /order/create` returned **`201`** with the real created order: `orderTotal: 120`, `orderDelivery: 0` (correct — $55 + $65 = $120, at/above the $100 free-shipping threshold), `orderStatus: "PENDING"` (confirms Phase 0's enum rename is live end-to-end), and the exact submitted `shippingAddress` echoed back.
+  6. Confirmed the cart was **genuinely** cleared, not just visually: `localStorage.cartData` → `null` (not just an empty array), cart badge → `0`.
+  7. Landed on `/orders`, screenshotted: the new order appears under the (still old-labeled, Phase-5-scoped) "PAUSED ORDERS" tab showing "Product price $120 + Delivery cost $0 = Total $120" — matching the created order exactly.
+  - Only console errors seen were pre-existing MUI `findDOMNode`/StrictMode deprecation warnings from `AuthenticationModal`, a component untouched by this session.
+
+**Failure-path verification (follow-up, live-tested)**: the happy path alone doesn't prove `onDeleteAll()`/the `/orders` redirect are correctly gated on actual success rather than just "the button was clicked" — tested both explicitly, real backend, real login:
+- **Blank address**: submitted `/checkout` with all 5 fields empty. Result: **0** `POST /order/create` calls fired (client-side `Object.values(address).every(...)` check blocks before any network request — confirms validation is client-side, not "POST and let the backend 400"), a real SweetAlert error (`"Please fulfill all inputs!"`) rendered on screen (not swallowed), user stayed on `/checkout`, `localStorage.cartData` byte-for-byte unchanged before vs. after.
+- **Partial address**: filled Street/City/State/Zip, left Country blank. Identical result — 0 network calls, same error shown, stayed on `/checkout`, cart unchanged. Confirms the check catches a single missing field, not just "all blank."
+- Both screenshotted; the partial-address screenshot shows the error modal open with the form data still intact underneath and the cart badge still reading `1`.
+- **Code-path confirmation matching the live result**: `submitOrderHandler`'s validation throw happens *before* `order.createOrder(...)` is ever called, and `onDeleteAll()`/`setOrderBuilder`/`history.push("/orders")` all sit *after* that `await` inside the same `try` block — so any failure (client-side validation throw, or a hypothetical backend rejection) skips straight to the `catch`, which only calls `sweetErrorHandling`. There is no code path that reaches `onDeleteAll()` without a real `201` from `order.createOrder` resolving first.
+- Not exercised: a genuine backend-side rejection (client validation requires all 5 fields non-empty by the same rule the backend enforces, so there's no way to pass client validation while still failing the backend's schema check through the actual UI — would require bypassing the form entirely, which wouldn't be testing this screen's real code path).
+
+**Other bugs found while in these files**: none beyond what's already fixed above — no additional hardcoded values or broken logic noticed in `App.tsx`/`Basket.tsx` outside the scope of this phase's own changes.
+
+**Not done in this session** (deferred to a later visual-design pass, see `docs/ai/NEXT_STEPS.md`): all styling/layout for the new checkout page (currently bare MUI defaults).

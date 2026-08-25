@@ -256,3 +256,16 @@ copy was invented.
   `averageRating`) but not yet surfaced anywhere in the UI (e.g. a
   "(N reviews)" label next to the stars) — noting as available for a
   future targeted addition, not implemented since it wasn't asked for
+
+### Phase 4 — Checkout (new page)
+- `src/app/screens/checkoutPage/index.tsx`: brand-new page, currently
+  unstyled beyond MUI component defaults (no custom CSS file was created,
+  deliberately — this pass is functional-only) — needs the full design
+  treatment a real page gets: layout, spacing, imagery, and a decision on
+  whether the address-field labels/copy need anything beyond the generic
+  Street/City/State/Zip/Country used here
+- The broken product-image icons visible on this page for `qa_`-tagged
+  test products are expected (those synthetic products have empty
+  `productImages` arrays — no real images were uploaded for test data),
+  not a checkout bug; will resolve naturally once real product images
+  exist
