@@ -6,6 +6,7 @@ import {
   OrderInquiry,
   OrderItemInput,
   OrderUpdateInput,
+  ShippingAddress,
 } from "../../lib/types/order";
 
 class OrderService {
@@ -15,9 +16,12 @@ class OrderService {
     this.path = serverApi;
   }
 
-  public async createOrder(input: CartItem[]): Promise<Order> {
+  public async createOrder(
+    input: CartItem[],
+    shippingAddress: ShippingAddress
+  ): Promise<Order> {
     try {
-      const orderItems: OrderItemInput[] = input.map((cartItem: CartItem) => {
+      const items: OrderItemInput[] = input.map((cartItem: CartItem) => {
         return {
           itemQuantity: cartItem.quantity,
           itemPrice: cartItem.price,
@@ -26,9 +30,11 @@ class OrderService {
       });
 
       const url = `${this.path}/order/create`;
-      const result = await axios.post(url, orderItems, {
-        withCredentials: true,
-      });
+      const result = await axios.post(
+        url,
+        { shippingAddress, items },
+        { withCredentials: true }
+      );
       console.log("createOrder:", result);
       return result.data;
     } catch (err) {

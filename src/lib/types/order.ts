@@ -2,11 +2,24 @@
 import { OrderStatus } from "../enums/order.enum";
 import { Product } from "./product";
 
+export interface ShippingAddress {
+  street: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+}
+
 export interface OrderItemInput {
   itemQuantity: number;
   itemPrice: number;
   productId: string;
   orderId?: string;
+}
+
+export interface CreateOrderInput {
+  shippingAddress: ShippingAddress;
+  items: OrderItemInput[];
 }
 
 export interface OrderItem {

@@ -49,7 +49,15 @@ export default function Basket(props: BasketProps) {
       if (!authMember) throw new Error(Messages.error2);
 
       const order = new OrderService();
-      await order.createOrder(cartItems);
+      // TODO(Phase 4 — checkout): placeholder address, replace once the
+      // dedicated /checkout screen collects a real ShippingAddress.
+      await order.createOrder(cartItems, {
+        street: "",
+        city: "",
+        state: "",
+        zip: "",
+        country: "",
+      });
 
       onDeleteAll();
 

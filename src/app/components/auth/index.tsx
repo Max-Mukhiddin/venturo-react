@@ -149,20 +149,20 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
               <h2>Signup Form</h2>
               <TextField
                 sx={{ marginTop: "7px" }}
-                id="outlined-basic"
+                id="signup-nick"
                 label="username"
                 variant="outlined"
                 onChange={handleUsername}
               />
               <TextField
                 sx={{ my: "17px" }}
-                id="outlined-basic"
+                id="signup-phone"
                 label="phone number"
                 variant="outlined"
                 onChange={handlePhone}
               />
               <TextField
-                id="outlined-basic"
+                id="signup-password"
                 label="password"
                 variant="outlined"
                 onChange={handlePassword}
@@ -210,14 +210,14 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
             >
               <h2>Login Form</h2>
               <TextField
-                id="outlined-basic"
+                id="login-nick"
                 label="username"
                 variant="outlined"
                 sx={{ my: "10px" }}
                 onChange={handleUsername}
               />
               <TextField
-                id={"outlined-basic"}
+                id={"login-password"}
                 label={"password"}
                 variant={"outlined"}
                 type={"password"}

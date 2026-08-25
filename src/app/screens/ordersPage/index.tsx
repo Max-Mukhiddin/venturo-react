@@ -36,14 +36,14 @@ export default function OrdersPage() {
   const [orderInquiry, setOrderInquiry] = useState<OrderInquiry>({
     page: 1,
     limit: 5,
-    orderStatus: OrderStatus.PAUSE,
+    orderStatus: OrderStatus.PENDING,
   });
 
   useEffect(() => {
     const order = new OrderService();
 
     order
-      .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.PAUSE })
+      .getMyOrders({ ...orderInquiry, orderStatus: OrderStatus.PENDING })
       .then((data) => setPausedOrders(data))
       .catch((err) => console.log(err));
 
