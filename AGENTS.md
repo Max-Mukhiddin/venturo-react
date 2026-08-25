@@ -45,7 +45,6 @@ rather than guessing at backend behavior):
 4. Run npx tsc --noEmit and npm run build after each phase.
 5. Do not remove working logic (Redux slices, the service layer, hooks
    like useBasket) unless replaced safely.
-6. Update docs/ai/COMPLETED_TASKS.md (this repo's own docs — separate
-   from the backend's) after major changes.
+6. Update ../venturo/docs/ai/COMPLETED_TASKS.md after major changes.
 
 
