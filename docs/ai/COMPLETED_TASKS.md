@@ -31,6 +31,26 @@ plan (Phase 0–6, plus flagged follow-ups for Wishlist/Blog/Review UI).
   - **Product count corrected**: initial unfiltered `GET /product/all` returning `[]` was mis-read as "zero products in the DB." A direct `db.products.countDocuments({})` against the same `MONGO_URL` the backend's `.env` uses (via the backend's own installed `mongodb` driver, since this frontend repo has no `MONGO_URL`/DB access of its own — it's a pure REST client) found **1 product** ("QA Test Trekking Poles", `productStatus: "PAUSE"`, `productCollection: "TREKKING"`). The public `GET /product/all` correctly excludes non-`PROCESS` products (per the backend's own `DECISIONS.md` #4) — so the empty list was correct filtering behavior, not missing data or a broken fetch. Also confirmed via the `members` collection that this DB is the same one referenced in the backend's test history (`qa_tester_002`, `memberPoints: 1`, present).
   - **Login round-trip confirmed live**, using `qa_tester_002` / `TestPass123!`: `POST /member/login` → `200`, `accessToken`/`connect.sid` cookies set, `localStorage.memberData` populated, navbar switches to the authenticated avatar state, and the auth-gated `/orders` route renders (not redirected to `/`) showing the real profile (nickname, `USER` type, address). Product browsing while authenticated (`/products`) also confirmed.
     - First attempt at this test produced a false-negative `404` — traced to the test script's own selector, not the app at the time: `getByLabel("username"/"password")` landed on the wrong field because every `TextField` in `components/auth/index.tsx` shared the identical `id="outlined-basic"`. Retested with position/type-based selectors to confirm the underlying login flow worked; the duplicate-`id` bug itself was then fixed (see table above) and **re-verified with `getByLabel` directly — now resolves the correct field with no workaround needed**: `POST /member/login` → `200`, `connect.sid`/`accessToken` cookies set, same authenticated round-trip confirmed. Removed from `docs/ai/NEXT_STEPS.md` now that it's fixed and re-verified.
-  - **Incidental finding, not fixed in Phase 0 (deferred to Phase 1)**: `src/app/screens/homePage/ActiveUsers.tsx:30` builds `${serverApi}/${member.memberImage}` with no fallback when a member has no uploaded image, producing a request to `http://localhost:3005/undefined` that the browser blocks (`ERR_BLOCKED_BY_ORB`). `HomeNavbar.tsx` already has the right pattern for this (`memberImage ? ... : "/icons/default-user.svg"`) — `ActiveUsers.tsx` should adopt the same fallback. Still logged in `docs/ai/NEXT_STEPS.md` until fixed.
+  - **Incidental finding, deferred to Phase 1 and fixed there** (see below): `src/app/screens/homePage/ActiveUsers.tsx:30`'s missing-image fallback bug.
 
 **Not done in this session** (explicitly out of Phase 0's scope, per the plan): no visual/theming changes, no `/checkout` route or screen (Phase 4), no re-theme of `ordersPage`'s "Paused" tab labels (Phase 5).
+
+## Session — Phase 1: Homepage (functional-only pass)
+
+**Type**: One bug fix. Per explicit instruction, this pass skips all
+CSS/theming, copy, and asset-swap work for every phase — a separate later
+session with design skills loaded handles that. Everything Phase 1 in the
+original plan called for was visual/copy work (hero copy, stats, video ad,
+event copy) and is deferred to `docs/ai/NEXT_STEPS.md`'s new "Visual pass
+— not yet done" section, untouched here.
+
+| Change | File(s) | What changed |
+|---|---|---|
+| Missing-image fallback fix | `src/app/screens/homePage/ActiveUsers.tsx` | `imagePath` now falls back to `/icons/default-user.svg` when `member.memberImage` is unset, matching the existing pattern in `HomeNavbar.tsx`. Previously built `${serverApi}/undefined`, which the browser blocked (`ERR_BLOCKED_BY_ORB`) — flagged during Phase 0's live verification. |
+
+**Verification**:
+- `npx tsc --noEmit` — zero errors.
+- `npm run build` — succeeds (exit 0).
+- Live check (Playwright, real headless Chromium): loaded `/`, confirmed zero failed requests (previously one `FAILED GET http://localhost:3005/undefined`), and confirmed the `ActiveUsers` card's `<img>` now renders `src="/icons/default-user.svg"` for `qa_tester_002` (the only top user, who has no `memberImage`).
+
+**Not done in this session** (deferred to a later visual-design pass, see `docs/ai/NEXT_STEPS.md`): `HomeNavbar.tsx` hero copy, `Statistics.tsx` stats/labels, `Advertisement.tsx` video asset, any remaining `Events.tsx`/`plans.ts` copy, the `burak.svg` logo reference.

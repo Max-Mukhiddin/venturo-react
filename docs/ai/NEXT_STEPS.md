@@ -193,11 +193,24 @@ Not fixed as part of Phase 0 — out of that phase's scope (contract/config
 fixes only). Worth a dedicated small cleanup pass before any CI pipeline
 is wired up, separate from the phase-by-phase reskin work.
 
-## Incidental bugs found during Phase 0's live verification, not fixed
+## Visual pass — not yet done
 
-1. **`ActiveUsers.tsx:30`** — `` `${serverApi}/${member.memberImage}` `` has
-   no fallback when a member has no uploaded image, producing a request to
-   `http://localhost:3005/undefined` that the browser blocks
-   (`ERR_BLOCKED_BY_ORB`). `HomeNavbar.tsx` already has the right pattern
-   (`memberImage ? ... : "/icons/default-user.svg"`) — `ActiveUsers.tsx`
-   should adopt it. Belongs in Phase 1 (Homepage session).
+This session's functional-only pass (Phases 0–6) deliberately skipped all
+CSS/theming, copy, and brand-asset work, per explicit instruction — a
+separate later session with design skills loaded handles this. Per
+AGENTS.md, `burak.svg`/`burak-ads.mp4` references are untouched
+deliberately (no Venturo replacement asset exists yet) and no replacement
+copy was invented.
+
+### Phase 1 — Homepage
+- `HomeNavbar.tsx`: hero copy ("World's Most Delicious Cousine", "The
+  Choice, not just a choice", "24 hours service"), brand-logo `src`
+  (`/icons/burak.svg`)
+- `Statistics.tsx`: hardcoded stats + labels ("Restaurants: 12", "Menu:
+  50+", etc.)
+- `Advertisement.tsx`: video ad (`video/burak-ads.mp4`)
+- `ActiveUsers.tsx`, `Events.tsx`: remaining food-domain copy, if any
+  (functional bug in `ActiveUsers.tsx` already fixed separately — see
+  `docs/ai/COMPLETED_TASKS.md`)
+- `lib/data/plans.ts`: events copy ("Hot Discount Days", "Chef Deming",
+  "New Restaurant is opening in Florida") consumed by `Events.tsx`
