@@ -81,7 +81,7 @@ export default function OrdersPage() {
                   aria-label="basic tabs example"
                   className={"table_list"}
                 >
-                  <Tab label="PAUSED ORDERS" value={"1"} />
+                  <Tab label="PENDING ORDERS" value={"1"} />
                   <Tab label="PROCESS ORDERS" value={"2"} />
                   <Tab label="FINISHED ORDERS" value={"3"} />
                 </Tabs>
@@ -130,39 +130,6 @@ export default function OrdersPage() {
                     : "no adress"}
                 </p>
               </Box>
-            </Stack>
-          </Stack>
-
-          <Stack className="card-box">
-            <Stack>
-              <input
-                type="text"
-                placeholder="Card number : 5243 4090 2002 7495"
-                className="card-input "
-              />
-              <Box className="card-exp-cvv">
-                <input
-                  type="text"
-                  placeholder="07 / 24"
-                  className="card-input-inner top-input"
-                />
-                <input
-                  type="text"
-                  placeholder="CVV : 010"
-                  className="card-input-inner top-input"
-                />
-              </Box>
-              <input
-                type="text"
-                placeholder="Justin Robertson"
-                className="card-input"
-              />
-            </Stack>
-            <Stack className="card-icons">
-              <img src="/icons/western-card.svg" alt="" className="card-icon" />
-              <img src="/icons/master-card.svg" alt="" className="card-icon" />
-              <img src="/icons/paypal-card.svg" alt="" className="card-icon" />
-              <img src="/icons/visa-card.svg" alt="" className="card-icon" />
             </Stack>
           </Stack>
         </Stack>

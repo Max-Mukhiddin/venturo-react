@@ -12,13 +12,52 @@ import TabPanel from "@mui/lab/TabPanel";
 import "../../../css/help.css";
 import { faq } from "../../../lib/data/faq";
 import { terms } from "../../../lib/data/terms";
+import { ContactMessageInput } from "../../../lib/types/contact";
+import { Messages } from "../../../lib/config";
+import { sweetErrorHandling, sweetTopSuccessAlert } from "../../../lib/sweetAlert";
+import ContactService from "../../services/ContactService";
+
+const emptyContactInput: ContactMessageInput = {
+  name: "",
+  email: "",
+  subject: "",
+  message: "",
+};
 
 export default function HelpPage() {
   const [value, setValue] = React.useState("1");
+  const [contactInput, setContactInput] = React.useState<ContactMessageInput>(
+    emptyContactInput
+  );
 
   /** HANDLERS **/
   const handleChange = (e: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
+  };
+
+  const handleContactChange =
+    (field: keyof ContactMessageInput) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      setContactInput((prev) => ({ ...prev, [field]: e.target.value }));
+    };
+
+  const submitContactHandler = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const isFulfilled = Object.values(contactInput).every(
+        (value) => value.trim() !== ""
+      );
+      if (!isFulfilled) throw new Error(Messages.error3);
+
+      const contact = new ContactService();
+      await contact.submitMessage(contactInput);
+
+      setContactInput(emptyContactInput);
+      await sweetTopSuccessAlert("Message sent!", 800);
+    } catch (err) {
+      console.log("Error, submitContactHandler:", err);
+      sweetErrorHandling(err).then();
+    }
   };
 
   return (
@@ -78,31 +117,46 @@ export default function HelpPage() {
                       <p>Fill out below form to send a message!</p>
                     </Box>
                     <form
-                      action={"#"}
-                      method={"POST"}
+                      onSubmit={submitContactHandler}
                       className={"admin-letter-frame"}
                     >
                       <div className={"admin-input-box"}>
                         <label>Your name</label>
                         <input
                           type={"text"}
-                          name={"memberNick"}
+                          name={"name"}
                           placeholder={"Type your name here"}
+                          value={contactInput.name}
+                          onChange={handleContactChange("name")}
                         />
                       </div>
                       <div className={"admin-input-box"}>
                         <label>Your email</label>
                         <input
                           type={"text"}
-                          name={"memberEmail"}
+                          name={"email"}
                           placeholder={"Type your email here"}
+                          value={contactInput.email}
+                          onChange={handleContactChange("email")}
+                        />
+                      </div>
+                      <div className={"admin-input-box"}>
+                        <label>Subject</label>
+                        <input
+                          type={"text"}
+                          name={"subject"}
+                          placeholder={"Type the subject here"}
+                          value={contactInput.subject}
+                          onChange={handleContactChange("subject")}
                         />
                       </div>
                       <div className={"admin-input-box"}>
                         <label>Message</label>
                         <textarea
-                          name={"memberMsg"}
+                          name={"message"}
                           placeholder={"Your message"}
+                          value={contactInput.message}
+                          onChange={handleContactChange("message")}
                         ></textarea>
                       </div>
                       <Box
