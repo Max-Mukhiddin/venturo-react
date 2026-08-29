@@ -1,12 +1,20 @@
-import { Box, Button, Container, ListItemIcon, Menu, MenuItem, Stack } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  Stack,
+} from "@mui/material";
 import Basket from "./Basket";
 import { NavLink } from "react-router-dom";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { CartItem } from "../../../lib/types/search";
 import { useGlobals } from "../../hooks/useGlobals";
 import { serverApi } from "../../../lib/config";
 import { Logout } from "@mui/icons-material";
- 
+
 interface HomeNavbarProps {
   cartItems: CartItem[];
   onAdd: (item: CartItem) => void;
@@ -37,47 +45,77 @@ export default function HomeNavbar(props: HomeNavbarProps) {
   } = props;
   const { authMember } = useGlobals();
 
-  // HANDLERS
-
   return (
     <div className="home-navbar">
-      <Container className="navbar-container">
-        <Stack className="menu">
-          <Box>
-            <NavLink to={"/"}>
-              <img className="brand-logo" src="/icons/burak.svg" />
-            </NavLink>
-          </Box>
-          <Stack className="links">
+      {/* Announcement bar */}
+      <Box className="hm-topbar">
+        <Container className="hm-inner">
+          <span className="hm-topbar-promo">
+            30-60% off – Mid Season Sale! On All Orders
+          </span>
+          <span className="hm-topbar-currency">
+            Currency United States (USD $)
+            <img src="/icons/hm-caret-down.svg" alt="" className="hm-caret" />
+          </span>
+        </Container>
+      </Box>
+
+      {/* Main navigation */}
+      <Box className="hm-nav">
+        <Container className="hm-inner">
+          <NavLink to={"/"} className="hm-brand">
+            <Box className="brand-lockup">
+              <img
+                className="brand-badge"
+                src="/icons/venturo-badge.svg"
+                alt="Venturo"
+              />
+              <span className="brand-wordmark">VENTURO</span>
+            </Box>
+          </NavLink>
+
+          <Stack className="hm-links">
             <Box className={"hover-line"}>
-              <NavLink to="/" activeClassName={"underline"}>
+              <NavLink to="/" activeClassName={"underline"} exact>
                 Home
               </NavLink>
             </Box>
+            <span className="hm-sep">|</span>
             <Box className={"hover-line"}>
               <NavLink to={"/products"} activeClassName={"underline"}>
                 Products
               </NavLink>
             </Box>
             {authMember ? (
-              <Box className={"hover-line"}>
-                <NavLink to="/orders" activeClassName={"underline"}>
-                  Orders
-                </NavLink>
-              </Box>
+              <>
+                <span className="hm-sep">|</span>
+                <Box className={"hover-line"}>
+                  <NavLink to="/orders" activeClassName={"underline"}>
+                    Orders
+                  </NavLink>
+                </Box>
+                <span className="hm-sep">|</span>
+                <Box className={"hover-line"}>
+                  <NavLink to="/member-page" activeClassName={"underline"}>
+                    My page
+                  </NavLink>
+                </Box>
+              </>
             ) : null}
-            {authMember ? (
-              <Box className={"hover-line"}>
-                <NavLink to="/member-page" activeClassName={"underline"}>
-                  My page
-                </NavLink>
-              </Box>
-            ) : null}
+            <span className="hm-sep">|</span>
             <Box className={"hover-line"}>
               <NavLink to="/help" activeClassName={"underline"}>
                 Help
               </NavLink>
             </Box>
+          </Stack>
+
+          <Stack className="hm-actions">
+            {/* Search lives on the products page — this links there rather
+                than rendering a decorative, non-functional control. */}
+            <NavLink to="/products" className="hm-icon-btn" aria-label="Search">
+              <img src="/icons/hm-search.svg" alt="" className="hm-icon" />
+            </NavLink>
 
             <Basket
               cartItems={cartItems}
@@ -88,15 +126,13 @@ export default function HomeNavbar(props: HomeNavbarProps) {
             />
 
             {!authMember ? (
-              <Box>
-                <Button
-                  className="login-button"
-                  variant="contained"
-                  onClick={() => setLoginOpen(true)}
-                >
-                  Login
-                </Button>
-              </Box>
+              <Button
+                className="hm-login-button"
+                variant="contained"
+                onClick={() => setLoginOpen(true)}
+              >
+                Login
+              </Button>
             ) : (
               <img
                 className="user-avatar"
@@ -105,14 +141,15 @@ export default function HomeNavbar(props: HomeNavbarProps) {
                     ? `${serverApi}/${authMember?.memberImage}`
                     : "/icons/default-user.svg"
                 }
+                alt="Account"
                 aria-haspopup={true}
                 onClick={handleLogoutClick}
-                style={{cursor: "pointer"}}
+                style={{ cursor: "pointer" }}
               />
             )}
 
             <Menu
-            anchorEl={anchorEl}
+              anchorEl={anchorEl}
               id="account-menu"
               open={Boolean(anchorEl)}
               onClose={handleCloseLogout}
@@ -146,38 +183,46 @@ export default function HomeNavbar(props: HomeNavbarProps) {
               transformOrigin={{ horizontal: "right", vertical: "top" }}
               anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
             >
-              <MenuItem onClick={handleLogoutRequest} >
+              <MenuItem onClick={handleLogoutRequest}>
                 <ListItemIcon>
                   <Logout fontSize="small" style={{ color: "blue" }} />
                 </ListItemIcon>
                 Logout
               </MenuItem>
             </Menu>
-            
           </Stack>
-        </Stack>
-        <Stack className="header-frame">
-          <Stack className="detail">
-            <Box className="head-main-txt">World's Most Delicious Cousine</Box>
-            <Box className="wel-txt">The Choice, not just a choice</Box>
-            <Box className="service-txt">24 hours service</Box>
-            <Box className="signup">
-              {!authMember ? (
-                <Button
-                  variant="contained"
-                  onClick={() => setSignupOpen(true)}
-                  className="signup-button"
-                >
-                  SIGN UP
-                </Button>
-              ) : null}
-            </Box>
-          </Stack>
-          <Stack className="logo-frame">
-            <div className="logo-img"></div>
-          </Stack>
-        </Stack>
-      </Container>
+        </Container>
+      </Box>
+
+      {/* Hero */}
+      <Box className="hm-hero">
+        <Box className="hm-hero-panel hm-hero-panel-left" />
+        <Box className="hm-hero-panel hm-hero-panel-right" />
+
+        <Container className="hm-hero-inner">
+          <Box className="hm-hero-copy">
+            <span className="hm-hero-eyebrow">Hot Deals</span>
+            <span className="hm-hero-discount">Discount 30% Off</span>
+            <h1 className="hm-hero-title">
+              Adventures
+              <span className="hm-hero-title-accent">Is Calling</span>
+            </h1>
+            <span className="hm-hero-sub">Let’s Go Camping</span>
+            <NavLink to="/products" className="hm-shop-now">
+              Shop Now
+            </NavLink>
+          </Box>
+
+          <Box className="hm-hero-offer">
+            <span className="hm-hero-offer-get">Get</span>
+            <span className="hm-hero-offer-value">
+              25%
+              <span className="hm-hero-offer-off">Off</span>
+            </span>
+          </Box>
+
+        </Container>
+      </Box>
     </div>
   );
 }

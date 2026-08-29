@@ -21,3 +21,16 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# local agent tooling
+# Vendored third-party skills are reproducible from skills-lock.json
+# (`npx skills add`), so they don't need to live in git.
+.agents/
+# Machine-local tool permissions, same convention as .env.local
+.claude/settings.local.json
+# The remaining .claude/skills entries are symlinks into .agents/ and would
+# dangle in a fresh clone. The two project-owned skills are committed and
+# unaffected — .gitignore does not apply to already-tracked files.
+.claude/skills/*
+!.claude/skills/catalog-consistency/
+!.claude/skills/frontend-migration/

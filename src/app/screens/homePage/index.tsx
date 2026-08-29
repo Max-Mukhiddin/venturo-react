@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import ShopByCategory from "./ShopByCategory";
 import Statistics from "./Statistics";
 import PopularDishes from "./PopularDishes";
 import NewDishes from "./NewDishes";
@@ -60,6 +61,7 @@ export default function HomePage() {
 
   return (
     <div className={"homepage"}>
+      <ShopByCategory />
       <Statistics />
       <PopularDishes />
       <NewDishes />

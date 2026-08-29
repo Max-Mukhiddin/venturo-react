@@ -116,7 +116,9 @@ export default function CheckoutPage(props: CheckoutPageProps) {
             <Typography variant={"h6"}>Order Summary</Typography>
             <Stack className={"checkout-items"}>
               {cartItems.map((item: CartItem) => {
-                const imagePath = `${serverApi}/${item.image}`;
+                const imagePath = item.image
+                  ? `${serverApi}/${item.image}`
+                  : "/icons/noimage-list.svg";
                 return (
                   <Stack
                     key={item._id}

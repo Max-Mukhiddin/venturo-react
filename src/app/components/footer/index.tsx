@@ -19,8 +19,16 @@ export default function Footer() {
       <Container>
         <Stack flexDirection={"row"} sx={{ mt: "94px" }}>
           <Stack flexDirection={"column"} style={{ width: "340px" }}>
-            <Box>
-              <img width={"100px"} src={"/icons/burak.svg"} />
+            <Box className="footer-brand-lockup">
+              <img
+                className="footer-brand-badge"
+                src="/icons/venturo-badge-light.svg"
+                alt="Venturo"
+              />
+              <Box className="footer-brand-text">
+                <span className="footer-brand-wordmark">VENTURO</span>
+                <span className="footer-brand-tagline">ADVENTURE GEAR CO.</span>
+              </Box>
             </Box>
             <Box className={"foot-desc-txt"}>
               Venturo brings together quality gear, outdoor essentials, and

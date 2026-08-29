@@ -51,7 +51,14 @@ export default function OtherNavbar(props: OtherNavbarProps) {
         <Stack className="menu">
           <Box>
             <NavLink to={"/"}>
-              <img className="brand-logo" src="/icons/burak.svg" />
+              <Box className="brand-lockup">
+                <img
+                  className="brand-badge"
+                  src="/icons/venturo-badge-light.svg"
+                  alt="Venturo"
+                />
+                <span className="brand-wordmark">VENTURO</span>
+              </Box>
             </NavLink>
           </Box>
           <Stack className="links">

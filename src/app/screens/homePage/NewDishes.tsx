@@ -34,7 +34,9 @@ export default function NewDishes() {
             <CssVarsProvider>
               {newDishes.length !== 0 ? (
                 newDishes.map((product: Product) => {
-                  const imagePath = `${serverApi}/${product.productImages[0]}`;
+                  const imagePath = product.productImages[0]
+                    ? `${serverApi}/${product.productImages[0]}`
+                    : "/icons/noimage-list.svg";
                   const sizeLabel = product.productSize
                     ? `${product.productSize} size`
                     : "Standard";

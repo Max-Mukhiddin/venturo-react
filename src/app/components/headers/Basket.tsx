@@ -122,7 +122,9 @@ export default function Basket(props: BasketProps) {
           <Box className={"orders-main-wrapper"}>
             <Box className={"orders-wrapper"}>
               {cartItems.map((item: CartItem) => {
-                const imagePath = `${serverApi}/${item.image}`;
+                const imagePath = item.image
+                  ? `${serverApi}/${item.image}`
+                  : "/icons/noimage-list.svg";
                 return (
                   <Box className={"basket-info-box"} key={item._id}>
                     <div className={"cancel-btn"}>

@@ -501,3 +501,89 @@
   background: #343434;
   border-radius: 50%;
 }
+
+/** SHOP BY CATEGORY — Figma "HikMali" node 2479:1302 **/
+
+.homepage .shop-by-category {
+  width: 100%;
+  padding: 100px 0 90px 0;
+  background: #ffffff;
+}
+
+.homepage .shop-by-category .sbc-inner {
+  max-width: 1620px;
+  width: 100%;
+  padding: 0;
+}
+
+.homepage .shop-by-category .sbc-title {
+  margin: 0 0 50px 0;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 32px;
+  line-height: 32px;
+  font-weight: 600;
+  color: #707262;
+}
+
+/* Five 390px cards on a 410px pitch overflow the 1620px container, so the
+   row is a real horizontal scroller. The scrollbar IS the design's
+   track/thumb indicator — styled rather than faked, so the thumb
+   genuinely reflects scroll position. Follows the existing
+   ::-webkit-scrollbar pattern in navbar.css (.orders-wrapper). */
+.homepage .shop-by-category .sbc-scroller {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 40px;
+  scrollbar-width: thin;
+  scrollbar-color: #707262 #e4e4de;
+}
+
+.homepage .shop-by-category .sbc-scroller::-webkit-scrollbar {
+  height: 4px;
+}
+
+.homepage .shop-by-category .sbc-scroller::-webkit-scrollbar-track {
+  background: #e4e4de;
+}
+
+.homepage .shop-by-category .sbc-scroller::-webkit-scrollbar-thumb {
+  background: #707262;
+}
+
+.homepage .shop-by-category .sbc-row {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  width: max-content;
+}
+
+.homepage .shop-by-category .sbc-card {
+  display: flex;
+  flex-direction: column;
+  width: 390px;
+  flex: 0 0 390px;
+  text-decoration: none;
+}
+
+.homepage .shop-by-category .sbc-card-media {
+  width: 390px;
+  height: 450px;
+  background: #d9d9d9;
+  transition: opacity 200ms ease-in-out;
+}
+
+.homepage .shop-by-category .sbc-card:hover .sbc-card-media {
+  opacity: 0.85;
+}
+
+/* Design places a two-line caption 36px below the card. With the invented
+   item-count line dropped, the block is closed up to 32px so it reads as a
+   deliberate single-line caption rather than a two-line one with a hole. */
+.homepage .shop-by-category .sbc-card-label {
+  margin-top: 32px;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #707262;
+}

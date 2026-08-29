@@ -292,7 +292,9 @@ export default function Products(props: ProDuctsProps) {
               <div className="cards-frame">
                 {products.length !== 0 ? (
                   products.map((product: Product) => {
-                    const imagePath = `${serverApi}/${product.productImages[0]}`;
+                    const imagePath = product.productImages[0]
+                      ? `${serverApi}/${product.productImages[0]}`
+                      : "/icons/noimage-list.svg";
                     const sizeLabel = product.productSize
                       ? `${product.productSize} size`
                       : "Standard";
@@ -320,7 +322,7 @@ export default function Products(props: ProDuctsProps) {
                                   quantity: 1,
                                   name: product.productName,
                                   price: product.productPrice,
-                                  image: product.productImages[0],
+                                  image: product.productImages[0] || "",
                                 });
                                 e.stopPropagation();
                               }}

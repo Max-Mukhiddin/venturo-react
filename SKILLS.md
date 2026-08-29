@@ -1,8 +1,11 @@
-# Venturo-React — Working Skills
+# Venturo-React Frontend Skills
 
-## Contract changes
-Before changing Member/Product/Order shapes, check the backend's current
-AGENTS.md — don't assume the old Burak contract still applies.
+Use these Claude Code skills for repeatable Venturo-react frontend
+workflows.
 
-## Verification
-Run `npx tsc --noEmit && npm run build` after every edit round.
+| Skill | Purpose |
+| --- | --- |
+| `frontend-migration` | Continue the Burak-to-Venturo frontend migration and HikMali visual-alignment work. |
+| `catalog-consistency` | Review product-related pages for consistency with the current backend schema and API contract. |
+
+Each skill lives at `.claude/skills/<skill-name>/SKILL.md`.
