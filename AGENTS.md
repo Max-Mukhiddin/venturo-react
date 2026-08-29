@@ -23,6 +23,8 @@ This client project is being migrated from burak-react to venturo-react.
 - Some Burak brand assets (logo, ad video) are still referenced in code
   because no Venturo replacement exists yet — don't delete those
   references without a real replacement, it will break the build
+- This project uses npm exclusively (package-lock.json) — do not run
+  yarn or yarn install, even if package.json or habit suggests otherwise
 
 ## Backend Context
 
