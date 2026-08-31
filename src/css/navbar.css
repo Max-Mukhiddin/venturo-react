@@ -11,11 +11,15 @@
   background: none;
 }
 
-/* Shared inner width: 1920 design width minus 150px gutters = 1620px */
+/* Full design width with a fluid gutter, rather than a 1620px cap that only
+   produced a gutter as a side effect of the viewport exceeding it (which
+   collapsed the gutter to 0 below 1620px). Content still measures 1620px at
+   1920px viewport, matching the design. */
 .home-navbar .hm-inner {
-  max-width: 1620px;
+  max-width: var(--vt-content-max);
   width: 100%;
-  padding: 0;
+  padding: 0 var(--vt-gutter);
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -200,7 +204,7 @@
 .home-navbar .hm-hero {
   position: relative;
   width: 100%;
-  height: 900px;
+  height: var(--vt-hero-height);
   display: flex;
   justify-content: center;
   overflow: hidden;
@@ -229,16 +233,26 @@
 
 .home-navbar .hm-hero-inner {
   position: relative;
-  max-width: 1620px;
+  max-width: var(--vt-content-max);
   width: 100%;
   height: 100%;
-  padding: 0;
+  padding: 0 var(--vt-gutter);
+  box-sizing: border-box;
 }
 
+/* Copy sits 58px inside the gutter — design places it at x=208 on a 1920
+   frame (150 gutter + 58). Offsetting from the token keeps it tracking the
+   gutter instead of pinning to a fixed 58px once the gutter shrinks.
+
+   Vertically centred rather than pinned at the design's 238px: at a 900px
+   hero this resolves to (900-460)/2 = 220px, within 3px of the design, but
+   unlike a fixed offset it re-flows instead of clipping once --vt-hero-height
+   caps against viewport height on a short window. */
 .home-navbar .hm-hero-copy {
   position: absolute;
-  left: 58px;
-  top: 238px;
+  left: calc(var(--vt-gutter) + 58px);
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -265,8 +279,8 @@
   display: flex;
   flex-direction: column;
   font-family: "Montserrat", "Poppins", Arial, sans-serif;
-  font-size: 64px;
-  line-height: 82px;
+  font-size: var(--vt-h1-size);
+  line-height: var(--vt-h1-leading);
   font-weight: 700;
   color: #707262;
 }
@@ -303,11 +317,14 @@
   background: #5d5f51;
 }
 
-/* "Get 25% Off" — right panel */
+/* "Get 25% Off" — right panel. Offset from the gutter token for the same
+   reason as the copy block. Note the 64px "25%" below is deliberately NOT
+   fluid: the design holds it at 64px on both the desktop and mobile frames. */
 .home-navbar .hm-hero-offer {
   position: absolute;
-  right: 90px;
-  top: 392px;
+  right: calc(var(--vt-gutter) + 90px);
+  top: 50%;
+  transform: translateY(-50%);
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -340,6 +357,93 @@
   font-weight: 600;
 }
 
+/* ==========================================================================
+   Structural breakpoint — 900px (keep in sync with --vt-bp-structural)
+   --------------------------------------------------------------------------
+   Reserved for changes the `mob 01` frame proves cannot be interpolated.
+   Purely numeric values (gutter, H1, hero height) are handled by the fluid
+   tokens above and are deliberately NOT repeated here.
+   ========================================================================== */
+@media (max-width: 900px) {
+  /* Announcement bar: the mobile frame (node 7:142) keeps only the promo
+     string, centred — the currency selector is dropped. Without this the
+     two nowrap strings sit side by side and overflow a 390px viewport. */
+  .home-navbar .hm-topbar-currency {
+    display: none;
+  }
+
+  .home-navbar .hm-topbar .hm-inner {
+    justify-content: center;
+  }
+
+  /* Nav: the mobile frame drops the text links entirely, leaving
+     logo + three icons, with icons stepping down 24px -> 17px. */
+  .home-navbar .hm-links {
+    display: none;
+  }
+
+  .home-navbar .hm-icon {
+    width: 17px;
+    height: 17px;
+  }
+
+  .home-navbar .brand-badge {
+    width: 28px;
+    height: 28px;
+  }
+
+  .home-navbar .brand-wordmark {
+    font-size: 16px;
+  }
+
+  /* Hero: side-by-side split becomes a vertical stack — one image panel on
+     top, copy centred beneath it on the light ground. */
+  .home-navbar .hm-hero {
+    height: auto;
+    display: block;
+    background: #ebebe8;
+  }
+
+  .home-navbar .hm-hero-panel-left {
+    display: none;
+  }
+
+  .home-navbar .hm-hero-panel-right {
+    position: relative;
+    left: auto;
+    right: auto;
+    width: 100%;
+    height: 372px;
+  }
+
+  .home-navbar .hm-hero-inner {
+    position: static;
+    height: auto;
+    padding: 0 var(--vt-gutter) 56px;
+  }
+
+  /* transform:none undoes the desktop translateY(-50%) centring — the copy
+     is in normal flow here, so the transform would shift it upward. */
+  .home-navbar .hm-hero-copy {
+    position: static;
+    transform: none;
+    align-items: center;
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .home-navbar .hm-hero-title {
+    align-items: center;
+  }
+
+  /* Offer moves off the right panel and overlays the stacked image.
+     .hm-hero-inner is static above, so this positions against .hm-hero. */
+  .home-navbar .hm-hero-offer {
+    top: 128px;
+    right: 54px;
+    transform: none;
+  }
+}
 
 .other-navbar {
   width: 100%;

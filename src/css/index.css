@@ -1,3 +1,54 @@
+/* ==========================================================================
+   Shared layout conventions — HikMali rebuild
+   --------------------------------------------------------------------------
+   Anchored on the two authored Figma frames: `home 1` (1920px) and `mob 01`
+   (390px). Each clamp is a linear interpolation that lands on BOTH endpoints
+   exactly, so the design is pixel-accurate at either reference width and
+   scales sensibly between.
+
+   Rule of thumb for sections 4-12:
+     - purely numeric value with two known anchors -> use a fluid token here
+     - structural change (restack / re-align / hide) -> use the breakpoint
+     - value the design holds constant -> plain px, no token
+
+   NOTE: custom properties cannot be used inside @media conditions, so the
+   900px structural breakpoint is written literally in each @media rule.
+   Keep those in sync with --vt-bp-structural below.
+   ========================================================================== */
+:root {
+  /* 150px @1920 -> 20px @390 */
+  --vt-gutter: clamp(20px, 8.497vw - 13.14px, 150px);
+  /* 64px @1920 -> 48px @390 */
+  --vt-h1-size: clamp(48px, 1.0458vw + 43.92px, 64px);
+  /* 82px @1920 -> 58px @390 */
+  --vt-h1-leading: clamp(58px, 1.5686vw + 51.88px, 82px);
+  /* ---- Figma-height-locked elements -------------------------------------
+     Figma frames are scrolling canvases with no viewport-height concept, so
+     the design fixes these heights in absolute px (hero: 900px desktop /
+     748px mobile — near-constant while width changes 4.9x). Taken literally
+     that makes the hero 118% of a real maximized Chrome window on this 13"
+     MBP (measured innerHeight 719px): nothing below it is visible at all.
+
+     Convention for any such element — cap the design's fixed height against
+     viewport height, keeping the Figma value as a ceiling only reached on
+     genuinely tall windows:
+
+       clamp(<floor>, min(<width-fluid or fixed>, var(--vt-vh-cap)), <figma max>)
+
+     The floor must clear the element's own content height (the hero copy
+     block measures 460px, so 520px leaves ~30px either side). Pair this with
+     vertical centring rather than a fixed top offset, so content re-flows
+     instead of clipping as the height shrinks. */
+  --vt-vh-cap: 78vh;
+  --vt-hero-height: clamp(520px, min(9.935vw + 709.25px, var(--vt-vh-cap)), 900px);
+  /* Section vertical rhythm: 100px @1920 -> 48px @390 */
+  --vt-section-y: clamp(48px, 3.4vw + 34.75px, 100px);
+  /* Full design width; content is centred and gutter-padded within it */
+  --vt-content-max: 1920px;
+  /* Documented for reference — see NOTE above */
+  --vt-bp-structural: 900px;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

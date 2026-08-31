@@ -506,14 +506,18 @@
 
 .homepage .shop-by-category {
   width: 100%;
-  padding: 100px 0 90px 0;
+  padding: var(--vt-section-y) 0;
   background: #ffffff;
 }
 
+/* Same container convention as the header/hero — full design width with a
+   fluid gutter, rather than a fixed cap whose gutter collapses to 0 below
+   1620px. Sections 4-12 should use this same shape. */
 .homepage .shop-by-category .sbc-inner {
-  max-width: 1620px;
+  max-width: var(--vt-content-max);
   width: 100%;
-  padding: 0;
+  padding: 0 var(--vt-gutter);
+  box-sizing: border-box;
 }
 
 .homepage .shop-by-category .sbc-title {
