@@ -1108,3 +1108,96 @@
     min-height: 480px;
   }
 }
+
+/* ==========================================================================
+   DEALS OF THE DAY — Figma "HikMali" node 7:90 (mobile counterpart 7:149).
+   Countdown timer and Lorem Ipsum body copy both dropped — see
+   DealsOfTheDay.tsx for why (no real end-time to count down to, no real
+   copy to ship). Plain heading over a 4-product grid, same card treatment
+   as Best Products.
+   ========================================================================== */
+
+.homepage .deals-of-the-day {
+  width: 100%;
+  padding: var(--vt-section-y) 0;
+  background: #ffffff;
+}
+
+.homepage .deals-of-the-day .dd-inner {
+  max-width: var(--vt-content-max);
+  width: 100%;
+  padding: 0 var(--vt-gutter);
+  box-sizing: border-box;
+}
+
+.homepage .deals-of-the-day .dd-title {
+  margin: 0;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #707262;
+}
+
+.homepage .deals-of-the-day .dd-grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.homepage .deals-of-the-day .dd-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 554px;
+  background: #f5f5f5;
+  overflow: hidden;
+}
+
+.homepage .deals-of-the-day .dd-card-info {
+  padding: 60px 30px 0 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.homepage .deals-of-the-day .dd-card-name,
+.homepage .deals-of-the-day .dd-card-desc {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #707262;
+}
+
+.homepage .deals-of-the-day .dd-card-desc {
+  opacity: 0.75;
+}
+
+.homepage .deals-of-the-day .dd-add {
+  width: 100%;
+  padding: 14px 40px;
+  border: none;
+  cursor: pointer;
+  background: #707262;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  transition: background 200ms ease-out;
+}
+
+@media (hover: hover) {
+  .homepage .deals-of-the-day .dd-add:hover {
+    background: #5d5f51;
+  }
+}
+
+/* Structural breakpoint — keep in sync with --vt-bp-structural.
+   Confirmed mobile frame (7:149): cards stack full-width, single column. */
+@media (max-width: 900px) {
+  .homepage .deals-of-the-day .dd-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
