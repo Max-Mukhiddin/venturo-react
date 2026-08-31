@@ -591,3 +591,235 @@
   font-weight: 500;
   color: #707262;
 }
+
+/* ==========================================================================
+   BEST PRODUCTS — Figma "HikMali" node 7:53
+   Numeric values use the shared --vt-* tokens; the 900px breakpoint is
+   reserved for structural change only (grid 4 -> 1 column).
+   ========================================================================== */
+
+.homepage .best-products {
+  width: 100%;
+  padding: var(--vt-section-y) 0;
+  background: #ffffff;
+}
+
+.homepage .best-products .bp-inner {
+  max-width: var(--vt-content-max);
+  width: 100%;
+  padding: 0 var(--vt-gutter);
+  box-sizing: border-box;
+  display: block;
+}
+
+.homepage .best-products .bp-title {
+  margin: 0;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: var(--vt-h1-size);
+  line-height: var(--vt-h1-leading);
+  font-weight: 700;
+  color: #707262;
+}
+
+/* Filter row */
+.homepage .best-products .bp-filter-row {
+  margin-top: 19px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.homepage .best-products .bp-filters {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.homepage .best-products .bp-filter {
+  padding: 0 0 4px 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #707262;
+  border-bottom: 2px solid transparent;
+  transition: border-color 200ms ease-out, opacity 200ms ease-out;
+}
+
+.homepage .best-products .bp-filter-active {
+  border-bottom-color: #707262;
+}
+
+.homepage .best-products .bp-filter-sep {
+  font-size: 14px;
+  color: #707262;
+  opacity: 0.45;
+}
+
+.homepage .best-products .bp-shop-all {
+  padding-bottom: 4px;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #707262;
+  text-decoration: none;
+  border-bottom: 2px solid #707262;
+  transition: opacity 200ms ease-out;
+}
+
+/* Grid: four 390px cards on a 410px pitch at the 1920 design width */
+.homepage .best-products .bp-grid {
+  margin-top: 60px;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.homepage .best-products .bp-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 554px;
+  background: #f5f5f5;
+  overflow: hidden;
+  transition: box-shadow 200ms ease-out, transform 200ms ease-out;
+}
+
+.homepage .best-products .bp-card-info {
+  padding: 60px 30px 0 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.homepage .best-products .bp-card-name,
+.homepage .best-products .bp-card-desc,
+.homepage .best-products .bp-card-rating {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #707262;
+}
+
+.homepage .best-products .bp-card-desc {
+  opacity: 0.75;
+}
+
+.homepage .best-products .bp-card-rating {
+  margin-top: 2px;
+  color: #aeb192;
+}
+
+.homepage .best-products .bp-card-media {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.homepage .best-products .bp-card-media img {
+  max-width: 60%;
+  max-height: 100%;
+  object-fit: contain;
+  opacity: 0.65;
+}
+
+/* Add-to-cart bar — flush to the card's bottom edge, as in the design */
+.homepage .best-products .bp-add {
+  width: 100%;
+  padding: 14px 40px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #707262;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  transition: background 200ms ease-out;
+}
+
+/* The design reveals the price in the button on the hovered card only.
+   Animating max-width keeps the label optically centred at rest and lets
+   the pair re-centre smoothly instead of snapping. */
+.homepage .best-products .bp-add-price {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: max-width 200ms ease-out, opacity 200ms ease-out;
+}
+
+.homepage .best-products .bp-empty {
+  grid-column: 1 / -1;
+  padding: 60px 0;
+  text-align: center;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  color: #707262;
+  opacity: 0.7;
+}
+
+/* Hover scoped to pointer devices — touch has no hover, and the price
+   must stay reachable there (it is also shown on :focus-within). */
+@media (hover: hover) {
+  .homepage .best-products .bp-card:hover {
+    box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.1);
+  }
+
+  .homepage .best-products .bp-card:hover .bp-add-price {
+    max-width: 120px;
+    opacity: 1;
+  }
+
+  .homepage .best-products .bp-card:hover .bp-add {
+    background: #5d5f51;
+  }
+
+  .homepage .best-products .bp-filter:hover {
+    opacity: 0.65;
+  }
+
+  .homepage .best-products .bp-shop-all:hover {
+    opacity: 0.65;
+  }
+
+  /* Slower, gentler return */
+  .homepage .best-products .bp-card:not(:hover) {
+    transition: box-shadow 250ms ease-in-out;
+  }
+}
+
+/* Keyboard parity with the hover reveal */
+.homepage .best-products .bp-card:focus-within .bp-add-price {
+  max-width: 120px;
+  opacity: 1;
+}
+
+/* Structural breakpoint — keep in sync with --vt-bp-structural */
+@media (max-width: 900px) {
+  .homepage .best-products .bp-grid {
+    grid-template-columns: minmax(0, 1fr);
+    margin-top: 32px;
+  }
+
+  .homepage .best-products .bp-card {
+    min-height: 420px;
+  }
+
+  .homepage .best-products .bp-filter-row {
+    margin-top: 24px;
+  }
+}

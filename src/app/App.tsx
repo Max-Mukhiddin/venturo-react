@@ -108,7 +108,7 @@ function App() {
             <HelpPage />
           </Route>
           <Route path="/">
-            <HomePage />
+            <HomePage onAdd={onAdd} />
           </Route>
         </Switch>
       </Box>

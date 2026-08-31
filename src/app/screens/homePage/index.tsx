@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import ShopByCategory from "./ShopByCategory";
+import BestProducts from "./BestProducts";
 import Statistics from "./Statistics";
 import PopularDishes from "./PopularDishes";
 import NewDishes from "./NewDishes";
@@ -14,6 +15,7 @@ import ProductService from "../../services/ProductService";
 import { ProductCollection } from "../../../lib/enums/product.enum";
 import MemberService from "../../services/MemberService";
 import { Member } from "../../../lib/types/member";
+import { CartItem } from "../../../lib/types/search";
 import "../../../css/home.css";
 
 /** REDUX SLICE & SELECTOR **/
@@ -23,7 +25,12 @@ const actionDispatch = (dispatch: Dispatch) => ({
   setTopUsers: (data: Member[]) => dispatch(setTopUsers(data)),
 });
 
-export default function HomePage() {
+interface HomePageProps {
+  onAdd: (item: CartItem) => void;
+}
+
+export default function HomePage(props: HomePageProps) {
+  const { onAdd } = props;
   const { setPopularDishes, setNewDishes, setTopUsers } =
     actionDispatch(useDispatch());
 
@@ -62,6 +69,7 @@ export default function HomePage() {
   return (
     <div className={"homepage"}>
       <ShopByCategory />
+      <BestProducts onAdd={onAdd} />
       <Statistics />
       <PopularDishes />
       <NewDishes />
