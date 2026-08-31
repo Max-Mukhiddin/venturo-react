@@ -28,7 +28,7 @@
   font-weight: 700;
   letter-spacing: 1.5px;
   line-height: 1.1;
-  color: #d7b586;
+  color: #f5f2ea;
 }
 
 .footer-brand-tagline {
@@ -37,101 +37,202 @@
   font-size: 10px;
   font-weight: 500;
   letter-spacing: 2px;
-  color: #d7b586;
-  opacity: 0.75;
+  color: #aeb192;
+  opacity: 0.9;
 }
 
-.foot-desc-txt {
-  margin-top: 22px;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 34px;
-  color: #e3c08d;
+/* ==========================================================================
+   SITE FOOTER — Figma "HikMali" node 2012:455 (mobile counterpart
+   2012:1159). Global component (rendered in App.tsx), not homepage-only.
+   Newsletter/Shop-Learn-duplicate/contact-info resolutions are documented
+   in the component file and in docs/ai/NEXT_STEPS.md.
+   ========================================================================== */
+
+.site-footer {
+  width: 100%;
+  background: #707262;
+}
+
+.site-footer .sf-inner {
+  max-width: var(--vt-content-max);
+  width: 100%;
+  padding: var(--vt-section-y) var(--vt-gutter);
+  box-sizing: border-box;
+}
+
+.site-footer .sf-top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 60px;
+}
+
+.site-footer .sf-brand-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 24px;
+  flex: 0 1 420px;
+}
+
+.site-footer .footer-brand-lockup {
+  text-decoration: none;
+}
+
+.site-footer .sf-newsletter-heading {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 22px;
+  line-height: 30px;
+  color: #f0f0f0;
+}
+
+.site-footer .sf-newsletter-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.site-footer .sf-email-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid rgba(240, 240, 240, 0.4);
+  background: transparent;
+  padding: 0 0 12px;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  color: #f0f0f0;
+}
+
+.site-footer .sf-email-input::placeholder {
+  color: #f0f0f0;
+  opacity: 0.7;
+}
+
+.site-footer .sf-email-input:focus {
+  outline: none;
+  border-bottom-color: #f0f0f0;
+}
+
+.site-footer .sf-subscribe {
+  align-self: flex-start;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  color: #ffffff;
+}
+
+.site-footer .sf-follow-text {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  color: #f0f0f0;
 }
 
 .sns-context {
-  margin-top: 17px;
-  width: 137px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap: 20px;
 }
 
-.foot-category-title {
-  width: 106px;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 24px;
-  line-height: 34px;
-  color: #c5c8c9;
+.site-footer .sf-nav-zone {
+  display: flex;
+  flex-direction: row;
+  gap: 80px;
+  align-items: flex-start;
+  position: relative;
 }
 
-.foot-category-link {
-  margin-top: 20px;
-  height: 170px;
+.site-footer .sf-nav-col {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  height: 170px;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 34px;
+  gap: 20px;
+  min-width: 100px;
 }
 
-.foot-category-link a {
-  color: #e3c08d;
-  text-decoration: none;
-  cursor: pointer;
+.site-footer .sf-nav-title {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 24px;
+  color: #ffffff;
 }
 
-.find-us {
+.site-footer .sf-nav-links {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  gap: 12px;
 }
 
-.find-us span {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 18px;
-  line-height: 34px;
-  color: #c5c8c9;
+.site-footer .sf-nav-links a {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  color: #f0f0f0;
+  text-decoration: none;
+  transition: opacity 200ms ease-out;
 }
 
-.find-us div {
-  margin-left: 10px;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 34px;
-  color: #e3c08d;
+.site-footer .sf-nav-links a:hover {
+  opacity: 0.75;
 }
 
-.copyright-txt {
-  margin-top: 17px;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 34px;
-  color: #e3c08d;
+.site-footer .sf-to-top {
+  width: 78px;
+  height: 78px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(240, 240, 240, 0.4);
+  background: none;
+  cursor: pointer;
+  transition: background 200ms ease-out;
 }
 
-.foot-category-title:after {
-  display: block;
-  content: "";
-  border-bottom: solid 2px #d7b686;
-  transform: scaleX(0);
-  transition: transform 250ms ease-in-out;
-  transform-origin: 0% 50%;
+.site-footer .sf-to-top:hover {
+  background: rgba(240, 240, 240, 0.1);
 }
 
-.foot-category-title:hover:after {
-  transform: scaleX(1);
+.site-footer .sf-to-top-icon {
+  width: 16px;
+  height: 16px;
+  transform: rotate(90deg);
+  filter: invert(1);
+}
+
+.site-footer .sf-divider {
+  margin-top: var(--vt-section-y);
+  height: 1px;
+  background: rgba(197, 200, 201, 0.2);
+}
+
+.site-footer .sf-bottom {
+  margin-top: 24px;
+}
+
+.site-footer .sf-copyright {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  color: #f0f0f0;
+}
+
+/* Structural breakpoint — keep in sync with --vt-bp-structural.
+   Confirmed mobile frame (2012:1159): brand/newsletter zone stacks
+   entirely above the nav-columns zone; nav columns stack vertically. */
+@media (max-width: 900px) {
+  .site-footer .sf-top {
+    flex-direction: column;
+    gap: var(--vt-section-y);
+  }
+
+  .site-footer .sf-brand-zone {
+    flex: 1 1 auto;
+  }
+
+  .site-footer .sf-nav-zone {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 }
