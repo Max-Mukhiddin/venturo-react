@@ -1413,3 +1413,34 @@
     display: none;
   }
 }
+
+/* ==========================================================================
+   INSTAGRAM — Figma "HikMali" node 2481:1308 (mobile counterpart 7:152).
+   6 flat, unexported AdobeStock placeholder tiles, no captions/links/
+   product references anywhere in the source — pure decorative imagery,
+   same flat-panel-fallback treatment as Highlights' background and
+   Banner's panels. Genuinely full-bleed in the source (first tile starts
+   at left:0, no gutter) — no --vt-gutter/--vt-content-max here, unlike
+   every other section.
+   ========================================================================== */
+
+.homepage .instagram-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 20px;
+  width: 100%;
+}
+
+.homepage .instagram-grid .ig-tile {
+  aspect-ratio: 1;
+  background: #d9d9d9;
+}
+
+/* Structural breakpoint — keep in sync with --vt-bp-structural.
+   Confirmed mobile frame (7:152): same 6 tiles reflow to a 3-column,
+   2-row grid. */
+@media (max-width: 900px) {
+  .homepage .instagram-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

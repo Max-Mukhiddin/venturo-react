@@ -5,6 +5,7 @@ import Banner from "./Banner";
 import Highlights from "./Highlights";
 import DealsOfTheDay from "./DealsOfTheDay";
 import ProductDetails from "./ProductDetails";
+import Instagram from "./Instagram";
 import Statistics from "./Statistics";
 import PopularDishes from "./PopularDishes";
 import NewDishes from "./NewDishes";
@@ -78,6 +79,7 @@ export default function HomePage(props: HomePageProps) {
       <Highlights onAdd={onAdd} />
       <DealsOfTheDay onAdd={onAdd} />
       <ProductDetails onAdd={onAdd} />
+      <Instagram />
       <Statistics />
       <PopularDishes />
       <NewDishes />
