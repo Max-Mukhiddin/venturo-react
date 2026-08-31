@@ -823,3 +823,113 @@
     margin-top: 24px;
   }
 }
+
+/* ==========================================================================
+   BANNER — Figma "HikMali" node 2479:1304 (mobile counterpart 7:147)
+   Two panels, each an 8:7 aspect ratio in both the desktop (800x700) and
+   mobile (390.87x342.01) frames — the same ratio, so one aspect-ratio rule
+   covers every width instead of a fabricated height clamp.
+   ========================================================================== */
+
+.homepage .home-banner {
+  width: 100%;
+  padding: var(--vt-section-y) 0;
+  background: #ffffff;
+}
+
+.homepage .home-banner .hb-inner {
+  max-width: var(--vt-content-max);
+  width: 100%;
+  padding: 0 var(--vt-gutter);
+  box-sizing: border-box;
+}
+
+.homepage .home-banner .hb-row {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+.homepage .home-banner .hb-panel {
+  position: relative;
+  flex: 1 1 0;
+  aspect-ratio: 8 / 7;
+  display: block;
+  text-decoration: none;
+  overflow: hidden;
+}
+
+.homepage .home-banner .hb-panel-media {
+  position: absolute;
+  inset: 0;
+  background: #d9d9d9;
+  transition: transform 300ms ease-out;
+}
+
+@media (hover: hover) {
+  .homepage .home-banner .hb-panel:hover .hb-panel-media {
+    transform: scale(1.03);
+  }
+}
+
+.homepage .home-banner .hb-panel-content {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  /* 100px @1920 -> 168px @390, both taken from the two authored frames
+     (text sits proportionally further from the edge on the narrow panel). */
+  padding: clamp(100px, 185.33px - 4.444vw, 168px) 0 0
+    clamp(100px, 185.33px - 4.444vw, 168px);
+}
+
+.homepage .home-banner .hb-panel-copy {
+  display: flex;
+  flex-direction: column;
+}
+
+.homepage .home-banner .hb-panel-eyebrow {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #707262;
+}
+
+.homepage .home-banner .hb-panel-heading {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 32px;
+  line-height: 32px;
+  font-weight: 600;
+  color: #707262;
+}
+
+.homepage .home-banner .hb-panel-cta {
+  /* Pushes to the bottom of the flex column instead of a fixed top offset —
+     same "content reflows, doesn't pin" approach used for the hero copy. */
+  margin-top: auto;
+  margin-bottom: clamp(56px, 103.7px - 2.487vw, 96px);
+  align-self: flex-start;
+  padding: 14px 40px;
+  background: #ffffff;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #707262;
+  transition: background 200ms ease-out, color 200ms ease-out;
+}
+
+@media (hover: hover) {
+  .homepage .home-banner .hb-panel:hover .hb-panel-cta {
+    background: #707262;
+    color: #ffffff;
+  }
+}
+
+/* Structural breakpoint — keep in sync with --vt-bp-structural.
+   Mobile frame stacks the two panels full-width instead of side by side. */
+@media (max-width: 900px) {
+  .homepage .home-banner .hb-row {
+    flex-direction: column;
+  }
+}
