@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import ShopByCategory from "./ShopByCategory";
 import BestProducts from "./BestProducts";
 import Banner from "./Banner";
+import Highlights from "./Highlights";
 import Statistics from "./Statistics";
 import PopularDishes from "./PopularDishes";
 import NewDishes from "./NewDishes";
@@ -72,6 +73,7 @@ export default function HomePage(props: HomePageProps) {
       <ShopByCategory />
       <BestProducts onAdd={onAdd} />
       <Banner />
+      <Highlights onAdd={onAdd} />
       <Statistics />
       <PopularDishes />
       <NewDishes />

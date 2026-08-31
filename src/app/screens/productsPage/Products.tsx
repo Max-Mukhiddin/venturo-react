@@ -25,8 +25,39 @@ import { createSelector } from "reselect";
 import ProductService from "../../services/ProductService";
 import { ProductCollection } from "../../../lib/enums/product.enum";
 import { serverApi } from "../../../lib/config";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
+
+/**
+ * Seeds the initial filter/sort state from the URL on mount, so links built
+ * elsewhere (ShopByCategory, BestProducts' "Shop All Categories", Banner's
+ * two panels) actually land pre-filtered/pre-sorted instead of always
+ * falling back to the hardcoded default — see docs/ai/NEXT_STEPS.md.
+ *
+ * Runs once via useState's lazy initializer, not a separate effect: this
+ * only changes what the page starts with when arrived at via a link — the
+ * in-page filter/sort controls still work exactly as before via
+ * setProductSearch, and the URL is not re-read after mount.
+ */
+const parseInitialProductSearch = (search: string): ProductInquiry => {
+  const params = new URLSearchParams(search);
+  const collectionParam = params.get("productCollection");
+  const orderParam = params.get("order");
+
+  const isValidCollection =
+    !!collectionParam &&
+    (Object.values(ProductCollection) as string[]).includes(collectionParam);
+
+  return {
+    order: orderParam || "createdAt",
+    page: 1,
+    limit: 8,
+    productCollection: isValidCollection
+      ? (collectionParam as ProductCollection)
+      : ProductCollection.CLIMBING,
+    search: "",
+  };
+};
 
 /** REDUX SLICE & SELECTOR **/
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -45,13 +76,10 @@ export default function Products(props: ProDuctsProps) {
   const { onAdd } = props;
   const { setProducts } = actionDispatch(useDispatch());
   const { products } = useSelector(productsRetriever);
-  const [productSearch, setProductSearch] = useState<ProductInquiry>({
-    order: "createdAt",
-    page: 1,
-    limit: 8,
-    productCollection: ProductCollection.CLIMBING,
-    search: "",
-  });
+  const location = useLocation();
+  const [productSearch, setProductSearch] = useState<ProductInquiry>(() =>
+    parseInitialProductSearch(location.search)
+  );
   const [searchText, setSearchText] = useState<string>("");
   const history = useHistory();
 

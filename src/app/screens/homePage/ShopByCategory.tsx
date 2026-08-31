@@ -14,6 +14,11 @@ import { ProductCollection } from "../../../lib/enums/product.enum";
  * 53, 12, 26). Those are invented mockup numbers and the backend has no
  * total-count support, so they are deliberately omitted rather than
  * shipping fabricated figures — see docs/ai/NEXT_STEPS.md.
+ *
+ * Cards link to /products?productCollection=<value>, which Products.tsx
+ * now reads on mount (see parseInitialProductSearch there) — previously
+ * this was a bare /products link that landed unfiltered regardless of
+ * which tile was clicked.
  */
 const CATEGORIES: { label: string; collection: ProductCollection }[] = [
   { label: "Climbing", collection: ProductCollection.CLIMBING },
@@ -35,7 +40,7 @@ export default function ShopByCategory() {
               return (
                 <Link
                   key={category.collection}
-                  to={"/products"}
+                  to={`/products?productCollection=${category.collection}`}
                   className={"sbc-card"}
                 >
                   {/* Flat panel: the design's AdobeStock layers are

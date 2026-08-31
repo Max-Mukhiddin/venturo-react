@@ -103,9 +103,19 @@ export default function BestProducts(props: BestProductsProps) {
             ))}
           </Box>
 
-          {/* Deep-linking a pre-filtered view still needs Products.tsx to
-              read a productCollection query param — tracked in NEXT_STEPS.md */}
-          <Link to={"/products"} className={"bp-shop-all"}>
+          {/* Carries through whichever category is currently active in the
+              filter row above, so filtering here and then clicking through
+              lands on the matching Products.tsx view instead of resetting
+              to unfiltered. Products.tsx reads this on mount — see
+              parseInitialProductSearch there. */}
+          <Link
+            to={
+              activeCollection
+                ? `/products?productCollection=${activeCollection}`
+                : "/products"
+            }
+            className={"bp-shop-all"}
+          >
             Shop All Categories
           </Link>
         </Box>

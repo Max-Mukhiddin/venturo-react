@@ -933,3 +933,178 @@
     flex-direction: column;
   }
 }
+
+/* ==========================================================================
+   HIGHLIGHTS — Figma "HikMali" node 7:61 (mobile counterpart 7:148, the
+   only mobile node sharing the background asset name `AdobeStock_505354052`).
+   Background is 2.4:1 at both the desktop (1920x800) and mobile
+   (757.1x315.5) anchors, so one aspect-ratio rule covers every width.
+   The heading, tick decoration and six decorative "+" markers exist only
+   in the desktop frame — confirmed absent (not omitted) in the mobile
+   node, so they're hidden below the structural breakpoint rather than
+   scaled down.
+   ========================================================================== */
+
+.homepage .highlights {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2.4;
+  overflow: hidden;
+  background: #d9d9d9;
+}
+
+.homepage .highlights .hl-media {
+  position: absolute;
+  inset: 0;
+  background: #d9d9d9;
+}
+
+.homepage .highlights .hl-heading {
+  position: absolute;
+  left: var(--vt-gutter);
+  top: 595px;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 32px;
+  line-height: 32px;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.homepage .highlights .hl-tick {
+  position: absolute;
+  left: var(--vt-gutter);
+  top: 708px;
+  width: 12px;
+  height: 112px;
+  background: rgba(255, 255, 255, 0.6);
+}
+
+/* Decorative markers only — no href, no hover state in the source. */
+.homepage .highlights .hl-cross {
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  pointer-events: none;
+}
+
+.homepage .highlights .hl-cross::before,
+.homepage .highlights .hl-cross::after {
+  content: "";
+  position: absolute;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.homepage .highlights .hl-cross::before {
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  transform: translateX(-50%);
+}
+
+.homepage .highlights .hl-cross::after {
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  transform: translateY(-50%);
+}
+
+.homepage .highlights .hl-inner {
+  position: absolute;
+  inset: 0;
+  max-width: var(--vt-content-max);
+  margin: 0 auto;
+  padding: 0 var(--vt-gutter);
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+/* No second desktop anchor for the card's own size (the mobile frame
+   restructures it to full-width rather than scaling it), so it stays
+   fixed at the one authored desktop size, same convention as values held
+   constant absent a second reference. */
+.homepage .highlights .hl-card {
+  pointer-events: auto;
+  position: relative;
+  width: 390px;
+  height: 554px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #f5f5f5;
+}
+
+.homepage .highlights .hl-card-info {
+  padding: 60px 30px 0 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.homepage .highlights .hl-card-name,
+.homepage .highlights .hl-card-desc {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #707262;
+}
+
+.homepage .highlights .hl-card-desc {
+  opacity: 0.75;
+}
+
+.homepage .highlights .hl-add {
+  width: 100%;
+  padding: 14px 40px;
+  border: none;
+  cursor: pointer;
+  background: #707262;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  transition: background 200ms ease-out;
+}
+
+@media (hover: hover) {
+  .homepage .highlights .hl-add:hover {
+    background: #5d5f51;
+  }
+}
+
+/* Structural breakpoint — keep in sync with --vt-bp-structural.
+   Confirmed mobile frame (7:148): background stacks on top full-width,
+   card sits as a normal block below it, heading/tick/crosses don't exist
+   at all — not scaled down, genuinely absent. */
+@media (max-width: 900px) {
+  .homepage .highlights {
+    aspect-ratio: auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .homepage .highlights .hl-media {
+    position: static;
+    width: 100%;
+    aspect-ratio: 2.4;
+  }
+
+  .homepage .highlights .hl-heading,
+  .homepage .highlights .hl-tick,
+  .homepage .highlights .hl-cross {
+    display: none;
+  }
+
+  .homepage .highlights .hl-inner {
+    position: static;
+    padding: var(--vt-section-y) var(--vt-gutter);
+  }
+
+  .homepage .highlights .hl-card {
+    width: 100%;
+    height: auto;
+    min-height: 480px;
+  }
+}

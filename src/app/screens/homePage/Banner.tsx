@@ -17,19 +17,18 @@ import { Link } from "react-router-dom";
  * today) and order=productViews (Best Sellers, same query BestProducts
  * uses for its default listing).
  *
- * Both link to /products rather than a differentiated, sort-pre-applied
- * URL: Products.tsx doesn't read a query param yet (the same gap already
- * tracked in docs/ai/NEXT_STEPS.md for Sections 3 and 4's category
- * links) — so today both panels land on the same default view. Once that
- * fix lands the two hrefs below are what to update.
+ * Both panels link to /products?order=<value>, which Products.tsx now
+ * reads on mount (see parseInitialProductSearch there) — previously this
+ * was a bare /products link, so both panels landed on the same default
+ * view regardless of which was clicked.
  *
  * Both panel images are unexported AdobeStock placeholders in the design
  * (flat #d9d9d9 fills), same as every prior section — rendered as flat
  * panels, same established pattern.
  */
 const PANELS = [
-  { eyebrow: "Shop", heading: "New Arrivals", to: "/products" }, // order=createdAt once query-param support lands
-  { eyebrow: "Shop", heading: "Best Sellers", to: "/products" }, // order=productViews once query-param support lands
+  { eyebrow: "Shop", heading: "New Arrivals", to: "/products?order=createdAt" },
+  { eyebrow: "Shop", heading: "Best Sellers", to: "/products?order=productViews" },
 ];
 
 export default function Banner() {
