@@ -1201,3 +1201,215 @@
   }
 }
 
+/* ==========================================================================
+   PRODUCT DETAILS — Figma "HikMali" node 7:140 (mobile counterpart 7:151).
+   Desktop: thumbnail rail on the left, large image on the right, content
+   column beside it. Mobile (confirmed via get_design_context): large
+   image on top, thumbnails in a row below it, content stacked underneath
+   — same overlay/split-to-stack transformation used for the hero and
+   Highlights, just with the thumbnail axis swapped. Product title heading
+   is genuinely absent from the mobile frame's only instance (not a
+   partial inconsistency like Deals' price) — desktop-only, same shape as
+   Highlights' heading.
+   ========================================================================== */
+
+.homepage .product-details {
+  width: 100%;
+  padding: var(--vt-section-y) 0;
+  background: #ffffff;
+}
+
+.homepage .product-details .pd-inner {
+  max-width: var(--vt-content-max);
+  width: 100%;
+  padding: 0 var(--vt-gutter);
+  box-sizing: border-box;
+}
+
+.homepage .product-details .pd-layout {
+  display: flex;
+  flex-direction: row;
+  gap: 40px;
+}
+
+.homepage .product-details .pd-gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.homepage .product-details .pd-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 0 0 auto;
+}
+
+.homepage .product-details .pd-thumb {
+  width: 116px;
+  height: 116px;
+  padding: 0;
+  border: 1px solid transparent;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.homepage .product-details .pd-thumb-active {
+  border-color: #aeb192;
+}
+
+.homepage .product-details .pd-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.homepage .product-details .pd-main {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  aspect-ratio: 663 / 900;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.homepage .product-details .pd-main-image {
+  max-width: 68%;
+  max-height: 68%;
+  object-fit: contain;
+  opacity: 0.65;
+}
+
+.homepage .product-details .pd-badge {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 64px;
+  height: 64px;
+  opacity: 0.85;
+}
+
+.homepage .product-details .pd-content {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.homepage .product-details .pd-title {
+  margin: 0;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 32px;
+  line-height: 32px;
+  font-weight: 600;
+  color: #707262;
+}
+
+.homepage .product-details .pd-price {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #707262;
+}
+
+.homepage .product-details .pd-divider {
+  height: 1px;
+  background: #aeb192;
+}
+
+.homepage .product-details .pd-size-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  color: #707262;
+}
+
+.homepage .product-details .pd-size-value {
+  padding: 4px 10px;
+  border: 1px solid #aeb192;
+  text-transform: capitalize;
+}
+
+.homepage .product-details .pd-add,
+.homepage .product-details .pd-buy {
+  width: 100%;
+  padding: 14px 40px;
+  cursor: pointer;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 200ms ease-out, color 200ms ease-out;
+}
+
+.homepage .product-details .pd-add {
+  border: none;
+  background: #707262;
+  color: #ffffff;
+}
+
+.homepage .product-details .pd-buy {
+  border: 1px solid #707262;
+  background: transparent;
+  color: #707262;
+}
+
+@media (hover: hover) {
+  .homepage .product-details .pd-add:hover {
+    background: #5d5f51;
+  }
+
+  .homepage .product-details .pd-buy:hover {
+    background: #707262;
+    color: #ffffff;
+  }
+}
+
+.homepage .product-details .pd-desc {
+  margin: 0;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #707262;
+  opacity: 0.85;
+}
+
+/* Structural breakpoint — keep in sync with --vt-bp-structural.
+   Confirmed mobile frame (7:151): image on top, thumbnails in a row
+   below it, content stacked underneath; title heading is absent. */
+@media (max-width: 900px) {
+  .homepage .product-details .pd-layout {
+    flex-direction: column;
+    gap: var(--vt-section-y);
+  }
+
+  .homepage .product-details .pd-gallery {
+    flex-direction: column;
+  }
+
+  .homepage .product-details .pd-thumbs {
+    flex-direction: row;
+    order: 2;
+  }
+
+  .homepage .product-details .pd-main {
+    order: 1;
+    aspect-ratio: 350 / 475;
+  }
+
+  .homepage .product-details .pd-thumb {
+    width: 107px;
+    height: 107px;
+  }
+
+  .homepage .product-details .pd-title {
+    display: none;
+  }
+}
