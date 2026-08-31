@@ -7,18 +7,10 @@ import DealsOfTheDay from "./DealsOfTheDay";
 import ProductDetails from "./ProductDetails";
 import Instagram from "./Instagram";
 import FreeShipping from "./FreeShipping";
-import Statistics from "./Statistics";
-import PopularDishes from "./PopularDishes";
-import NewDishes from "./NewDishes";
-import Advertisement from "./Advertisement";
 import ActiveUsers from "./ActiveUsers";
-import Events from "./Events";
 import { useDispatch } from "react-redux";
 import { Dispatch } from "@reduxjs/toolkit";
-import { setNewDishes, setPopularDishes, setTopUsers } from "./slice";
-import { Product } from "../../../lib/types/product";
-import ProductService from "../../services/ProductService";
-import { ProductCollection } from "../../../lib/enums/product.enum";
+import { setTopUsers } from "./slice";
 import MemberService from "../../services/MemberService";
 import { Member } from "../../../lib/types/member";
 import { CartItem } from "../../../lib/types/search";
@@ -26,8 +18,6 @@ import "../../../css/home.css";
 
 /** REDUX SLICE & SELECTOR **/
 const actionDispatch = (dispatch: Dispatch) => ({
-  setPopularDishes: (data: Product[]) => dispatch(setPopularDishes(data)),
-  setNewDishes: (data: Product[]) => dispatch(setNewDishes(data)),
   setTopUsers: (data: Member[]) => dispatch(setTopUsers(data)),
 });
 
@@ -37,34 +27,10 @@ interface HomePageProps {
 
 export default function HomePage(props: HomePageProps) {
   const { onAdd } = props;
-  const { setPopularDishes, setNewDishes, setTopUsers } =
-    actionDispatch(useDispatch());
+  const { setTopUsers } = actionDispatch(useDispatch());
 
   useEffect(() => {
     // Backend server data fetch => Data
-    const product = new ProductService();
-    product
-      .getProducts({
-        page: 1,
-        limit: 4,
-        order: "productViews",
-        productCollection: ProductCollection.CLIMBING,
-      })
-      .then((data) => {
-        setPopularDishes(data);
-      })
-      .catch((err) => console.log(err));
-
-    product
-      .getProducts({
-        page: 1,
-        limit: 4,
-        order: "createdAt",
-        //  productCollection: ProductCollection.CLIMBING,
-      })
-      .then((data) => setNewDishes(data))
-      .catch((err) => console.log(err));
-
     const member = new MemberService();
     member
       .getTopUsers()
@@ -82,12 +48,7 @@ export default function HomePage(props: HomePageProps) {
       <ProductDetails onAdd={onAdd} />
       <Instagram />
       <FreeShipping />
-      <Statistics />
-      <PopularDishes />
-      <NewDishes />
-      <Advertisement />
       <ActiveUsers />
-      <Events />
     </div>
   );
 }
