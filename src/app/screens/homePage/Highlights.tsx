@@ -19,7 +19,10 @@ import ProductService from "../../services/ProductService";
  * The six "+" marker icons and the vertical tick decoration are purely
  * decorative in the source (no href, no hover state) and are hidden below
  * 900px, matching the confirmed mobile frame, which has neither them nor
- * the "Highlights" heading at all.
+ * the "Highlights" heading at all — so the background photo (real,
+ * sourced from Unsplash — credit + license in docs/ai/COMPLETED_TASKS.md,
+ * backend repo) is the only overlay-legibility concern on desktop; the
+ * product card already has its own solid #f5f5f5 fill.
  */
 const CROSS_POSITIONS = [
   { left: "calc(50% + 36px)", top: "168px" },
@@ -59,7 +62,10 @@ export default function Highlights(props: HighlightsProps) {
 
   return (
     <div className={"highlights"}>
-      <Box className={"hl-media"} />
+      <Box
+        className={"hl-media"}
+        style={{ backgroundImage: "url(/img/highlights.jpg)" }}
+      />
 
       <span className={"hl-heading"}>Highlights</span>
       <span className={"hl-tick"} />
