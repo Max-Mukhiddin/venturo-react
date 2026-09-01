@@ -19,13 +19,20 @@ import { ProductCollection } from "../../../lib/enums/product.enum";
  * now reads on mount (see parseInitialProductSearch there) — previously
  * this was a bare /products link that landed unfiltered regardless of
  * which tile was clicked.
+ *
+ * Card photos are real, sourced from Unsplash's Search API (photographer
+ * credits + license in docs/ai/COMPLETED_TASKS.md, backend repo), same
+ * pipeline as the hero. The label sits below the media as a plain caption
+ * on the section's white background — confirmed against both this markup
+ * and the real Figma node (label y=1678 vs. the media block's own bottom
+ * edge at y=1642) — not an overlay, so no legibility risk from the photo.
  */
-const CATEGORIES: { label: string; collection: ProductCollection }[] = [
-  { label: "Climbing", collection: ProductCollection.CLIMBING },
-  { label: "All Brand Tenting", collection: ProductCollection.CAMPING },
-  { label: "Warm & Cool Jacket", collection: ProductCollection.APPAREL },
-  { label: "Hiking Shoes", collection: ProductCollection.FOOTWEAR },
-  { label: "Trekking", collection: ProductCollection.TREKKING },
+const CATEGORIES: { label: string; collection: ProductCollection; image: string }[] = [
+  { label: "Climbing", collection: ProductCollection.CLIMBING, image: "/img/category-climbing.jpg" },
+  { label: "All Brand Tenting", collection: ProductCollection.CAMPING, image: "/img/category-camping.jpg" },
+  { label: "Warm & Cool Jacket", collection: ProductCollection.APPAREL, image: "/img/category-apparel.jpg" },
+  { label: "Hiking Shoes", collection: ProductCollection.FOOTWEAR, image: "/img/category-footwear.jpg" },
+  { label: "Trekking", collection: ProductCollection.TREKKING, image: "/img/category-trekking.jpg" },
 ];
 
 export default function ShopByCategory() {
@@ -43,9 +50,10 @@ export default function ShopByCategory() {
                   to={`/products?productCollection=${category.collection}`}
                   className={"sbc-card"}
                 >
-                  {/* Flat panel: the design's AdobeStock layers are
-                      unexported placeholders, so no photography exists. */}
-                  <Box className={"sbc-card-media"} />
+                  <Box
+                    className={"sbc-card-media"}
+                    style={{ backgroundImage: `url(${category.image})` }}
+                  />
                   <span className={"sbc-card-label"}>{category.label}</span>
                 </Link>
               );

@@ -142,7 +142,9 @@
 .homepage .shop-by-category .sbc-card-media {
   width: 390px;
   height: 450px;
-  background: #d9d9d9;
+  background-color: #d9d9d9;
+  background-size: cover;
+  background-position: center;
   transition: opacity 200ms ease-in-out;
 }
 
