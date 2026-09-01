@@ -445,32 +445,85 @@
   }
 }
 
+/* ==========================================================================
+   OTHER NAVBAR — the header on every non-home route. Figma "HikMali"
+   node 2012:153 ("Header" on the "Shop List" frame, 2458:2), pulled
+   directly rather than assumed as a HomeNavbar variant. Same two-bar
+   structure (announcement topbar + main nav) as .home-navbar, confirmed
+   identical in the real design context — just without the homepage-only
+   hero. Class names deliberately mirror .home-navbar's (hm-*) since the
+   visual treatment is the same design system; each rule is re-scoped
+   under .other-navbar rather than shared, since the two headers render
+   as siblings, never both mounted at once, but keeping them independently
+   readable.
+   ========================================================================== */
+
 .other-navbar {
   width: 100%;
-  height: 400px;
   display: flex;
-  background: url("/public/img/banner.webp");
-  background-size: cover;
+  flex-direction: column;
+  background: none;
 }
 
-.other-navbar .navbar-container {
-  margin-top: 55px;
-}
-
-.other-navbar .navbar-container .menu {
-  height: 50px;
+.other-navbar .hm-inner {
+  max-width: var(--vt-content-max);
+  width: 100%;
+  padding: 0 var(--vt-gutter);
+  box-sizing: border-box;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
 }
 
-.other-navbar .navbar-container .menu .brand-logo {
-  width: 125px;
-  height: 30px;
+/* ---------- Announcement bar (35px) ---------- */
+
+.other-navbar .hm-topbar {
+  width: 100%;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  background: #707262;
 }
 
-.other-navbar .navbar-container .menu .brand-lockup {
+.other-navbar .hm-topbar-promo,
+.other-navbar .hm-topbar-currency {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #ffffff;
+  white-space: nowrap;
+}
+
+.other-navbar .hm-topbar-currency {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.other-navbar .hm-caret {
+  width: 10px;
+  height: 10px;
+  transform: rotate(180deg);
+}
+
+/* ---------- Main nav (75px) ---------- */
+
+.other-navbar .hm-nav {
+  width: 100%;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+}
+
+.other-navbar .hm-brand {
+  text-decoration: none;
+  flex: 0 0 auto;
+}
+
+.other-navbar .brand-lockup {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -478,63 +531,111 @@
   cursor: pointer;
 }
 
-.other-navbar .navbar-container .menu .brand-badge {
+.other-navbar .brand-badge {
   width: 34px;
   height: 34px;
   transition: transform 200ms ease-in-out, opacity 200ms ease-in-out;
 }
 
-.other-navbar .navbar-container .menu .brand-lockup:hover .brand-badge {
+.other-navbar .brand-lockup:hover .brand-badge {
   transform: scale(1.08);
   opacity: 0.9;
 }
 
-.other-navbar .navbar-container .menu .brand-wordmark {
-  font-family: "Poppins", "Roboto", Arial, sans-serif;
+.other-navbar .brand-wordmark {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
   font-size: 19px;
   font-weight: 700;
   letter-spacing: 1.5px;
-  color: #d7b586;
+  color: #707262;
 }
 
-.other-navbar .navbar-container .menu .links {
-  min-width: 700px;
-  display: flex;
+.other-navbar .hm-links {
   flex-direction: row;
-  justify-content: space-between;
   align-items: center;
+  gap: 14px;
 }
 
-.other-navbar .navbar-container .menu .links .login-button {
-  background: #3776cc;
-  color: #f8f8ff;
+.other-navbar .hm-links a {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #707262;
+  text-decoration: none;
 }
 
-.other-navbar .navbar-container .menu .user-avatar {
-  width: 50px;
-  height: 50px;
-  border-radius: 24px;
+.other-navbar .hm-sep {
+  font-size: 14px;
+  color: #707262;
+  opacity: 0.55;
 }
 
+.other-navbar .hm-actions {
+  flex-direction: row;
+  align-items: center;
+  gap: 18px;
+  flex: 0 0 auto;
+}
+
+.other-navbar .hm-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.other-navbar .hm-icon {
+  width: 24px;
+  height: 24px;
+  transition: opacity 200ms ease-in-out;
+}
+
+.other-navbar .hm-icon-btn:hover .hm-icon {
+  opacity: 0.65;
+}
+
+.other-navbar .hm-login-button {
+  background: #707262;
+  color: #ffffff;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: none;
+  box-shadow: none;
+}
+
+.other-navbar .hm-login-button:hover {
+  background: #5d5f51;
+  box-shadow: none;
+}
+
+.other-navbar .user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 20px;
+}
+
+/* Active / hover underline — same treatment as .home-navbar. */
 .other-navbar a {
   text-decoration: none;
 }
 
 .other-navbar .hover-line a {
-  color: #f8f8f8;
+  color: #707262;
   z-index: 100;
 }
 
 .other-navbar .underline {
   display: block;
   content: "";
-  border-bottom: solid 2px #d7b686;
+  border-bottom: solid 2px #707262;
 }
 
 .other-navbar .hover-line:after {
   display: block;
   content: "";
-  border-bottom: solid 2px #d7b686;
+  border-bottom: solid 2px #707262;
   transform: scaleX(0);
   transition: transform 250ms ease-in-out;
 }
@@ -545,6 +646,37 @@
 
 .other-navbar div.hover-line:after {
   transform-origin: 0% 50%;
+}
+
+/* Structural breakpoint — keep in sync with --vt-bp-structural.
+   Same mobile treatment as .home-navbar's nav (no hero here to adjust):
+   currency selector drops, text links drop, icons/badge/wordmark shrink. */
+@media (max-width: 900px) {
+  .other-navbar .hm-topbar-currency {
+    display: none;
+  }
+
+  .other-navbar .hm-topbar .hm-inner {
+    justify-content: center;
+  }
+
+  .other-navbar .hm-links {
+    display: none;
+  }
+
+  .other-navbar .hm-icon {
+    width: 17px;
+    height: 17px;
+  }
+
+  .other-navbar .brand-badge {
+    width: 28px;
+    height: 28px;
+  }
+
+  .other-navbar .brand-wordmark {
+    font-size: 16px;
+  }
 }
 
 
