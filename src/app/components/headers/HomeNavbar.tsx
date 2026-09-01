@@ -196,8 +196,14 @@ export default function HomeNavbar(props: HomeNavbarProps) {
 
       {/* Hero */}
       <Box className="hm-hero">
-        <Box className="hm-hero-panel hm-hero-panel-left" />
-        <Box className="hm-hero-panel hm-hero-panel-right" />
+        <Box
+          className="hm-hero-panel hm-hero-panel-left"
+          style={{ backgroundImage: "url(/img/hero-left.jpg)" }}
+        />
+        <Box
+          className="hm-hero-panel hm-hero-panel-right"
+          style={{ backgroundImage: "url(/img/hero-right.jpg)" }}
+        />
 
         <Container className="hm-hero-inner">
           <Box className="hm-hero-copy">

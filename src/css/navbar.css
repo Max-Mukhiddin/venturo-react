@@ -210,25 +210,69 @@
   overflow: hidden;
 }
 
-/* Split panels: 970px / 950px on the 1920px design width.
-   NOTE: these are flat colour fills in the Figma file — the AdobeStock
-   layers are unexported placeholders, so no photography was available. */
+/* Split panels: 970px / 950px on the 1920px design width. The Figma
+   AdobeStock layers were unexported placeholders (flat colour fills);
+   replaced with real photography sourced from Unsplash's Search API
+   (photographer credit + license in docs/ai/COMPLETED_TASKS.md, backend
+   repo). background-image itself is set inline in HomeNavbar.tsx (as a
+   plain runtime src string, same convention as every /icons/* reference
+   elsewhere in this codebase) rather than via url() here — CRA's
+   css-loader tries to resolve a CSS url() as a webpack module import,
+   which fails for a path that only exists in public/, not src/. Flat
+   colour kept as background-color so it still shows as a plain
+   loading/fallback fill before the photo decodes. */
 .home-navbar .hm-hero-panel {
   position: absolute;
   top: 0;
   height: 100%;
+  background-size: cover;
+  background-position: center;
 }
 
 .home-navbar .hm-hero-panel-left {
   left: 0;
   width: 50.52%;
-  background: #ebebe8;
+  background-color: #ebebe8;
 }
 
 .home-navbar .hm-hero-panel-right {
   left: 50.52%;
   right: 0;
-  background: #d9d9d9;
+  background-color: #d9d9d9;
+}
+
+/* Real photography reads busy behind the copy (the eyebrow/H1 on the left
+   panel and "Get 25% Off" on the right both lost legibility against sky/
+   mountain mid-tones once the flat placeholder fills were replaced).
+   Directional gradients, not a flat panel-wide tint, concentrated exactly
+   where each panel's text sits (left edge for the left panel, right edge
+   for the right) and fading to fully transparent well before the panel's
+   far side — most of each photo stays untouched. Same technique real
+   e-commerce heroes use; text colour itself is untouched. */
+.home-navbar .hm-hero-panel-left::before,
+.home-navbar .hm-hero-panel-right::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.home-navbar .hm-hero-panel-left::before {
+  background: linear-gradient(
+    to right,
+    rgba(15, 15, 10, 0.32) 0%,
+    rgba(15, 15, 10, 0.12) 40%,
+    rgba(15, 15, 10, 0) 68%
+  );
+}
+
+.home-navbar .hm-hero-panel-right::before {
+  background: linear-gradient(
+    to left,
+    rgba(10, 10, 10, 0.28) 0%,
+    rgba(10, 10, 10, 0.1) 35%,
+    rgba(10, 10, 10, 0) 62%
+  );
 }
 
 .home-navbar .hm-hero-inner {
@@ -256,6 +300,24 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+/* Scrim sized to the copy block itself, not the panel — the panel-wide
+   gradient above alone measured a 1.01:1 contrast ratio behind "Hot
+   Deals" (WCAG needs 4.5:1 for normal text): the photo's brightness
+   swings enormously from bright sky at the top of the block to already-
+   dark rock at the bottom, and a single directional gradient can't track
+   that. A scrim padded around the actual text bounding box guarantees
+   contrast regardless of what's behind it at any point. Text colour
+   itself is untouched — still the design's own #707262/#aeb192 tokens. */
+.home-navbar .hm-hero-copy::before {
+  content: "";
+  position: absolute;
+  inset: -28px -36px;
+  z-index: -1;
+  background: rgba(8, 9, 7, 0.88);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
 }
 
 .home-navbar .hm-hero-eyebrow {
@@ -338,6 +400,17 @@
   align-items: flex-start;
   gap: 13px;
   color: #ffffff;
+}
+
+/* Same scrim technique as .hm-hero-copy — sized to this block only. */
+.home-navbar .hm-hero-offer::before {
+  content: "";
+  position: absolute;
+  inset: -20px -28px;
+  z-index: -1;
+  background: rgba(8, 9, 8, 0.6);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
 }
 
 .home-navbar .hm-hero-offer-get {
@@ -443,11 +516,29 @@
      against), so a plain fixed value rather than a clamp(). Previously
      40px, an invented value. */
   .home-navbar .hm-hero-copy {
-    position: static;
+    /* relative, not static, so this stays its own containing block (a
+       static parent would send the ::before scrim below escaping upward
+       to .hm-hero, detached from the text). Kept for correctness even
+       though the scrim itself is hidden below — .hm-hero-copy sits below
+       the stacked image here, on the plain #ebebe8 ground, not over a
+       photo, so no scrim is needed on this breakpoint at all.
+       left must be reset too — unlike static, relative still honours the
+       base rule's `left: calc(var(--vt-gutter) + 58px)` desktop offset,
+       which shifted the whole block ~78px off-centre and clipped the
+       text against the viewport edge. */
+    position: relative;
+    left: auto;
     transform: none;
     align-items: center;
     text-align: center;
     margin-top: 29px;
+  }
+
+  /* No photo behind the copy block on mobile (it's below the stacked
+     image, on plain #ebebe8) — the desktop-only scrim would just be an
+     unexplained dark card floating on a flat background. */
+  .home-navbar .hm-hero-copy::before {
+    display: none;
   }
 
   .home-navbar .hm-hero-title {
