@@ -22,13 +22,44 @@ import { Link } from "react-router-dom";
  * was a bare /products link, so both panels landed on the same default
  * view regardless of which was clicked.
  *
- * Both panel images are unexported AdobeStock placeholders in the design
- * (flat #d9d9d9 fills), same as every prior section — rendered as flat
- * panels, same established pattern.
+ * Both panel images were unexported AdobeStock placeholders in the
+ * design (flat #d9d9d9 fills); replaced with real photography sourced
+ * from Unsplash's Search API (photographer credits + license in
+ * docs/ai/COMPLETED_TASKS.md, backend repo). `.hb-panel-content` sits as
+ * a sibling positioned over `.hb-panel-media` (confirmed in home.css,
+ * not assumed) — this is an overlay layout like the hero, not a
+ * caption-below layout like Shop by Category.
  */
 const PANELS = [
-  { eyebrow: "Shop", heading: "New Arrivals", to: "/products?order=createdAt" },
-  { eyebrow: "Shop", heading: "Best Sellers", to: "/products?order=productViews" },
+  {
+    eyebrow: "Shop",
+    heading: "New Arrivals",
+    to: "/products?order=createdAt",
+    image: "/img/banner-new-arrivals.jpg",
+    // Measured (pixel-sampling contrast script, same as the hero) at all
+    // 4 widths — background-size:cover recrops this photo differently
+    // per breakpoint, so contrast isn't a single number: 3.90:1 (1920),
+    // 3.04:1 (1536), 2.98:1 (1440), 4.00:1 (390) against this specific
+    // photo's mid-toned/blurred-forest crop at each width. Needs a
+    // scrim at every width. Tied to this photo specifically — if it's
+    // ever swapped, re-measure rather than assuming this still applies.
+    needsScrim: true,
+    needsScrimMobile: false,
+  },
+  {
+    eyebrow: "Shop",
+    heading: "Best Sellers",
+    to: "/products?order=productViews",
+    image: "/img/banner-best-sellers.jpg",
+    // Measured at all 4 widths, not just desktop: 4.92:1 at every
+    // desktop width (bright-sky crop) — but the mobile crop centres on
+    // a busier, warmer part of the same photo and measured 1.27:1,
+    // badly failing. Same lesson as New Arrivals: cover recrops per
+    // breakpoint, so a desktop-only measurement isn't sufficient. Scrim
+    // needed below 900px only.
+    needsScrim: false,
+    needsScrimMobile: true,
+  },
 ];
 
 export default function Banner() {
@@ -38,9 +69,20 @@ export default function Banner() {
         <Box className={"hb-row"}>
           {PANELS.map((panel) => (
             <Link key={panel.heading} to={panel.to} className={"hb-panel"}>
-              <Box className={"hb-panel-media"} />
+              <Box
+                className={"hb-panel-media"}
+                style={{ backgroundImage: `url(${panel.image})` }}
+              />
               <Box className={"hb-panel-content"}>
-                <Box className={"hb-panel-copy"}>
+                <Box
+                  className={[
+                    "hb-panel-copy",
+                    panel.needsScrim ? "hb-panel-copy-scrim" : "",
+                    panel.needsScrimMobile ? "hb-panel-copy-scrim-mobile" : "",
+                  ]
+                    .filter(Boolean)
+                    .join(" ")}
+                >
                   <span className={"hb-panel-eyebrow"}>{panel.eyebrow}</span>
                   <span className={"hb-panel-heading"}>{panel.heading}</span>
                 </Box>

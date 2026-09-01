@@ -433,7 +433,9 @@
 .homepage .home-banner .hb-panel-media {
   position: absolute;
   inset: 0;
-  background: #d9d9d9;
+  background-color: #d9d9d9;
+  background-size: cover;
+  background-position: center;
   transition: transform 300ms ease-out;
 }
 
@@ -455,8 +457,73 @@
 }
 
 .homepage .home-banner .hb-panel-copy {
+  position: relative;
   display: flex;
   flex-direction: column;
+}
+
+/* Scrim for the "New Arrivals" panel only — measured 1.85:1 contrast
+   against this specific photo (a mid-toned blurred forest), same
+   pixel-sampling technique used for the hero. The sibling "Best Sellers"
+   panel measured 8.12:1 against its own photo's bright sky and needs
+   nothing. Sized to the copy block itself, not the whole panel, same
+   scrim technique as the hero's .hm-hero-copy::before.
+
+   z-index is explicit on both layers, not left to default paint order —
+   confirmed by measurement that default order doesn't do what it looks
+   like it should here: a *positioned* element (this ::before, even at
+   z-index:auto) paints after normal in-flow inline content in CSS's
+   default painting order, regardless of DOM position — so the scrim was
+   landing on top of the eyebrow/heading text, not behind it, even though
+   it comes first in the DOM. Giving .hb-panel-copy-scrim a real z-index
+   establishes an actual stacking context (position + non-auto z-index),
+   and the text spans get their own explicit higher z-index inside it, so
+   the order is unambiguous instead of relying on that default. */
+.homepage .home-banner .hb-panel-copy-scrim {
+  z-index: 0;
+}
+
+.homepage .home-banner .hb-panel-copy-scrim::before {
+  content: "";
+  position: absolute;
+  inset: -20px -28px;
+  z-index: 0;
+  background: rgba(8, 9, 7, 0.9);
+  border-radius: 10px;
+}
+
+.homepage .home-banner .hb-panel-copy-scrim .hb-panel-eyebrow,
+.homepage .home-banner .hb-panel-copy-scrim .hb-panel-heading {
+  position: relative;
+  z-index: 1;
+}
+
+/* Same scrim, same stacking-context fix, but only for "Best Sellers"
+   and only below 900px: measured 4.92:1 at every desktop width (its
+   photo's bright-sky crop) but 1.27:1 on mobile — background-size:cover
+   recrops the same photo onto a busier, warmer part of it at the
+   narrower panel width, and a desktop-only measurement missed that.
+   Scoped inside the existing structural breakpoint since the need here
+   is itself breakpoint-driven, not a separate concern. */
+@media (max-width: 900px) {
+  .homepage .home-banner .hb-panel-copy-scrim-mobile {
+    z-index: 0;
+  }
+
+  .homepage .home-banner .hb-panel-copy-scrim-mobile::before {
+    content: "";
+    position: absolute;
+    inset: -20px -28px;
+    z-index: 0;
+    background: rgba(8, 9, 7, 0.85);
+    border-radius: 10px;
+  }
+
+  .homepage .home-banner .hb-panel-copy-scrim-mobile .hb-panel-eyebrow,
+  .homepage .home-banner .hb-panel-copy-scrim-mobile .hb-panel-heading {
+    position: relative;
+    z-index: 1;
+  }
 }
 
 .homepage .home-banner .hb-panel-eyebrow {
