@@ -1073,7 +1073,9 @@
 
 .homepage .instagram-grid .ig-tile {
   aspect-ratio: 1;
-  background: #d9d9d9;
+  background-color: #d9d9d9;
+  background-size: cover;
+  background-position: center;
 }
 
 /* Structural breakpoint — keep in sync with --vt-bp-structural.
