@@ -1,42 +1,45 @@
-import React, { useEffect } from "react";
-import { Container, Stack, Box } from "@mui/material";
-import { Swiper, SwiperSlide } from "swiper/react";
+import React, { useEffect, useState } from "react";
+import { Box, Container } from "@mui/material";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
-import Divider from "../../components/divider";
-import Button from "@mui/material/Button";
 import Rating from "@mui/material/Rating";
-import "swiper/css";
-import "swiper/css/free-mode";
-import "swiper/css/navigation";
-import "swiper/css/thumbs";
-import { FreeMode, Navigation, Thumbs } from "swiper";
 import { Dispatch } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import { setRestaurant, setChosenProduct } from "./slice";
+import { setChosenProduct } from "./slice";
 import { Product } from "../../../lib/types/product";
-import { retrieveChosenProduct, retrieveRestaurant } from "./selector";
+import { retrieveChosenProduct } from "./selector";
 import { createSelector } from "reselect";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import ProductService from "../../services/ProductService";
-import MemberService from "../../services/MemberService";
-import { Member } from "../../../lib/types/member";
 import { serverApi } from "../../../lib/config";
 import { CartItem } from "../../../lib/types/search";
 import Breadcrumb from "../../components/breadcrumb";
 
-/** REDUX SLICE & SELECTOR **/
+/**
+ * Shop Detail — Session 4 of the Shop List/Shop Detail rebuild. Figma
+ * "HikMali" node 2461:881. Gallery (thumb rail + large image),
+ * price/size-row, and Add To Cart/Buy Now wiring reuse the homepage
+ * ProductDetails.tsx's already-solved pattern verbatim (same
+ * `activeImage` state, same `addToCartHandler`/`buyNowHandler` shape) —
+ * not a new pattern. `ProductSize` is a single fixed value per product,
+ * same inert-label treatment (not a fake S/M/L/XL picker) already
+ * established there.
+ *
+ * The old "Product Detail" Dancing Script heading is gone — Breadcrumb
+ * (Session 1) already renders the real "Shop Detail" heading, so it was
+ * a straight duplicate, flagged as known/temporary in that session.
+ *
+ * `averageRating`/`productViews` are real, already-wired data with no
+ * counterpart in the reused pd-* pattern (the homepage teaser shows
+ * neither) — kept and restyled rather than dropped, since they're
+ * genuine product data, not mockup filler.
+ */
 const actionDispatch = (dispatch: Dispatch) => ({
-  setRestaurant: (data: Member) => dispatch(setRestaurant(data)),
   setChosenProduct: (data: Product) => dispatch(setChosenProduct(data)),
 });
 
 const chosenProductRetriever = createSelector(
   retrieveChosenProduct,
   (chosenProduct) => ({ chosenProduct })
-);
-const restaurantRetriever = createSelector(
-  retrieveRestaurant,
-  (restaurant) => ({ restaurant })
 );
 
 interface ChosenProDuctProps {
@@ -45,10 +48,11 @@ interface ChosenProDuctProps {
 
 export default function ChosenProduct(props: ChosenProDuctProps) {
   const { onAdd } = props;
-  const { setRestaurant, setChosenProduct } = actionDispatch(useDispatch());
+  const { setChosenProduct } = actionDispatch(useDispatch());
   const { productsId } = useParams<{ productsId: string }>();
   const { chosenProduct } = useSelector(chosenProductRetriever);
-  const { restaurant } = useSelector(restaurantRetriever);
+  const history = useHistory();
+  const [activeImage, setActiveImage] = useState(0);
 
   useEffect(() => {
     const product = new ProductService();
@@ -56,91 +60,119 @@ export default function ChosenProduct(props: ChosenProDuctProps) {
       .getProduct(productsId)
       .then((data) => setChosenProduct(data))
       .catch((err) => console.log(err));
-
-    const member = new MemberService();
-    member
-      .getRestaurant()
-      .then((data) => setRestaurant(data))
-      .catch((err) => console.log(err));
   }, [productsId]);
 
   if (!chosenProduct) return null;
+
+  const images = chosenProduct.productImages;
+  const mainImage = images[activeImage]
+    ? `${serverApi}/${images[activeImage]}`
+    : "/icons/noimage-list.svg";
+
+  const addToCartHandler = () => {
+    onAdd({
+      _id: chosenProduct._id,
+      quantity: 1,
+      name: chosenProduct.productName,
+      price: chosenProduct.productPrice,
+      image: chosenProduct.productImages[0] || "",
+    });
+  };
+
+  const buyNowHandler = () => {
+    addToCartHandler();
+    history.push("/checkout");
+  };
+
   return (
     <div className={"chosen-product"}>
       <Breadcrumb
         heading={"Shop Detail"}
         trail={[{ label: "Home", to: "/" }, { label: "Shop Detail" }]}
       />
-      <Box className={"title"}>Product Detail</Box>
-      <Container className={"product-container"}>
-        <Stack className={"chosen-product-slider"}>
-          <Swiper
-            loop={true}
-            spaceBetween={10}
-            navigation={true}
-            modules={[FreeMode, Navigation, Thumbs]}
-            className="swiper-area"
-          >
-            {chosenProduct?.productImages.map((ele: string, index: number) => {
-              const imagePath = `${serverApi}/${ele}`;
-              return (
-                <SwiperSlide key={index}>
-                  <img className="slider-image" src={imagePath} />
-                </SwiperSlide>
-              );
-            })}
-          </Swiper>
-        </Stack>
-        <Stack className={"chosen-product-info"}>
-          <Box className={"info-box"}>
-            <strong className={"product-name"}>
-              {chosenProduct.productName}
-            </strong>
-            <span className={"resto-name"}>{restaurant?.memberNick}</span>
-            <span className={"resto-name"}>{restaurant?.memberPhone}</span>
-            <Box className={"rating-box"}>
+      <Container className={"sd-inner"}>
+        <Box className={"sd-layout"}>
+          <Box className={"sd-gallery"}>
+            {images.length > 0 ? (
+              <Box className={"sd-thumbs"}>
+                {images.map((img, index) => (
+                  <button
+                    key={img + index}
+                    type={"button"}
+                    className={
+                      index === activeImage
+                        ? "sd-thumb sd-thumb-active"
+                        : "sd-thumb"
+                    }
+                    onClick={() => setActiveImage(index)}
+                  >
+                    <img
+                      src={`${serverApi}/${img}`}
+                      alt={`${chosenProduct.productName} ${index + 1}`}
+                    />
+                  </button>
+                ))}
+              </Box>
+            ) : null}
+
+            <Box className={"sd-main"}>
+              <img
+                src={mainImage}
+                alt={chosenProduct.productName}
+                className={"sd-main-image"}
+              />
+            </Box>
+          </Box>
+
+          <Box className={"sd-content"}>
+            <h1 className={"sd-title"}>{chosenProduct.productName}</h1>
+
+            <Box className={"sd-meta-row"}>
               <Rating
                 name="half-rating-read"
                 value={chosenProduct.averageRating ?? 0}
                 precision={0.5}
                 readOnly
               />
-              <div className={"evaluation-box"}>
-                <div className={"product-view"}>
-                  <RemoveRedEyeIcon sx={{ mr: "10px" }} />
-                  <span>{chosenProduct.productViews}</span>
-                </div>
-              </div>
+              <span className={"sd-views"}>
+                <RemoveRedEyeIcon fontSize={"small"} />
+                {chosenProduct.productViews}
+              </span>
             </Box>
-            <p className={"product-desc"}>
-              {chosenProduct?.productDesc
-                ? chosenProduct?.productDesc
-                : "No Description"}
-            </p>
-            <Divider height="1" width="100%" bg="#000000" />
-            <div className={"product-price"}>
-              <span>Price:</span>
-              <span>{chosenProduct.productPrice}</span>
-            </div>
-            <div className={"button-box"}>
-              <Button
-                variant="contained"
-                onClick={(e) => {
-                  onAdd({
-                    _id: chosenProduct._id,
-                    quantity: 1,
-                    name: chosenProduct.productName,
-                    price: chosenProduct.productPrice,
-                    image: chosenProduct.productImages[0] || "",
-                  });
-                  e.stopPropagation();
-                }}
-              >
-                Add To Basket
-              </Button>
-            </div>
+
+            <span className={"sd-price"}>${chosenProduct.productPrice}</span>
+
+            <Box className={"sd-divider"} />
+
+            {chosenProduct.productSize ? (
+              <Box className={"sd-size-row"}>
+                <span className={"sd-size-label"}>Size:</span>
+                <span className={"sd-size-value"}>
+                  {chosenProduct.productSize}
+                </span>
+              </Box>
+            ) : null}
+
+            <button
+              type={"button"}
+              className={"sd-add"}
+              onClick={addToCartHandler}
+            >
+              Add To Cart
+            </button>
+            <button
+              type={"button"}
+              className={"sd-buy"}
+              onClick={buyNowHandler}
+            >
+              Buy Now
+            </button>
+
+            {chosenProduct.productDesc ? (
+              <p className={"sd-desc"}>{chosenProduct.productDesc}</p>
+            ) : null}
           </Box>
-        </Stack>
+        </Box>
       </Container>
     </div>
   );

@@ -162,6 +162,68 @@
   }
 }
 
+/* ==========================================================================
+   SHOP LIST — Session 3: sort + results count + pagination. The sort
+   control reuses the exact .sl-filter-chip pill treatment (Session 2)
+   rather than inventing new styling — same real button/pill convention
+   everywhere on this page. Results count is honest: the real returned
+   array length, not a fabricated grand total (the backend has no
+   total-count field — see NEXT_STEPS.md).
+   ========================================================================== */
+
+.sl-results-row {
+  width: 100%;
+  margin-top: 40px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sl-results-count {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #707262;
+}
+
+.sl-sort-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Pagination — MUI Pagination restyled to the site palette. */
+.pagination-section {
+  align-items: center;
+  margin-top: 40px;
+}
+
+.pagination-section .MuiPaginationItem-root {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #707262;
+}
+
+.pagination-section .MuiPaginationItem-root.Mui-selected {
+  background-color: #707262;
+  color: #ffffff;
+}
+
+@media (hover: hover) {
+  .pagination-section .MuiPaginationItem-root:hover {
+    background-color: #e5e3d3;
+  }
+
+  .pagination-section .MuiPaginationItem-root.Mui-selected:hover {
+    background-color: #5d5f51;
+  }
+}
+
 /* Product cards area */
 /* Fixed 390px tracks (not minmax/1fr) so cards measure the real Figma
    size regardless of column count — the surrounding MUI <Container>
@@ -410,181 +472,221 @@
   margin: 0 auto 40px auto;
 }
 
-/** ChosenProduct **/
+/* ==========================================================================
+   SHOP DETAIL — Session 4 of the Shop List/Shop Detail rebuild. Figma
+   "HikMali" node 2461:881. Gallery (thumb rail + large image),
+   price/size-row, and Add To Cart/Buy Now buttons reuse the homepage
+   ProductDetails.tsx's already-solved pd-* pattern (home.css) verbatim
+   under an sd- prefix — not a new pattern. The old "Product Detail"
+   Dancing Script heading is gone: Breadcrumb (Session 1) already shows
+   the real "Shop Detail" heading, so this was a straight duplicate.
+   ========================================================================== */
 
 .products-page .chosen-product {
   position: relative;
   width: 100%;
-  height: auto;
-  background: #f8f8ff;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  padding: var(--vt-section-y) 0;
+  background: #ffffff;
 }
 
-.products-page .chosen-product .product-container {
+.products-page .chosen-product .sd-inner {
+  max-width: var(--vt-content-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--vt-gutter);
+  box-sizing: border-box;
+}
+
+.products-page .chosen-product .sd-layout {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  margin-top: 80px;
-  margin-bottom: 150px;
+  gap: 40px;
 }
 
-.products-page .chosen-product .chosen-product-slider {
-  width: 48%;
-  height: 480px;
-  background: #ffffff;
-  box-shadow: 9px 13px 14px 5px rgba(0, 0, 0, 0.25),
-    inset -1px 2px 10px 3px rgba(0, 0, 0, 0.25);
-  border-radius: 16px;
-  overflow: hidden;
+.products-page .chosen-product .sd-gallery {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  flex: 1 1 0;
+  min-width: 0;
 }
 
-.products-page .chosen-product .chosen-product-slider .swiper-area {
-  --swiper-navigation-color: #fff;
-  --swiper-pagination-color: #fff;
-  width: 100%;
-  height: 1020px;
+.products-page .chosen-product .sd-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  flex: 0 0 auto;
 }
 
-.products-page
-  .chosen-product
-  .chosen-product-slider
-  .swiper-area
-  .slider-image {
+.products-page .chosen-product .sd-thumb {
+  width: 116px;
+  height: 116px;
+  padding: 0;
+  border: 1px solid transparent;
+  background: #f5f5f5;
+  cursor: pointer;
+}
+
+.products-page .chosen-product .sd-thumb-active {
+  border-color: #aeb192;
+}
+
+.products-page .chosen-product .sd-thumb img {
   width: 100%;
   height: 100%;
-  /* Was missing entirely — default object-fit: fill stretched/distorted
-     the real product photo (1080x720) to match the swiper box's own
-     ratio. Same object-fit: cover treatment used everywhere else this
-     session. */
   object-fit: cover;
 }
 
-.products-page .chosen-product .chosen-product-info {
-  padding: 30px 40px;
-  width: 49%;
-  height: 480px;
-  display: flex;
-  background: #ffffff;
-  box-shadow: 9px 13px 14px 5px rgba(0, 0, 0, 0.25),
-    inset -1px 2px 10px 3px rgba(0, 0, 0, 0.25);
-  border-radius: 16px;
-}
-
-.products-page .chosen-product .chosen-product-info .info-box {
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.products-page .chosen-product .info-box .product-name {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 30px;
-  line-height: 36px;
-  color: #000000;
-}
-
-.products-page .chosen-product .info-box .resto-name {
-  margin-top: 16px;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 17px;
-  line-height: 15px;
-  color: #979797;
-}
-
-.products-page .chosen-product .info-box .rating-box {
-  margin-top: 20px;
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.products-page .chosen-product .rating-box .star-box {
-  width: auto;
-  height: auto;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.products-page .chosen-product .rating-box .evaluation-box {
-  width: auto;
-  height: auto;
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
-
-.products-page .chosen-product .rating-box .evaluation-box .product-view {
-  display: flex;
-  align-items: center;
-}
-
-.products-page .chosen-product .info-box .product-desc {
-  height: 112px;
-  margin-top: 30px;
-  margin-bottom: 30px;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 18px;
-  line-height: 22px;
-  color: #000000;
-}
-
-.products-page .chosen-product .info-box .product-price {
-  margin-top: 20px;
-  margin-bottom: 20px;
-  width: 100%;
-  height: auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.products-page .chosen-product .product-price span {
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 25px;
-  line-height: 22px;
-  color: #000000;
-}
-
-.products-page .chosen-product .button-box {
-  width: 100%;
-  height: auto;
+.products-page .chosen-product .sd-main {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  aspect-ratio: 663 / 900;
+  background: #f5f5f5;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
-.products-page .chosen-product .button-box button {
-  width: 230px;
-  height: 44px;
-  font-family: "Poppins";
-  font-style: normal;
+.products-page .chosen-product .sd-main-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.products-page .chosen-product .sd-content {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.products-page .chosen-product .sd-title {
+  margin: 0;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 32px;
+  line-height: 32px;
   font-weight: 600;
-  font-size: 15px;
-  line-height: 22px;
-  color: #f8f8ff;
+  color: #707262;
 }
 
-.products-page .chosen-product .title {
-  font-family: "Dancing Script";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 36px;
-  line-height: 43px;
-  margin-top: 40px;
+/* Real, functioning data (averageRating/productViews) — not part of
+   the reused pd-* pattern (the homepage teaser doesn't show either),
+   but genuine product data already wired here, kept and restyled
+   rather than dropped. */
+.products-page .chosen-product .sd-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.products-page .chosen-product .sd-views {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  color: #707262;
+}
+
+.products-page .chosen-product .sd-price {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: #707262;
+}
+
+.products-page .chosen-product .sd-divider {
+  height: 1px;
+  background: #aeb192;
+}
+
+.products-page .chosen-product .sd-size-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  color: #707262;
+}
+
+.products-page .chosen-product .sd-size-value {
+  padding: 4px 10px;
+  border: 1px solid #aeb192;
+  text-transform: capitalize;
+}
+
+.products-page .chosen-product .sd-add,
+.products-page .chosen-product .sd-buy {
+  width: 100%;
+  padding: 14px 40px;
+  cursor: pointer;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 200ms ease-out, color 200ms ease-out;
+}
+
+.products-page .chosen-product .sd-add {
+  border: none;
+  background: #707262;
+  color: #ffffff;
+}
+
+.products-page .chosen-product .sd-buy {
+  border: 1px solid #707262;
+  background: transparent;
+  color: #707262;
+}
+
+@media (hover: hover) {
+  .products-page .chosen-product .sd-add:hover {
+    background: #5d5f51;
+  }
+
+  .products-page .chosen-product .sd-buy:hover {
+    background: #707262;
+    color: #ffffff;
+  }
+}
+
+.products-page .chosen-product .sd-desc {
+  margin: 0;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #707262;
+  opacity: 0.85;
+}
+
+/* Structural breakpoint — keep in sync with --vt-bp-structural. Unlike
+   the homepage teaser's pd-title (hidden on its confirmed mobile
+   frame), sd-title always shows — this is a real standalone page, not
+   a teaser section with its own confirmed no-title mobile frame. */
+@media (max-width: 900px) {
+  .products-page .chosen-product .sd-layout {
+    flex-direction: column;
+    gap: var(--vt-section-y);
+  }
+
+  .products-page .chosen-product .sd-gallery {
+    flex-direction: column;
+  }
+
+  .products-page .chosen-product .sd-thumbs {
+    flex-direction: row;
+    order: 2;
+  }
+
+  .products-page .chosen-product .sd-main {
+    order: 1;
+    aspect-ratio: 350 / 475;
+  }
+
+  .products-page .chosen-product .sd-thumb {
+    width: 107px;
+    height: 107px;
+  }
 }

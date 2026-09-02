@@ -15,7 +15,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Dispatch } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import { setRestaurant, setChosenProduct, setProducts } from "./slice";
+import { setProducts } from "./slice";
 import { Product, ProductInquiry } from "../../../lib/types/product";
 import { retrieveProducts } from "./selector";
 import { createSelector } from "reselect";
@@ -196,42 +196,53 @@ export default function Products(props: ProDuctsProps) {
           </Box>
         </Stack>
 
-        <Stack
-          direction="row"
-          justifyContent="flex-end"
-          spacing={1}
-          sx={{ mr: 2, mt: 10, mb: 4 }}
-        >
-          <Button
-            variant="contained"
-            color={
-              productSearch.order === "createdAt" ? "primary" : "secondary"
-            }
-            onClick={() => searchOrderHandler("createdAt")}
-          >
-            NEW
-          </Button>
-          <Button
-            variant="contained"
-            color={
-              productSearch.order === "productPrice" ? "primary" : "secondary"
-            }
-            onClick={() => searchOrderHandler("productPrice")}
-          >
-            PRICE
-          </Button>
-          <Button
-            variant="contained"
-            color={
-              productSearch.order === "productViews" ? "primary" : "secondary"
-            }
-            onClick={() => searchOrderHandler("productViews")}
-          >
-            VIEWS
-          </Button>
-        </Stack>
-
         <Stack className="products-page-wrapper">
+          <Box className={"sl-results-row"}>
+            {/* Honest count: the real returned array length, not a
+                fabricated grand total — GET /product/all has no
+                total-count field (see docs/ai/NEXT_STEPS.md), unlike
+                Figma's mockup "Showing 1-15 of 50 Results". */}
+            <span className={"sl-results-count"}>
+              {products.length} Result{products.length === 1 ? "" : "s"}
+            </span>
+
+            <Box className={"sl-sort-row"}>
+              <button
+                type={"button"}
+                className={
+                  productSearch.order === "createdAt"
+                    ? "sl-filter-chip sl-filter-chip-active"
+                    : "sl-filter-chip"
+                }
+                onClick={() => searchOrderHandler("createdAt")}
+              >
+                Newest
+              </button>
+              <button
+                type={"button"}
+                className={
+                  productSearch.order === "productPrice"
+                    ? "sl-filter-chip sl-filter-chip-active"
+                    : "sl-filter-chip"
+                }
+                onClick={() => searchOrderHandler("productPrice")}
+              >
+                Price
+              </button>
+              <button
+                type={"button"}
+                className={
+                  productSearch.order === "productViews"
+                    ? "sl-filter-chip sl-filter-chip-active"
+                    : "sl-filter-chip"
+                }
+                onClick={() => searchOrderHandler("productViews")}
+              >
+                Most Viewed
+              </button>
+            </Box>
+          </Box>
+
           <Box className={"sl-filter-row"}>
             {CATEGORY_FILTERS.map((filter) => (
               <button
