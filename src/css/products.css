@@ -473,6 +473,287 @@
 }
 
 /* ==========================================================================
+   SHOP LIST — HikMali "Shop List" node 2458:2. The controls and cards use
+   only the existing Venturo catalogue fields and basket behavior.
+   ========================================================================== */
+
+.products-page .sl-page {
+  background: #ffffff;
+}
+
+.products-page .sl-content {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: var(--vt-content-max);
+  margin: 0 auto;
+  padding: var(--vt-section-y) var(--vt-gutter);
+}
+
+.products-page .sl-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-bottom: clamp(1.5rem, 2.5vw, 2.5rem);
+  border-bottom: 1px solid #deded8;
+  padding-bottom: 1.125rem;
+}
+
+.products-page .sl-result-count,
+.products-page .sl-filter-label,
+.products-page .sl-sort-label {
+  color: #5f625d;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.products-page .sl-toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.products-page .sl-filter-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  border: 0;
+  padding: 0;
+  color: #22251f;
+  background: transparent;
+  font: inherit;
+  cursor: pointer;
+}
+
+.products-page .sl-filter-button::before {
+  width: 1.125rem;
+  height: 0.75rem;
+  border-top: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  content: "";
+}
+
+.products-page .sl-sort-control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.products-page .sl-sort-select {
+  min-height: 2.5rem;
+  border: 0;
+  border-bottom: 1px solid #a9aca6;
+  border-radius: 0;
+  padding: 0 1.55rem 0 0.2rem;
+  color: #22251f;
+  background: #fff;
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.products-page .sl-filter-panel {
+  display: grid;
+  grid-template-columns: minmax(13rem, 18rem) 1fr;
+  gap: 1.5rem clamp(1.5rem, 4vw, 4rem);
+  margin-bottom: clamp(1.75rem, 3vw, 3rem);
+  border: 1px solid #deded8;
+  padding: clamp(1.25rem, 2vw, 2rem);
+  background: #f7f7f2;
+}
+
+.products-page .sl-search-form { display: grid; gap: 0.5rem; }
+
+.products-page .sl-search-label,
+.products-page .sl-filter-heading {
+  color: #22251f;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.products-page .sl-search-row { display: flex; }
+
+.products-page .sl-search-input {
+  min-width: 0;
+  flex: 1;
+  border: 1px solid #b9bbb5;
+  border-right: 0;
+  border-radius: 0;
+  padding: 0.75rem;
+  color: #22251f;
+  background: #fff;
+  font: inherit;
+}
+
+.products-page .sl-search-button {
+  border: 1px solid #22251f;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  background: #22251f;
+  font: inherit;
+  cursor: pointer;
+}
+
+.products-page .sl-category-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 0.625rem;
+}
+
+.products-page .sl-filter-heading { width: 100%; margin-bottom: 0.125rem; }
+
+.products-page .sl-filter-chip {
+  border: 1px solid #b9bbb5;
+  border-radius: 999px;
+  padding: 0.56rem 0.9rem;
+  color: #3b3e39;
+  background: transparent;
+  font: inherit;
+  font-size: 0.8125rem;
+  cursor: pointer;
+}
+
+.products-page .sl-filter-chip[aria-pressed="true"] {
+  border-color: #22251f;
+  color: #fff;
+  background: #22251f;
+}
+
+.products-page .sl-state { margin: 0; padding: 4rem 0; color: #5f625d; text-align: center; }
+.products-page .sl-state-error { color: #a34430; }
+
+.products-page .sl-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(21.875rem, 1fr));
+  gap: 1.25rem;
+}
+
+.products-page .sl-card {
+  display: flex;
+  min-width: 0;
+  min-height: 34.625rem;
+  flex-direction: column;
+  overflow: hidden;
+  background: #f4f4ee;
+}
+
+.products-page .sl-card-main {
+  display: flex;
+  min-width: 0;
+  min-height: 31.875rem;
+  flex: 1;
+  flex-direction: column;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.products-page .sl-card-main:focus-visible,
+.products-page .sl-add-button:focus-visible,
+.products-page .sl-filter-button:focus-visible,
+.products-page .sl-filter-chip:focus-visible,
+.products-page .sl-search-button:focus-visible,
+.products-page .sl-page-button:focus-visible,
+.products-page .sl-sort-select:focus-visible,
+.products-page .sl-search-input:focus-visible { outline: 3px solid #7b9c48; outline-offset: 3px; }
+
+.products-page .sl-card-media {
+  order: 2;
+  height: 21.875rem;
+  margin-top: auto;
+  overflow: hidden;
+  background: #e7e7de;
+}
+
+.products-page .sl-card-media img { width: 100%; height: 100%; object-fit: cover; transition: transform 260ms ease; }
+.products-page .sl-card-main:hover .sl-card-media img { transform: scale(1.035); }
+
+.products-page .sl-card-info {
+  display: flex;
+  min-height: 10rem;
+  flex-direction: column;
+  order: 1;
+  padding: 1.625rem 1.875rem 1.125rem;
+}
+
+.products-page .sl-card-collection { margin: 0 0 0.7rem; color: #6d706a; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+
+.products-page .sl-card-name {
+  display: -webkit-box;
+  margin: 0;
+  overflow: hidden;
+  color: #20231d;
+  font-family: "Playfair Display", Georgia, serif;
+  font-size: clamp(1.2rem, 1.55vw, 1.55rem);
+  font-weight: 600;
+  line-height: 1.15;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.products-page .sl-card-meta { display: flex; align-items: baseline; justify-content: space-between; gap: 0.75rem; margin-top: auto; padding-top: 0.85rem; }
+.products-page .sl-card-price { color: #2c492c; font-size: 1rem; font-weight: 800; }
+.products-page .sl-card-rating { color: #5f625d; font-size: 0.75rem; white-space: nowrap; }
+
+.products-page .sl-add-button {
+  min-height: 2.75rem;
+  border: 0;
+  border-top: 1px solid #d9d9d2;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  background: #2c492c;
+  font: inherit;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+.products-page .sl-add-button:hover:not(:disabled) { background: #1f361f; }
+.products-page .sl-add-button:disabled { color: #777a73; background: #e6e6df; cursor: not-allowed; }
+
+.products-page .sl-pagination { display: flex; justify-content: center; gap: 0.5rem; margin-top: clamp(2.5rem, 5vw, 5rem); }
+
+.products-page .sl-page-button {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  border: 1px solid #c8cac4;
+  padding: 0.5rem 0.9rem;
+  color: #252820;
+  background: #fff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.products-page .sl-page-button[aria-current="page"] { border-color: #22251f; color: #fff; background: #22251f; }
+.products-page .sl-page-button:disabled { opacity: 0.4; cursor: not-allowed; }
+.products-page .sl-benefits { margin-top: clamp(3rem, 7vw, 7.5rem); }
+
+@media (max-width: 900px) {
+  .products-page .sl-toolbar { align-items: flex-start; flex-direction: column; }
+  .products-page .sl-toolbar-actions { width: 100%; justify-content: space-between; }
+  .products-page .sl-filter-panel { grid-template-columns: 1fr; }
+  .products-page .sl-product-grid { grid-template-columns: minmax(0, 1fr); }
+}
+
+@media (max-width: 520px) {
+  .products-page .sl-toolbar-actions { align-items: flex-start; flex-direction: column; gap: 1rem; }
+  .products-page .sl-sort-control { width: 100%; justify-content: space-between; }
+  .products-page .sl-sort-select { flex: 1; }
+  .products-page .sl-card-media { height: clamp(17rem, 90vw, 21.875rem); }
+  .products-page .sl-card-info { min-height: 9rem; padding: 1.35rem; }
+}
+
+/* ==========================================================================
    SHOP DETAIL — Session 4 of the Shop List/Shop Detail rebuild. Figma
    "HikMali" node 2461:881. Gallery (thumb rail + large image),
    price/size-row, and Add To Cart/Buy Now buttons reuse the homepage
