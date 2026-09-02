@@ -473,6 +473,11 @@
   .slider-image {
   width: 100%;
   height: 100%;
+  /* Was missing entirely — default object-fit: fill stretched/distorted
+     the real product photo (1080x720) to match the swiper box's own
+     ratio. Same object-fit: cover treatment used everywhere else this
+     session. */
+  object-fit: cover;
 }
 
 .products-page .chosen-product .chosen-product-info {

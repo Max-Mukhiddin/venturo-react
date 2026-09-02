@@ -3,6 +3,7 @@ import { Box, Container } from "@mui/material";
 import { Product } from "../../../lib/types/product";
 import { CartItem } from "../../../lib/types/search";
 import ProductService from "../../services/ProductService";
+import { serverApi } from "../../../lib/config";
 
 /**
  * Highlights — Figma "HikMali" node 7:61 (mobile counterpart 7:148, the
@@ -23,6 +24,16 @@ import ProductService from "../../services/ProductService";
  * sourced from Unsplash — credit + license in docs/ai/COMPLETED_TASKS.md,
  * backend repo) is the only overlay-legibility concern on desktop; the
  * product card already has its own solid #f5f5f5 fill.
+ *
+ * The card itself was missing its product photo entirely (name/desc/
+ * button only) — a real gap confirmed against the actual HikMali
+ * reference theme, where this card shows the product image the same way
+ * every other product card on the page does. Added `hl-card-media`
+ * using the identical fixed-height + object-fit: cover treatment as
+ * Best Products/Deals Of The Day/Product Details this session — image
+ * dominant above a compact name/button footer, not the hover-reveal
+ * overlay those two grid sections use (this is a single hero card, not
+ * a repeating row, and the reference shows the caption always visible).
  */
 const CROSS_POSITIONS = [
   { left: "calc(50% + 36px)", top: "168px" },
@@ -81,6 +92,16 @@ export default function Highlights(props: HighlightsProps) {
       <Container className={"hl-inner"}>
         {product ? (
           <article className={"hl-card"}>
+            <Box className={"hl-card-media"}>
+              <img
+                src={
+                  product.productImages[0]
+                    ? `${serverApi}/${product.productImages[0]}`
+                    : "/icons/noimage-list.svg"
+                }
+                alt={product.productName}
+              />
+            </Box>
             <Box className={"hl-card-info"}>
               <span className={"hl-card-name"}>{product.productName}</span>
               {product.productDesc ? (
