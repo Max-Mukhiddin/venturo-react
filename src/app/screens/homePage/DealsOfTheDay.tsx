@@ -3,6 +3,7 @@ import { Box, Container } from "@mui/material";
 import { Product } from "../../../lib/types/product";
 import { CartItem } from "../../../lib/types/search";
 import ProductService from "../../services/ProductService";
+import { serverApi } from "../../../lib/config";
 
 /**
  * Deals Of The day — Figma "HikMali" node 7:90 (mobile counterpart 7:149).
@@ -60,24 +61,34 @@ export default function DealsOfTheDay(props: { onAdd: (item: CartItem) => void }
         <h2 className={"dd-title"}>Deals Of The Day</h2>
 
         <Box className={"dd-grid"}>
-          {products.map((product: Product) => (
-            <article key={product._id} className={"dd-card"}>
-              <Box className={"dd-card-info"}>
-                <span className={"dd-card-name"}>{product.productName}</span>
-                {product.productDesc ? (
-                  <span className={"dd-card-desc"}>{product.productDesc}</span>
-                ) : null}
-              </Box>
+          {products.map((product: Product) => {
+            const imagePath = product.productImages[0]
+              ? `${serverApi}/${product.productImages[0]}`
+              : "/icons/noimage-list.svg";
 
-              <button
-                type={"button"}
-                className={"dd-add"}
-                onClick={() => addToCartHandler(product)}
-              >
-                Add To Cart
-              </button>
-            </article>
-          ))}
+            return (
+              <article key={product._id} className={"dd-card"}>
+                <Box className={"dd-card-info"}>
+                  <span className={"dd-card-name"}>{product.productName}</span>
+                  {product.productDesc ? (
+                    <span className={"dd-card-desc"}>{product.productDesc}</span>
+                  ) : null}
+                </Box>
+
+                <Box className={"dd-card-media"}>
+                  <img src={imagePath} alt={product.productName} />
+                </Box>
+
+                <button
+                  type={"button"}
+                  className={"dd-add"}
+                  onClick={() => addToCartHandler(product)}
+                >
+                  Add To Cart
+                </button>
+              </article>
+            );
+          })}
         </Box>
       </Container>
     </div>
