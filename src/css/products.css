@@ -110,243 +110,224 @@
   border-radius: 18.5px;
 }
 
-.products .filter-section {
+/* ==========================================================================
+   SHOP LIST — Session 2 of the Shop List/Shop Detail rebuild. Figma
+   "HikMali" node 2458:2. Grid/card reuse the Best Products (`bp-card`)
+   fixed-height + object-fit: cover + hover-reveal-overlay convention
+   verbatim (home.css) — not a new pattern. Filter is a horizontal chip
+   row (real ProductCollection values), replacing the old rotated
+   sidebar tabs; Figma's static frame doesn't show what its own compact
+   "Filter" control expands into, so the widget shape was a real
+   decision point, resolved with the user before implementing rather
+   than guessed.
+   ========================================================================== */
+
+.sl-filter-row {
+  width: 100%;
+  margin-top: 40px;
   display: flex;
   flex-direction: row;
-  gap: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.products-layout {
-  display: flex;
-  gap: 10px;
-  margin-top: 40px;
+.sl-filter-chip {
+  padding: 8px 20px;
+  border: 1px solid #707262;
+  border-radius: 100px;
+  background: #f5f5f5;
+  cursor: pointer;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #707262;
+  transition: background 200ms ease-out, color 200ms ease-out;
 }
 
-/* Tab container stays left */
-.category-tabs {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  align-items: center;
+@media (hover: hover) {
+  .sl-filter-chip:hover {
+    background: #e5e3d3;
+  }
 }
 
-/* Rotate each tab */
-.category-tabs button {
-  transform: rotate(-90deg);
-  margin: 20px 0;
-  width: 80px;
-  height: 36px;
-  font-size: 12px;
-  padding: 0;
-  border-radius: 8px;
+.sl-filter-chip-active {
+  background: #707262;
+  border-color: #707262;
+  color: #ffffff;
+}
+
+@media (hover: hover) {
+  .sl-filter-chip-active:hover {
+    background: #5d5f51;
+  }
 }
 
 /* Product cards area */
-.products-grid {
-  flex: 1;
-}
-
-.cards-frame {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(273px, 1fr));
-  gap: 13px;
+/* Fixed 390px tracks (not minmax/1fr) so cards measure the real Figma
+   size regardless of column count — the surrounding MUI <Container>
+   this page still uses (untouched, out of this session's scope) caps
+   around ~1200px, narrower than the 1620px (4x390 + 3x20 gap) Figma's
+   1920 desktop anchor uses, so only 3 columns actually fit here today.
+   Flagged in NEXT_STEPS.md rather than widening the shared Container,
+   which would also reflow the title/search/sort row this session is
+   explicitly not touching. */
+.sl-grid {
   width: 100%;
-  /* padding: 20px 0; */
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 390px);
+  justify-content: center;
+  gap: 20px;
 }
 
-.card {
+/* Fixed 390x554 to match the real Figma card size — same total-height
+   composition as bp-card: fixed-height name header (no content-driven
+   height variance), fixed-height media, Add To Cart bar pinned to the
+   bottom via margin-top: auto. */
+.sl-card {
   position: relative;
-  width: 273px !important;
-  height: auto !important;
-  border-radius: 0px 50px 0px 0px !important;
-  overflow: visible !important;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+  overflow: hidden;
   cursor: pointer;
-  background-color: transparent !important;
-  box-shadow: none !important;
+  transition: box-shadow 200ms ease-out;
 }
 
-.card.MuiCard-root {
-  background-color: transparent !important;
-  box-shadow: none !important;
+.sl-card-info {
+  height: 80px;
+  padding: 16px 30px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
 }
 
-/* Size Chip/Badge */
-.card .MuiChip-root {
-  position: absolute !important;
-  top: 16px;
-  left: 16px;
-  z-index: 10;
-  background-color: #ff9800 !important;
-  color: white !important;
-  font-weight: 600 !important;
-  font-size: 12px !important;
-  height: 28px !important;
-  border-radius: 25px !important;
-  padding: 0 12px !important;
+.sl-card-name {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #707262;
 }
 
-.card .MuiCardMedia-root {
-  height: 275px !important;
-  width: 100% !important;
-  object-fit: cover !important;
-  border-radius: 0px 50px 0px 0px !important;
+.sl-card-media {
+  position: relative;
+  height: 320px;
+  flex: 0 0 auto;
+  overflow: hidden;
 }
 
-/* Product Info Container */
-.card-info {
-  padding: 16px;
-  text-align: center;
-  background-color: transparent;
+.sl-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
-.product-name {
-  color: #333333;
-  font-size: 20px;
-  font-weight: 600;
-  margin: 0 0 12px 0;
-  line-height: 1.3;
+/* Desc/rating overlay the photo on hover — same measured flat scrim as
+   bp-card-overlay (home.css): rgba(27,28,23,0.75) measured >=7:1 (WCAG
+   AAA) against the brightest real product photo, uniform across the
+   whole overlay regardless of text length. Visible by default (touch/
+   no-hover fallback) so it's never permanently unreachable off a
+   pointer device. */
+.sl-card-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 20px 24px;
+  box-sizing: border-box;
+  background: rgba(27, 28, 23, 0.75);
+  opacity: 1;
 }
 
-.price-container {
+.sl-card-desc,
+.sl-card-rating {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.sl-card-rating {
+  margin-top: 0;
+}
+
+.sl-add {
+  width: 100%;
+  margin-top: auto;
+  padding: 14px 40px;
+  border: none;
+  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  background: #707262;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #ffffff;
+  transition: background 200ms ease-out;
 }
 
-.dollar-icon {
-  width: 32px;
-  height: 31px;
-}
-
-.price {
-  color: rgba(227, 192, 141, 1);
-
-  font-family: Poppins;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 36px;
-  letter-spacing: 0%;
-  text-align: left;
-}
-
-.no-data {
-  min-width: 1250px;
-  min-height: 400px;
-  width: 100%;
-  height: 350px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-transform: capitalize;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
-  font-size: 30px;
-  line-height: 34px;
-  color: #e3c08d;
-}
-
-.hover-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 275px;
-  border-radius: 0px 50px 0px 0px;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.sl-add-price {
+  max-width: 0;
   opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: 20;
+  overflow: hidden;
+  white-space: nowrap;
+  transition: max-width 200ms ease-out, opacity 200ms ease-out;
 }
 
-.card:hover .hover-overlay {
-  opacity: 1;
+.sl-empty {
+  grid-column: 1 / -1;
+  padding: 60px 0;
+  text-align: center;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  color: #707262;
+  opacity: 0.7;
 }
 
-.hover-icons {
-  position: relative;
-  width: 100%;
-  height: 100%;
-}
+@media (hover: hover) {
+  .sl-card:hover {
+    box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.1);
+  }
 
-.shop-button {
-  position: absolute;
-  left: 50%;
-  top: 80%; /* Changed from 50% to move it down */
-  transform: translate(-50%, -50%);
-  box-sizing: border-box;
-  border: 1px solid rgba(227, 192, 141, 1);
-  border-radius: 10px;
-  background: rgba(187, 47, 200, 0.78);
-  width: 64px;
-  height: 46px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
-  transition: transform 0.3s ease;
-}
+  .sl-card:not(:hover) {
+    transition: box-shadow 250ms ease-in-out;
+  }
 
-.shop-button:hover {
-  transform: translate(-50%, -50%) scale(1.1);
-}
+  .sl-card-overlay {
+    opacity: 0;
+    transition: opacity 250ms ease-in-out;
+  }
 
-.shop-button img {
-  width: 24px;
-  height: 20px;
-}
+  .sl-card:hover .sl-card-overlay,
+  .sl-card:focus-within .sl-card-overlay {
+    opacity: 1;
+    transition: opacity 200ms ease-out;
+  }
 
-.eye-badge {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
-  display: flex;
-  align-items: flex-start;
-  gap: 2px;
-}
+  .sl-card:hover .sl-add-price,
+  .sl-card:focus-within .sl-add-price {
+    max-width: 120px;
+    opacity: 1;
+  }
 
-.eye-icon {
-  width: 24px;
-  height: 18.41px;
-  object-fit: contain;
-}
-
-.view-count {
-  width: 16px;
-  height: 16px;
-  background-color: rgba(215, 181, 134, 1);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 9px;
-  font-weight: 700;
-  color: #333;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-@media (max-width: 1400px) {
-  .cards-frame {
-    grid-template-columns: repeat(3, 273px);
-    justify-content: center;
+  .sl-card:hover .sl-add {
+    background: #5d5f51;
   }
 }
 
-@media (max-width: 1100px) {
-  .cards-frame {
-    grid-template-columns: repeat(2, 273px);
-  }
-}
-
-@media (max-width: 768px) {
-  .cards-frame {
-    grid-template-columns: 273px;
+@media (max-width: 900px) {
+  .sl-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 

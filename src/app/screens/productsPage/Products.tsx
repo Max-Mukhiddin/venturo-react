@@ -2,12 +2,9 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import {
   Box,
   Button,
-  Card,
-  CardMedia,
   Container,
   Stack,
   Typography,
-  Chip,
   Pagination,
   PaginationItem,
 } from "@mui/material";
@@ -28,6 +25,26 @@ import { serverApi } from "../../../lib/config";
 import { useHistory, useLocation } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
 import Breadcrumb from "../../components/breadcrumb";
+
+/**
+ * Category filter — Session 2 of the Shop List rebuild. Real
+ * ProductCollection values as a horizontal chip row, replacing the old
+ * rotated -90deg sidebar tabs. Figma's Shop List frame (2458:2) shows
+ * only a compact, collapsed "Filter" control with no expanded state
+ * visible in the static frame, so the widget shape itself was a real
+ * design decision — resolved with the user (chip row) rather than
+ * guessed, same discipline as every other genuine gap this rebuild.
+ */
+const CATEGORY_FILTERS: { label: string; value: ProductCollection }[] = [
+  { label: "Climbing", value: ProductCollection.CLIMBING },
+  { label: "Camping", value: ProductCollection.CAMPING },
+  { label: "Hiking", value: ProductCollection.HIKING },
+  { label: "Trekking", value: ProductCollection.TREKKING },
+  { label: "Cycling", value: ProductCollection.CYCLING },
+  { label: "Apparel", value: ProductCollection.APPAREL },
+  { label: "Footwear", value: ProductCollection.FOOTWEAR },
+  { label: "Other", value: ProductCollection.OTHER },
+];
 
 /**
  * Seeds the initial filter/sort state from the URL on mount, so links built
@@ -215,190 +232,88 @@ export default function Products(props: ProDuctsProps) {
         </Stack>
 
         <Stack className="products-page-wrapper">
-          <Stack direction="row" className="products-layout">
-            <Stack className="category-tabs" direction="column">
-              <Button
-                variant="contained"
-                color={
-                  productSearch.productCollection === ProductCollection.CLIMBING
-                    ? "primary"
-                    : "secondary"
+          <Box className={"sl-filter-row"}>
+            {CATEGORY_FILTERS.map((filter) => (
+              <button
+                key={filter.value}
+                type={"button"}
+                className={
+                  productSearch.productCollection === filter.value
+                    ? "sl-filter-chip sl-filter-chip-active"
+                    : "sl-filter-chip"
                 }
-                onClick={() =>
-                  searchCollectionHandler(ProductCollection.CLIMBING)
-                }
+                onClick={() => searchCollectionHandler(filter.value)}
               >
-                CLIMBING
-              </Button>
-              <Button
-                variant="contained"
-                color={
-                  productSearch.productCollection === ProductCollection.CAMPING
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() =>
-                  searchCollectionHandler(ProductCollection.CAMPING)
-                }
-              >
-                CAMPING
-              </Button>
-              <Button
-                variant="contained"
-                color={
-                  productSearch.productCollection === ProductCollection.HIKING
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() =>
-                  searchCollectionHandler(ProductCollection.HIKING)
-                }
-              >
-                HIKING
-              </Button>
-              <Button
-                variant="contained"
-                color={
-                  productSearch.productCollection === ProductCollection.TREKKING
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() =>
-                  searchCollectionHandler(ProductCollection.TREKKING)
-                }
-              >
-                TREKKING
-              </Button>
-              <Button
-                variant="contained"
-                color={
-                  productSearch.productCollection === ProductCollection.CYCLING
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() =>
-                  searchCollectionHandler(ProductCollection.CYCLING)
-                }
-              >
-                CYCLING
-              </Button>
-              <Button
-                variant="contained"
-                color={
-                  productSearch.productCollection === ProductCollection.APPAREL
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() =>
-                  searchCollectionHandler(ProductCollection.APPAREL)
-                }
-              >
-                APPAREL
-              </Button>
-              <Button
-                variant="contained"
-                color={
-                  productSearch.productCollection === ProductCollection.FOOTWEAR
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() =>
-                  searchCollectionHandler(ProductCollection.FOOTWEAR)
-                }
-              >
-                FOOTWEAR
-              </Button>
-              <Button
-                variant="contained"
-                color={
-                  productSearch.productCollection === ProductCollection.OTHER
-                    ? "primary"
-                    : "secondary"
-                }
-                onClick={() => searchCollectionHandler(ProductCollection.OTHER)}
-              >
-                OTHER
-              </Button>
-            </Stack>
+                {filter.label}
+              </button>
+            ))}
+          </Box>
 
-            <Stack className="products-grid">
-              <div className="cards-frame">
-                {products.length !== 0 ? (
-                  products.map((product: Product) => {
-                    const imagePath = product.productImages[0]
-                      ? `${serverApi}/${product.productImages[0]}`
-                      : "/icons/noimage-list.svg";
-                    const sizeLabel = product.productSize
-                      ? `${product.productSize} size`
-                      : "Standard";
-                    return (
-                      <Stack
-                        key={product._id}
-                        className="card"
-                        onClick={() => chooseDishHandler(product._id)}
-                      >
-                        <Chip label={sizeLabel} size="small" />
+          <Box className={"sl-grid"}>
+            {products.length !== 0 ? (
+              products.map((product: Product) => {
+                const imagePath = product.productImages[0]
+                  ? `${serverApi}/${product.productImages[0]}`
+                  : "/icons/noimage-list.svg";
 
-                        <CardMedia
-                          component="img"
-                          image={imagePath}
-                          alt={product.productName}
-                        />
+                return (
+                  <article
+                    key={product._id}
+                    className={"sl-card"}
+                    onClick={() => chooseDishHandler(product._id)}
+                  >
+                    <Box className={"sl-card-info"}>
+                      <span className={"sl-card-name"}>
+                        {product.productName}
+                      </span>
+                    </Box>
 
-                        <Box className="hover-overlay">
-                          <Box className="hover-icons">
-                            <button
-                              className="shop-button"
-                              onClick={(e) => {
-                                onAdd({
-                                  _id: product._id,
-                                  quantity: 1,
-                                  name: product.productName,
-                                  price: product.productPrice,
-                                  image: product.productImages[0] || "",
-                                });
-                                e.stopPropagation();
-                              }}
-                            >
-                              <img src="/icons/shopping-cart.svg" alt="shop" />
-                            </button>
-                            <Box className="eye-badge">
-                              <img
-                                src="/icons/eye.png"
-                                alt="views"
-                                className="eye-icon"
-                              />
-                              <span className="view-count">
-                                {product.productViews}
-                              </span>
-                            </Box>
-                          </Box>
-                        </Box>
+                    <Box className={"sl-card-media"}>
+                      <img src={imagePath} alt={product.productName} />
 
-                        <Box className="card-info">
-                          <h3 className="product-name">
-                            {product.productName}
-                          </h3>
-                          <Box className="price-container">
-                            <img
-                              src="/icons/dollar-coin.png"
-                              alt="price"
-                              className="dollar-icon"
-                            />
-                            <span className="price">
-                              {product.productPrice}
-                            </span>
-                          </Box>
-                        </Box>
-                      </Stack>
-                    );
-                  })
-                ) : (
-                  <Box className="no-data">New products are not available!</Box>
-                )}
-              </div>
-            </Stack>
-          </Stack>
+                      <Box className={"sl-card-overlay"}>
+                        {product.productDesc ? (
+                          <span className={"sl-card-desc"}>
+                            {product.productDesc}
+                          </span>
+                        ) : null}
+                        {product.reviewCount > 0 ? (
+                          <span className={"sl-card-rating"}>
+                            ★ {product.averageRating.toFixed(1)} (
+                            {product.reviewCount})
+                          </span>
+                        ) : null}
+                      </Box>
+                    </Box>
+
+                    <button
+                      type={"button"}
+                      className={"sl-add"}
+                      onClick={(e) => {
+                        onAdd({
+                          _id: product._id,
+                          quantity: 1,
+                          name: product.productName,
+                          price: product.productPrice,
+                          image: product.productImages[0] || "",
+                        });
+                        e.stopPropagation();
+                      }}
+                    >
+                      <span>Add To Cart</span>
+                      <span className={"sl-add-price"}>
+                        | ${product.productPrice}
+                      </span>
+                    </button>
+                  </article>
+                );
+              })
+            ) : (
+              <Box className={"sl-empty"}>
+                New products are not available!
+              </Box>
+            )}
+          </Box>
 
           <Stack className={"pagination-section"}>
             <Pagination
