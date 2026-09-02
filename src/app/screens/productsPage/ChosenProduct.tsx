@@ -22,6 +22,7 @@ import MemberService from "../../services/MemberService";
 import { Member } from "../../../lib/types/member";
 import { serverApi } from "../../../lib/config";
 import { CartItem } from "../../../lib/types/search";
+import Breadcrumb from "../../components/breadcrumb";
 
 /** REDUX SLICE & SELECTOR **/
 const actionDispatch = (dispatch: Dispatch) => ({
@@ -66,6 +67,10 @@ export default function ChosenProduct(props: ChosenProDuctProps) {
   if (!chosenProduct) return null;
   return (
     <div className={"chosen-product"}>
+      <Breadcrumb
+        heading={"Shop Detail"}
+        trail={[{ label: "Home", to: "/" }, { label: "Shop Detail" }]}
+      />
       <Box className={"title"}>Product Detail</Box>
       <Container className={"product-container"}>
         <Stack className={"chosen-product-slider"}>

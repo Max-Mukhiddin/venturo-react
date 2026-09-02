@@ -27,6 +27,7 @@ import { ProductCollection } from "../../../lib/enums/product.enum";
 import { serverApi } from "../../../lib/config";
 import { useHistory, useLocation } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
+import Breadcrumb from "../../components/breadcrumb";
 
 /**
  * Seeds the initial filter/sort state from the URL on mount, so links built
@@ -138,6 +139,10 @@ export default function Products(props: ProDuctsProps) {
 
   return (
     <div className="products">
+      <Breadcrumb
+        heading={"Shop"}
+        trail={[{ label: "Home", to: "/" }, { label: "Shop" }]}
+      />
       <Container>
         <Stack className="title-container">
           <Typography className="products-title">Venturo</Typography>

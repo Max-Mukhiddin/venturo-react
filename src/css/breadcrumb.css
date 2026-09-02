@@ -1,0 +1,76 @@
+/* ==========================================================================
+   BREADCRUMB — Figma "HikMali" Shop List (2458:2) / Shop Detail (2461:881).
+   Shared band used above a page's main content: #d9dbc5 background, a
+   "Home | X" trail, and a bold page heading. See
+   src/app/components/breadcrumb/index.tsx for the real-route-vs-decorative
+   discipline and why this uses normal document flow instead of Figma's
+   raw absolute coordinates.
+   ========================================================================== */
+
+.breadcrumb-band {
+  width: 100%;
+  background: #d9dbc5;
+  padding: var(--vt-section-y) 0;
+}
+
+.breadcrumb-inner {
+  max-width: var(--vt-content-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--vt-gutter);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.breadcrumb-trail {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #707262;
+}
+
+.breadcrumb-link {
+  color: #707262;
+  text-decoration: none;
+}
+
+@media (hover: hover) {
+  .breadcrumb-link:hover {
+    text-decoration: underline;
+  }
+}
+
+.breadcrumb-current {
+  color: #707262;
+}
+
+.breadcrumb-sep {
+  color: #707262;
+  opacity: 0.6;
+}
+
+.breadcrumb-heading {
+  margin: 0;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 48px;
+  line-height: 1.2;
+  font-weight: 700;
+  color: #707262;
+}
+
+/* Structural breakpoint — keep in sync with --vt-bp-structural. No
+   mobile Shop List/Shop Detail frame was checked in this session (scoped
+   to the breadcrumb only); this is a conservative fluid step-down
+   consistent with how every other section in this rebuild treats its own
+   heading below the breakpoint, not a verified Figma value. */
+@media (max-width: 900px) {
+  .breadcrumb-heading {
+    font-size: 32px;
+  }
+}
