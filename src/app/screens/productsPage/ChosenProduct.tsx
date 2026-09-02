@@ -8,7 +8,7 @@ import { setChosenProduct } from "./slice";
 import { Product } from "../../../lib/types/product";
 import { retrieveChosenProduct } from "./selector";
 import { createSelector } from "reselect";
-import { useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import ProductService from "../../services/ProductService";
 import { serverApi } from "../../../lib/config";
 import { CartItem } from "../../../lib/types/search";
@@ -174,6 +174,24 @@ export default function ChosenProduct(props: ChosenProDuctProps) {
           </Box>
         </Box>
       </Container>
+
+      {/* Figma node 7:247: generic brand copy and a real route only. */}
+      <section className={"sd-lifestyle-banner"} aria-labelledby="sd-lifestyle-title">
+        <div
+          className={"sd-lifestyle-banner__media"}
+          style={{ backgroundImage: "url(/img/shop-detail-banner.jpg)" }}
+        />
+        <div className={"sd-lifestyle-banner__content"}>
+          <h2 id="sd-lifestyle-title" className={"sd-lifestyle-banner__title"}>
+            Best Enjoyed
+            <br />
+            Outside
+          </h2>
+          <Link to="/products" className={"sd-lifestyle-banner__cta"}>
+            Shop Now
+          </Link>
+        </div>
+      </section>
     </div>
   );
 }

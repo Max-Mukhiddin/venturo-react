@@ -661,6 +661,92 @@
   opacity: 0.85;
 }
 
+/* ===========================================================================
+   SHOP DETAIL LIFESTYLE BANNER — Session 6. Figma "HikMali" Shop Detail
+   node 2461:881, Banner node 7:247. The 1920px frame's 150px outer gutter
+   and 1620.757 x 481px media area map to the shared content container. The
+   outer section retains the 1920 x 481px frame height at that anchor. The
+   background is a real Unsplash photo; its left-side
+   scrim is deliberately limited to the copy area so the image remains the
+   primary visual. Provenance and contrast measurements are recorded in
+   docs/ai/COMPLETED_TASKS.md in the backend repository.
+   ========================================================================== */
+
+.products-page .chosen-product .sd-lifestyle-banner {
+  position: relative;
+  width: 100%;
+  max-width: var(--vt-content-max);
+  aspect-ratio: 1920 / 481;
+  margin: var(--vt-section-y) auto 0;
+  padding: 0 var(--vt-gutter);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.products-page .chosen-product .sd-lifestyle-banner__media {
+  position: absolute;
+  inset: 0 var(--vt-gutter);
+  background-color: #707262;
+  background-position: center center;
+  background-size: cover;
+}
+
+.products-page .chosen-product .sd-lifestyle-banner__media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(20, 21, 17, 0.88) 0%,
+    rgba(20, 21, 17, 0.76) 60%,
+    rgba(20, 21, 17, 0.16) 82%,
+    transparent 100%
+  );
+}
+
+.products-page .chosen-product .sd-lifestyle-banner__content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+  padding-top: clamp(48px, 7.446vw + 18.96px, 162px);
+  padding-left: calc(
+    var(--vt-gutter) + clamp(24px, 26.388vw - 78.92px, 428px)
+  );
+  box-sizing: border-box;
+}
+
+.products-page .chosen-product .sd-lifestyle-banner__title {
+  margin: 0;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: clamp(44px, 1.829vw + 36.87px, 72px);
+  font-weight: 700;
+  line-height: clamp(42px, 1.438vw + 36.39px, 64px);
+  color: #ffffff;
+}
+
+.products-page .chosen-product .sd-lifestyle-banner__cta {
+  margin-top: 38px;
+  padding: 14px 40px;
+  background: #ffffff;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  color: #707262;
+  text-decoration: none;
+  transition: background 200ms ease-out, color 200ms ease-out;
+}
+
+@media (hover: hover) {
+  .products-page .chosen-product .sd-lifestyle-banner__cta:hover {
+    background: #707262;
+    color: #ffffff;
+  }
+}
+
 /* Structural breakpoint — keep in sync with --vt-bp-structural. Unlike
    the homepage teaser's pd-title (hidden on its confirmed mobile
    frame), sd-title always shows — this is a real standalone page, not
@@ -688,5 +774,27 @@
   .products-page .chosen-product .sd-thumb {
     width: 107px;
     height: 107px;
+  }
+
+  /* No dedicated Shop Detail mobile frame exists in the source Figma.
+     This follows the mobile homepage-banner precedent: a tall, near-full
+     width photographic composition with repositioned rather than scaled
+     copy, using this page's established 900px structural breakpoint. */
+  .products-page .chosen-product .sd-lifestyle-banner {
+    aspect-ratio: auto;
+    min-height: clamp(430px, 130vw, 520px);
+  }
+
+  .products-page .chosen-product .sd-lifestyle-banner__media {
+    background-position: 66% center;
+  }
+
+  .products-page .chosen-product .sd-lifestyle-banner__media::after {
+    background: linear-gradient(
+      90deg,
+      rgba(20, 21, 17, 0.9) 0%,
+      rgba(20, 21, 17, 0.82) 88%,
+      rgba(20, 21, 17, 0.45) 100%
+    );
   }
 }
