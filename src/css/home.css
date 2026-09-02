@@ -3,71 +3,80 @@
   height: auto;
 }
 
-/** ACTIVE USERS **/
+/* ==========================================================================
+   ACTIVE USERS — no dedicated Figma node; closest real design anchor is
+   the Testimonial section's circular-avatar credit treatment (node 7:122:
+   size-[58px] circular photo, Montserrat Medium 14px name, #aeb192 14px
+   secondary line), reused here at a larger featured scale since this
+   section highlights a single top member rather than a small review
+   credit. Was the last remaining @mui/joy consumer in the codebase.
+   ========================================================================== */
 
-.homepage .active-users-frame {
+.homepage .active-users {
   width: 100%;
-  background: #f8f8ff;
-  padding: 50px 0;
+  padding: var(--vt-section-y) 0;
+  background: #ffffff;
 }
 
-.homepage .active-users-frame .main {
-  margin-top: 45px;
+.homepage .active-users .au-inner {
+  max-width: var(--vt-content-max);
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--vt-gutter);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.homepage .active-users-frame .category-title {
-  font-family: "Dancing Script";
-  font-style: normal;
-  font-weight: 700;
-  font-size: 40px;
-  line-height: 48px;
-  color: #3c3c3c;
-  margin-bottom: 40px;
+.homepage .active-users .au-title {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 1.25;
+  color: #707262;
+  margin: 0 0 40px;
 }
 
-.homepage .cards-frame {
+.homepage .active-users .au-row {
   width: 100%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  gap: 20px;
-}
-
-.homepage .cards-frame .card {
-  width: 290px;
-  height: 340px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.homepage .cards-frame .card:hover {
-  transform: scale(1.05);
-}
-
-.homepage .cards-frame .member-nickname {
-  display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   justify-content: center;
-  padding: 15px;
-  background: white;
+  gap: 40px;
 }
 
-.homepage .cards-frame .member-nickname .nickname {
-  font-family: "Poppins";
-  font-style: normal;
+.homepage .active-users .au-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.homepage .active-users .au-avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background-color: #f5f5f5;
+  background-size: cover;
+  background-position: center;
+  box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.1);
+}
+
+.homepage .active-users .au-nickname {
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
   font-weight: 500;
-  font-size: 18px;
-  color: #3c3c3c;
+  font-size: 16px;
+  color: #707262;
 }
 
-.homepage .cards-frame .no-data {
+.homepage .active-users .au-no-data {
   width: 100%;
   text-align: center;
-  font-size: 20px;
-  color: #999;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 18px;
+  color: #aeb192;
   padding: 40px 0;
 }
 
