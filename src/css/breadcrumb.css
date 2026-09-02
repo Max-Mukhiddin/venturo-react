@@ -8,23 +8,26 @@
    ========================================================================== */
 
 .breadcrumb-band {
+  box-sizing: border-box;
   width: 100%;
+  height: 250px;
   background: #d9dbc5;
-  padding: var(--vt-section-y) 0;
 }
 
 .breadcrumb-inner {
   max-width: var(--vt-content-max);
   width: 100%;
+  height: 100%;
   margin: 0 auto;
   padding: 0 var(--vt-gutter);
   box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  position: relative;
 }
 
 .breadcrumb-trail {
+  position: absolute;
+  top: 112px;
+  left: var(--vt-gutter);
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -56,6 +59,9 @@
 }
 
 .breadcrumb-heading {
+  position: absolute;
+  top: 102px;
+  left: calc(25% + 68px);
   margin: 0;
   font-family: "Montserrat", "Poppins", Arial, sans-serif;
   font-size: 48px;
@@ -70,6 +76,23 @@
    consistent with how every other section in this rebuild treats its own
    heading below the breakpoint, not a verified Figma value. */
 @media (max-width: 900px) {
+  .breadcrumb-band {
+    height: auto;
+    padding: 48px 0;
+  }
+
+  .breadcrumb-inner {
+    display: flex;
+    height: auto;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .breadcrumb-trail,
+  .breadcrumb-heading {
+    position: static;
+  }
+
   .breadcrumb-heading {
     font-size: 32px;
   }

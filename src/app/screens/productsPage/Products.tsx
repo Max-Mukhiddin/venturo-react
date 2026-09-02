@@ -163,6 +163,13 @@ export default function Products({ onAdd }: ProductsProps) {
           <div className="sl-toolbar-actions">
             <button
               type="button"
+              className="sl-toolbar-search"
+              aria-label="Search products"
+              aria-controls="shop-list-filters"
+              onClick={() => setFiltersOpen(true)}
+            />
+            <button
+              type="button"
               className="sl-filter-button"
               aria-expanded={filtersOpen}
               aria-controls="shop-list-filters"
@@ -267,9 +274,6 @@ export default function Products({ onAdd }: ProductsProps) {
                           {product.productCollection.toLowerCase()}
                         </span>
                         <span className="sl-card-name">{product.productName}</span>
-                        <span className="sl-card-meta">
-                          <span className="sl-card-price">${product.productPrice}</span>
-                        </span>
                       </div>
                     </button>
                     <button
@@ -278,7 +282,8 @@ export default function Products({ onAdd }: ProductsProps) {
                       disabled={outOfStock}
                       onClick={() => addToCartHandler(product)}
                     >
-                      {outOfStock ? "Out of Stock" : "Add To Cart"}
+                      <span>{outOfStock ? "Out of Stock" : "Add To Cart"}</span>
+                      {!outOfStock ? <span className="sl-add-price">${product.productPrice}</span> : null}
                     </button>
                   </article>
                 );
