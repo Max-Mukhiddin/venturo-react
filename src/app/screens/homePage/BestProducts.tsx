@@ -133,23 +133,30 @@ export default function BestProducts(props: BestProductsProps) {
                     <span className={"bp-card-name"}>
                       {product.productName}
                     </span>
-                    {product.productDesc ? (
-                      <span className={"bp-card-desc"}>
-                        {product.productDesc}
-                      </span>
-                    ) : null}
-                    {/* Rating is shown only when a real review exists, so
-                        an unreviewed product never reads as "0 stars". */}
-                    {product.reviewCount > 0 ? (
-                      <span className={"bp-card-rating"}>
-                        ★ {product.averageRating.toFixed(1)} (
-                        {product.reviewCount})
-                      </span>
-                    ) : null}
                   </Box>
 
                   <Box className={"bp-card-media"}>
                     <img src={imagePath} alt={product.productName} />
+
+                    {/* Desc/rating overlay the photo on hover rather than
+                        living in the card's static flow, so the card stays
+                        image-forward at rest and never changes height —
+                        see home.css for the hover-reveal + scrim. */}
+                    <Box className={"bp-card-overlay"}>
+                      {product.productDesc ? (
+                        <span className={"bp-card-desc"}>
+                          {product.productDesc}
+                        </span>
+                      ) : null}
+                      {/* Rating is shown only when a real review exists, so
+                          an unreviewed product never reads as "0 stars". */}
+                      {product.reviewCount > 0 ? (
+                        <span className={"bp-card-rating"}>
+                          ★ {product.averageRating.toFixed(1)} (
+                          {product.reviewCount})
+                        </span>
+                      ) : null}
+                    </Box>
                   </Box>
 
                   <button

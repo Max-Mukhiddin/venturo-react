@@ -70,13 +70,18 @@ export default function DealsOfTheDay(props: { onAdd: (item: CartItem) => void }
               <article key={product._id} className={"dd-card"}>
                 <Box className={"dd-card-info"}>
                   <span className={"dd-card-name"}>{product.productName}</span>
-                  {product.productDesc ? (
-                    <span className={"dd-card-desc"}>{product.productDesc}</span>
-                  ) : null}
                 </Box>
 
                 <Box className={"dd-card-media"}>
                   <img src={imagePath} alt={product.productName} />
+
+                  {/* Same hover-reveal-over-photo treatment as Best
+                      Products — see home.css, shared .bp-/.dd- rules. */}
+                  <Box className={"dd-card-overlay"}>
+                    {product.productDesc ? (
+                      <span className={"dd-card-desc"}>{product.productDesc}</span>
+                    ) : null}
+                  </Box>
                 </Box>
 
                 <button

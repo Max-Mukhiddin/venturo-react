@@ -35,7 +35,7 @@ export default function ActiveUsers() {
             topUsers.map((member: Member) => {
               const imagePath = member.memberImage
                 ? `${serverApi}/${member.memberImage}`
-                : "/icons/default-user.svg";
+                : "/icons/default-user-au.svg";
               return (
                 <Box key={member._id} className={"au-card"}>
                   <Box
