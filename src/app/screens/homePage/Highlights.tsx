@@ -35,13 +35,17 @@ import { serverApi } from "../../../lib/config";
  * overlay those two grid sections use (this is a single hero card, not
  * a repeating row, and the reference shows the caption always visible).
  */
+// top values are percentages of the 800px-tall 1920 reference frame
+// (168/800, 185/800, ...), not fixed px — .highlights is fluid-height
+// (aspect-ratio: 2.4), so a fixed px top clips at narrower desktop
+// widths. See the matching comment on .hl-heading/.hl-tick in home.css.
 const CROSS_POSITIONS = [
-  { left: "calc(50% + 36px)", top: "168px" },
-  { left: "calc(25% + 173px)", top: "185px" },
-  { left: "calc(25% + 151px)", top: "390px" },
-  { left: "calc(75% - 51px)", top: "434px" },
-  { left: "calc(75% - 35px)", top: "708px" },
-  { left: "calc(41.67% + 77px)", top: "604px" },
+  { left: "calc(50% + 36px)", top: "21%" },
+  { left: "calc(25% + 173px)", top: "23.125%" },
+  { left: "calc(25% + 151px)", top: "48.75%" },
+  { left: "calc(75% - 51px)", top: "54.25%" },
+  { left: "calc(75% - 35px)", top: "88.5%" },
+  { left: "calc(41.67% + 77px)", top: "75.5%" },
 ];
 
 interface HighlightsProps {
