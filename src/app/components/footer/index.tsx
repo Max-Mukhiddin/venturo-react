@@ -30,6 +30,12 @@ import { ProductCollection } from "../../../lib/enums/product.enum";
  *
  * Social icons stay bare, unwrapped <img> (no href) — confirmed
  * decorative-only in the pre-existing footer, kept that way.
+ *
+ * "Blog" added to the "Help" column once the real Blog List/Detail
+ * pages existed — this column is already the site's real
+ * content/resources destination (Contact, Account, FAQs), and adding a
+ * third nav-zone column here would have re-introduced the exact
+ * Shop/Learn duplication already resolved above.
  */
 export default function Footer() {
   const { authMember } = useGlobals();
@@ -119,6 +125,7 @@ export default function Footer() {
                   <Link to={"/member-page"}>Account</Link>
                 ) : null}
                 <Link to={"/faq"}>FAQs</Link>
+                <Link to={"/blog"}>Blog</Link>
               </Box>
             </Box>
 

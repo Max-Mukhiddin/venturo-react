@@ -11,6 +11,7 @@ import Footer from "./components/footer";
 import HelpPage from "./screens/helpPage";
 import ContactPage from "./screens/contactPage";
 import FaqPage from "./screens/faqPage";
+import BlogPage from "./screens/blogPage";
 import CheckoutPage from "./screens/checkoutPage";
 import useBasket from "./hooks/useBasket";
 import AuthenticationModal from "./components/auth";
@@ -114,6 +115,9 @@ function App() {
           </Route>
           <Route path="/faq">
             <FaqPage />
+          </Route>
+          <Route path="/blog">
+            <BlogPage />
           </Route>
           <Route path="/">
             <HomePage onAdd={onAdd} />
