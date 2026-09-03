@@ -1,0 +1,256 @@
+.my-account-page {
+  background: #f0f0f0;
+}
+
+.ma-main {
+  box-sizing: border-box;
+  max-width: var(--vt-content-max);
+  min-height: 654px;
+  margin: 0 auto;
+  padding: 100px var(--vt-gutter);
+}
+
+.ma-profile {
+  display: grid;
+  grid-template-columns: minmax(280px, 390px) minmax(0, 1fr);
+  width: min(100%, 1200px);
+  margin: 0 auto;
+  gap: 64px;
+}
+
+.ma-summary,
+.ma-form {
+  color: #707262;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+}
+
+.ma-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 28px;
+  border: 1px solid #aeb192;
+  text-align: center;
+}
+
+.ma-avatar {
+  width: 124px;
+  height: 124px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.ma-summary h2,
+.ma-form h2 {
+  margin: 24px 0 8px;
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 30px;
+}
+
+.ma-summary > p {
+  margin: 0 0 18px;
+  font-size: 14px;
+}
+
+.ma-upload,
+.ma-actions button,
+.ma-message a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 45px;
+  box-sizing: border-box;
+  border: 0;
+  background: #707262;
+  color: #fff;
+  font: 500 14px "Montserrat", "Poppins", Arial, sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.ma-upload {
+  width: 180px;
+}
+
+.ma-upload input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.ma-readonly {
+  width: 100%;
+  margin: 32px 0 0;
+  border-top: 1px solid #aeb192;
+  font-size: 14px;
+  text-align: left;
+}
+
+.ma-readonly div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid #d9dbc5;
+}
+
+.ma-readonly dt {
+  font-weight: 500;
+}
+
+.ma-readonly dd {
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.ma-form h2 {
+  margin-top: 0;
+  margin-bottom: 28px;
+}
+
+.ma-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 28px;
+}
+
+.ma-fields label {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: #707262;
+  font: 500 14px "Montserrat", "Poppins", Arial, sans-serif;
+}
+
+.ma-fields input,
+.ma-fields textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 62px;
+  padding: 14px;
+  border: 1px solid #aeb192;
+  border-radius: 0;
+  outline-offset: 3px;
+  background: transparent;
+  color: #707262;
+  font: 400 14px/20px "Montserrat", "Poppins", Arial, sans-serif;
+}
+
+.ma-fields textarea {
+  min-height: 149px;
+  resize: vertical;
+}
+
+.ma-wide {
+  grid-column: 1 / -1;
+}
+
+.ma-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+  margin-top: 32px;
+}
+
+.ma-actions button {
+  padding: 0 40px;
+}
+
+.ma-actions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+
+.ma-success,
+.ma-error {
+  margin: 0;
+  font: 400 14px/20px "Montserrat", "Poppins", Arial, sans-serif;
+}
+
+.ma-success {
+  color: #4c6b42;
+}
+
+.ma-error {
+  color: #a14c43;
+}
+
+.ma-state,
+.ma-message {
+  width: min(801px, 100%);
+  min-height: 260px;
+  box-sizing: border-box;
+  margin: 0 auto;
+  color: #707262;
+  font: 500 14px/20px "Montserrat", "Poppins", Arial, sans-serif;
+  text-align: center;
+}
+
+.ma-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  border: 1px solid #aeb192;
+}
+
+.ma-message p {
+  margin: 0;
+}
+
+.ma-message a {
+  width: min(300px, calc(100% - 48px));
+}
+
+.ma-state button {
+  border: 0;
+  background: none;
+  color: #5d5f51;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .ma-main {
+    min-height: 0;
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+
+  .ma-profile {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .ma-summary {
+    padding: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ma-fields {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .ma-wide {
+    grid-column: auto;
+  }
+
+  .ma-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .ma-actions button {
+    width: 100%;
+  }
+}

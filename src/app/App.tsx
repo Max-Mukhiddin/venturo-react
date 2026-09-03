@@ -12,6 +12,7 @@ import HelpPage from "./screens/helpPage";
 import ContactPage from "./screens/contactPage";
 import FaqPage from "./screens/faqPage";
 import WishlistPage from "./screens/wishlistPage";
+import MyAccountPage from "./screens/myAccountPage";
 import BlogPage from "./screens/blogPage";
 import CheckoutPage from "./screens/checkoutPage";
 import useBasket from "./hooks/useBasket";
@@ -119,6 +120,9 @@ function App() {
           </Route>
           <Route path="/wishlist">
             <WishlistPage onAdd={onAdd} />
+          </Route>
+          <Route path="/my-account">
+            <MyAccountPage />
           </Route>
           <Route path="/blog">
             <BlogPage />

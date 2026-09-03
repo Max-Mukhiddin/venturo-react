@@ -1,6 +1,13 @@
 import axios from "axios";
 import { serverApi } from "../../lib/config";
-import { LoginInput, Member, MemberInput, MemberUpdateInput } from "../../lib/types/member";
+import {
+  LoginInput,
+  Member,
+  MemberInput,
+  MemberUpdateInput,
+  MyAccountProfile,
+  MyAccountUpdateInput,
+} from "../../lib/types/member";
 
 class MemberService {
   private readonly path: string;
@@ -80,7 +87,33 @@ class MemberService {
     }
   }
 
-    public async updateMember(input: MemberUpdateInput): Promise<Member> {
+  public async getMyAccount(): Promise<MyAccountProfile> {
+    const result = await axios.get(`${this.path}/member/detail`, {
+      withCredentials: true,
+    });
+
+    return result.data;
+  }
+
+  public async updateMyAccount(input: MyAccountUpdateInput): Promise<MyAccountProfile> {
+    const formData = new FormData();
+    formData.append("memberNick", input.memberNick);
+    formData.append("memberPhone", input.memberPhone);
+    formData.append("memberAddress", input.memberAddress || "");
+    formData.append("memberDesc", input.memberDesc || "");
+
+    if (input.memberImage) {
+      formData.append("memberImage", input.memberImage);
+    }
+
+    const result = await axios.post(`${this.path}/member/update`, formData, {
+      withCredentials: true,
+    });
+
+    return result.data;
+  }
+
+  public async updateMember(input: MemberUpdateInput): Promise<Member> {
     try {
       const formData = new FormData();
       formData.append("memberNick", input.memberNick || "");

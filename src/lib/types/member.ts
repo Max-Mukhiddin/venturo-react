@@ -40,3 +40,24 @@ export interface MemberUpdateInput {
   memberDesc?: string;
   memberImage?: string;
 }
+
+export interface MyAccountProfile {
+  _id: string;
+  memberNick: string;
+  memberPhone: string;
+  memberAddress?: string;
+  memberDesc?: string;
+  memberImage?: string;
+  memberType: string;
+  memberStatus: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MyAccountUpdateInput {
+  memberNick: string;
+  memberPhone: string;
+  memberAddress?: string;
+  memberDesc?: string;
+  memberImage?: File;
+}
