@@ -11,6 +11,7 @@ import Footer from "./components/footer";
 import HelpPage from "./screens/helpPage";
 import ContactPage from "./screens/contactPage";
 import FaqPage from "./screens/faqPage";
+import WishlistPage from "./screens/wishlistPage";
 import BlogPage from "./screens/blogPage";
 import CheckoutPage from "./screens/checkoutPage";
 import useBasket from "./hooks/useBasket";
@@ -115,6 +116,9 @@ function App() {
           </Route>
           <Route path="/faq">
             <FaqPage />
+          </Route>
+          <Route path="/wishlist">
+            <WishlistPage onAdd={onAdd} />
           </Route>
           <Route path="/blog">
             <BlogPage />
