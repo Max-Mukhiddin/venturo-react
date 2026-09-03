@@ -116,7 +116,7 @@ export default function OtherNavbar(props: OtherNavbarProps) {
                 </Box>
                 <span className="hm-sep">|</span>
                 <Box className={"hover-line"}>
-                  <NavLink to="/member-page" activeClassName={"underline"}>
+                  <NavLink to="/my-account" activeClassName={"underline"}>
                     My page
                   </NavLink>
                 </Box>

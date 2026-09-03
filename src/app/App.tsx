@@ -4,7 +4,6 @@ import { Link, Route, Router, Switch, useLocation } from "react-router-dom";
 import HomePage from "./screens/homePage";
 import ProductsPage from "./screens/productsPage/index";
 import OrdersPage from "./screens/ordersPage/index";
-import UserPage from "./screens/userPage";
 import OtherNavbar from "./components/headers/OtherNavbar";
 import HomeNavbar from "./components/headers/HomeNavbar";
 import Footer from "./components/footer";
@@ -105,9 +104,6 @@ function App() {
           </Route>
           <Route path="/orders">
             <OrdersPage />
-          </Route>
-          <Route path="/member-page">
-            <UserPage />
           </Route>
           <Route path="/help">
             <HelpPage />
