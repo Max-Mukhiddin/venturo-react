@@ -118,7 +118,7 @@ export default function Footer() {
                 {authMember ? (
                   <Link to={"/member-page"}>Account</Link>
                 ) : null}
-                <Link to={"/help"}>FAQs</Link>
+                <Link to={"/faq"}>FAQs</Link>
               </Box>
             </Box>
 

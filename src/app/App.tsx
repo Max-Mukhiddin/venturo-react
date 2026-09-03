@@ -10,6 +10,7 @@ import HomeNavbar from "./components/headers/HomeNavbar";
 import Footer from "./components/footer";
 import HelpPage from "./screens/helpPage";
 import ContactPage from "./screens/contactPage";
+import FaqPage from "./screens/faqPage";
 import CheckoutPage from "./screens/checkoutPage";
 import useBasket from "./hooks/useBasket";
 import AuthenticationModal from "./components/auth";
@@ -110,6 +111,9 @@ function App() {
           </Route>
           <Route path="/contact">
             <ContactPage />
+          </Route>
+          <Route path="/faq">
+            <FaqPage />
           </Route>
           <Route path="/">
             <HomePage onAdd={onAdd} />
