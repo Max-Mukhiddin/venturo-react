@@ -267,7 +267,9 @@
   gap: 20px;
 }
 
-.homepage .best-products .bp-card {
+.bp-card {
+  --bp-card-info-height: 80px;
+  --bp-card-media-height: 320px;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -276,28 +278,41 @@
   transition: box-shadow 200ms ease-out, transform 200ms ease-out;
 }
 
+.bp-card-main {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  border: 0;
+  padding: 0;
+  color: inherit;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
 /* Fixed height, not content-sized: a 1- or 2-line product name must never
    change the card's total height (it's the only thing left in normal
    flow above the image now — desc/rating moved into the hover overlay
    below, so the card reads as image-forward rather than text-heavy). */
-.homepage .best-products .bp-card-info {
-  height: 80px;
+.bp-card-info {
+  height: var(--bp-card-info-height);
   padding: 16px 30px;
   box-sizing: border-box;
   display: flex;
   align-items: flex-start;
 }
 
-.homepage .best-products .bp-card-name {
+.bp-card-name {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.homepage .best-products .bp-card-name,
-.homepage .best-products .bp-card-desc,
-.homepage .best-products .bp-card-rating {
+.bp-card-name,
+.bp-card-desc,
+.bp-card-rating {
   font-family: "Montserrat", "Poppins", Arial, sans-serif;
   font-size: 14px;
   font-weight: 500;
@@ -305,19 +320,19 @@
   color: #707262;
 }
 
-.homepage .best-products .bp-card-rating {
+.bp-card-rating {
   margin-top: 2px;
   color: #aeb192;
 }
 
-.homepage .best-products .bp-card-media {
+.bp-card-media {
   position: relative;
-  height: 320px;
+  height: var(--bp-card-media-height);
   flex: 0 0 auto;
   overflow: hidden;
 }
 
-.homepage .best-products .bp-card-media img {
+.bp-card-media img {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -335,7 +350,7 @@
    default (touch/no-hover fallback — see the hover-hides-it override
    below) so the description is never permanently unreachable off a
    pointer device. */
-.homepage .best-products .bp-card-overlay {
+.bp-card-overlay {
   position: absolute;
   inset: 0;
   display: flex;
@@ -348,8 +363,8 @@
   opacity: 1;
 }
 
-.homepage .best-products .bp-card-overlay .bp-card-desc,
-.homepage .best-products .bp-card-overlay .bp-card-rating {
+.bp-card-overlay .bp-card-desc,
+.bp-card-overlay .bp-card-rating {
   color: #ffffff;
   margin-top: 0;
 }
@@ -357,7 +372,7 @@
 /* Add-to-cart bar — flush to the card's bottom edge, as in the design.
    margin-top: auto pins it there regardless of description length, now
    that bp-card-media is a fixed height rather than a flex-grow filler. */
-.homepage .best-products .bp-add {
+.bp-add {
   width: 100%;
   margin-top: auto;
   padding: 14px 40px;
@@ -375,10 +390,16 @@
   transition: background 200ms ease-out;
 }
 
+.bp-add:disabled {
+  color: #707262;
+  background: #d9dbc5;
+  cursor: not-allowed;
+}
+
 /* The design reveals the price in the button on the hovered card only.
    Animating max-width keeps the label optically centred at rest and lets
    the pair re-centre smoothly instead of snapping. */
-.homepage .best-products .bp-add-price {
+.bp-add-price {
   max-width: 0;
   opacity: 0;
   overflow: hidden;
@@ -400,16 +421,16 @@
    (and, below, the desc/rating overlay) must stay reachable there (both
    are also shown on :focus-within). */
 @media (hover: hover) {
-  .homepage .best-products .bp-card:hover {
+  .bp-card:hover {
     box-shadow: 4px 4px 4px 0 rgba(0, 0, 0, 0.1);
   }
 
-  .homepage .best-products .bp-card:hover .bp-add-price {
+  .bp-card:hover .bp-add-price {
     max-width: 120px;
     opacity: 1;
   }
 
-  .homepage .best-products .bp-card:hover .bp-add {
+  .bp-card:hover .bp-add {
     background: #5d5f51;
   }
 
@@ -422,27 +443,27 @@
   }
 
   /* Slower, gentler return */
-  .homepage .best-products .bp-card:not(:hover) {
+  .bp-card:not(:hover) {
     transition: box-shadow 250ms ease-in-out;
   }
 
   /* Only hover-capable devices hide the overlay by default — it's
      visible unconditionally otherwise (see .bp-card-overlay above), so
      touch never loses the description entirely. */
-  .homepage .best-products .bp-card-overlay {
+  .bp-card-overlay {
     opacity: 0;
     transition: opacity 250ms ease-in-out;
   }
 
-  .homepage .best-products .bp-card:hover .bp-card-overlay,
-  .homepage .best-products .bp-card:focus-within .bp-card-overlay {
+  .bp-card:hover .bp-card-overlay,
+  .bp-card:focus-within .bp-card-overlay {
     opacity: 1;
     transition: opacity 200ms ease-out;
   }
 }
 
 /* Keyboard parity with the hover reveal */
-.homepage .best-products .bp-card:focus-within .bp-add-price {
+.bp-card:focus-within .bp-add-price {
   max-width: 120px;
   opacity: 1;
 }
@@ -454,8 +475,8 @@
     margin-top: 32px;
   }
 
-  .homepage .best-products .bp-card-media {
-    height: 220px;
+  .homepage .best-products .bp-card {
+    --bp-card-media-height: 220px;
   }
 
   .homepage .best-products .bp-filter-row {

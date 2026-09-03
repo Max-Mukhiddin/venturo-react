@@ -7,11 +7,11 @@ import { retrieveProducts } from "./selector";
 import { createSelector } from "reselect";
 import ProductService from "../../services/ProductService";
 import { ProductCollection } from "../../../lib/enums/product.enum";
-import { serverApi } from "../../../lib/config";
 import { useHistory, useLocation } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
 import Breadcrumb from "../../components/breadcrumb";
 import FreeShipping from "../homePage/FreeShipping";
+import BestProductCard from "../../components/productCard/BestProductCard";
 
 const CATEGORY_FILTERS: { label: string; value?: ProductCollection }[] = [
   { label: "All" },
@@ -252,42 +252,14 @@ export default function Products({ onAdd }: ProductsProps) {
         {!isLoading && !loadError ? (
           <section className="sl-product-grid" aria-label="Products">
             {products.length > 0 ? (
-              products.map((product) => {
-                const imagePath = product.productImages[0]
-                  ? `${serverApi}/${product.productImages[0]}`
-                  : "/icons/noimage-list.svg";
-                const outOfStock = product.productLeftCount <= 0;
-
-                return (
-                  <article key={product._id} className="sl-card">
-                    <button
-                      type="button"
-                      className="sl-card-main"
-                      onClick={() => chooseProductHandler(product._id)}
-                      aria-label={`View ${product.productName}`}
-                    >
-                      <div className="sl-card-media">
-                        <img src={imagePath} alt={product.productName} />
-                      </div>
-                      <div className="sl-card-info">
-                        <span className="sl-card-collection">
-                          {product.productCollection.toLowerCase()}
-                        </span>
-                        <span className="sl-card-name">{product.productName}</span>
-                      </div>
-                    </button>
-                    <button
-                      type="button"
-                      className="sl-add-button"
-                      disabled={outOfStock}
-                      onClick={() => addToCartHandler(product)}
-                    >
-                      <span>{outOfStock ? "Out of Stock" : "Add To Cart"}</span>
-                      {!outOfStock ? <span className="sl-add-price">${product.productPrice}</span> : null}
-                    </button>
-                  </article>
-                );
-              })
+              products.map((product) => (
+                <BestProductCard
+                  key={product._id}
+                  product={product}
+                  onAdd={addToCartHandler}
+                  onOpen={chooseProductHandler}
+                />
+              ))
             ) : (
               <p className="sl-empty">No products found.</p>
             )}
