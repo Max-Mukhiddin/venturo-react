@@ -5,6 +5,7 @@ import BlogSidebar from "./BlogSidebar";
 import ArticleService from "../../services/ArticleService";
 import { Article } from "../../../lib/types/article";
 import { ArticleCategory } from "../../../lib/enums/article.enum";
+import { serverApi } from "../../../lib/config";
 
 /**
  * Blog Detail — Figma "HikMali" node 2470:109.
@@ -17,10 +18,10 @@ import { ArticleCategory } from "../../../lib/enums/article.enum";
  *
  * Fabricated-content decisions, same standard as everywhere else in
  * this project (real Article fields only — title, slug, content,
- * category, createdAt):
- *   - Hero/secondary in-article images — no `image` field on `Article`;
- *     the shared /icons/noimage-list.svg fallback is used instead of a
- *     stock photo standing in for a "real" article photo.
+ * category, image, createdAt):
+ *   - Hero/secondary in-article images — `Article.image` (real, backend
+ *     field) renders when present; the shared /icons/noimage-list.svg
+ *     fallback covers any article without one.
  *   - "42 Comments" — no comment system exists — omitted.
  *   - The named reader quote block ("Maecenas tincidunt... — Emma
  *     White, Los Angeles, CA") — a specific fabricated person with a
@@ -112,7 +113,14 @@ export default function BlogDetail() {
             ) : (
               <>
                 <div className={"blog-detail-hero"}>
-                  <img src={"/icons/noimage-list.svg"} alt={""} />
+                  <img
+                    src={
+                      article.image
+                        ? `${serverApi}/${article.image}`
+                        : "/icons/noimage-list.svg"
+                    }
+                    alt={article.title}
+                  />
                 </div>
 
                 <div className={"blog-card-meta"}>
@@ -134,7 +142,14 @@ export default function BlogDetail() {
                         className={"blog-prevnext-link"}
                       >
                         <span className={"blog-prevnext-thumb"}>
-                          <img src={"/icons/noimage-list.svg"} alt={""} />
+                          <img
+                            src={
+                              previousPost.image
+                                ? `${serverApi}/${previousPost.image}`
+                                : "/icons/noimage-list.svg"
+                            }
+                            alt={previousPost.title}
+                          />
                         </span>
                         <span className={"blog-prevnext-text"}>
                           <span className={"blog-prevnext-title"}>
@@ -162,7 +177,14 @@ export default function BlogDetail() {
                           </span>
                         </span>
                         <span className={"blog-prevnext-thumb"}>
-                          <img src={"/icons/noimage-list.svg"} alt={""} />
+                          <img
+                            src={
+                              nextPost.image
+                                ? `${serverApi}/${nextPost.image}`
+                                : "/icons/noimage-list.svg"
+                            }
+                            alt={nextPost.title}
+                          />
                         </span>
                       </Link>
                     ) : null}

@@ -100,6 +100,12 @@ export default function OtherNavbar(props: OtherNavbarProps) {
                 Products
               </NavLink>
             </Box>
+            <span className="hm-sep">|</span>
+            <Box className={"hover-line"}>
+              <NavLink to="/blog" activeClassName={"underline"}>
+                Blog
+              </NavLink>
+            </Box>
             {authMember ? (
               <>
                 <span className="hm-sep">|</span>

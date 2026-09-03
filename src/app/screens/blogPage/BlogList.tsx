@@ -5,6 +5,7 @@ import BlogSidebar from "./BlogSidebar";
 import ArticleService from "../../services/ArticleService";
 import { Article } from "../../../lib/types/article";
 import { ArticleCategory } from "../../../lib/enums/article.enum";
+import { serverApi } from "../../../lib/config";
 
 /**
  * Blog List — Figma "HikMali" node 2465:2715. No mobile Blog List/Blog
@@ -23,14 +24,16 @@ import { ArticleCategory } from "../../../lib/enums/article.enum";
  * ceil(filteredCount / postsPerPage).
  *
  * Fabricated-content decisions (no real Article field exists for any
- * of these): "42 Comments" — omitted. Per-post thumbnail images —
- * Article has no image field (confirmed against the real schema before
- * assuming one existed); the shared /icons/noimage-list.svg fallback
- * already used site-wide for "real item, no photo" is reused instead
- * of fabricating a stock photo. Flagged in docs/ai/NEXT_STEPS.md
- * (backend repo) as a real content gap — a future `coverImage` field +
- * admin upload support, mirroring how Product already works, would let
- * this page show real per-article photos.
+ * of these): "42 Comments" — omitted.
+ *
+ * Per-post thumbnail images: `Article` now has a real optional `image`
+ * field (backend added it to support real per-article photography,
+ * mirroring how `Product.productImages[0]` already works). Renders the
+ * real photo when present, using the exact same
+ * `serverApi`/`${serverApi}/${image}` : "/icons/noimage-list.svg"
+ * fallback pattern already used everywhere else on the site — falls
+ * back to the shared no-image icon for any article without one, rather
+ * than assuming every article has a photo.
  */
 const POSTS_PER_PAGE = 3;
 
@@ -142,7 +145,14 @@ export default function BlogList() {
                 {pagedArticles.map((article) => (
                   <article key={article._id} className={"blog-card"}>
                     <div className={"blog-card-thumb"}>
-                      <img src={"/icons/noimage-list.svg"} alt={""} />
+                      <img
+                        src={
+                          article.image
+                            ? `${serverApi}/${article.image}`
+                            : "/icons/noimage-list.svg"
+                        }
+                        alt={article.title}
+                      />
                     </div>
                     <div className={"blog-card-meta"}>
                       <span>{formatDate(article.createdAt)}</span>

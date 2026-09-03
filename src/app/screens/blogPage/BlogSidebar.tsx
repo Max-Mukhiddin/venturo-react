@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Article } from "../../../lib/types/article";
 import { ArticleCategory } from "../../../lib/enums/article.enum";
+import { serverApi } from "../../../lib/config";
 
 /**
  * Shared sidebar for BlogList/BlogDetail — Figma "HikMali" node 2465:2715
@@ -9,7 +10,8 @@ import { ArticleCategory } from "../../../lib/enums/article.enum";
  *
  * Real-data-only, same discipline as every prior page:
  *   - "Recent Posts": the 3 most recent real articles (already sorted
- *     `createdAt` desc by the backend).
+ *     `createdAt` desc by the backend), real thumbnail when
+ *     `article.image` is present, else the shared no-image fallback.
  *   - "Category": real `ArticleCategory` values with real counts,
  *     computed from the already-fetched full article list — not
  *     Figma's fabricated "05/23/27/35/45".
@@ -96,7 +98,14 @@ export default function BlogSidebar({
             <li key={post._id}>
               <Link to={`/blog/${post.slug}`} className={"blog-recent-item"}>
                 <span className={"blog-recent-thumb"}>
-                  <img src={"/icons/noimage-list.svg"} alt={""} />
+                  <img
+                    src={
+                      post.image
+                        ? `${serverApi}/${post.image}`
+                        : "/icons/noimage-list.svg"
+                    }
+                    alt={post.title}
+                  />
                 </span>
                 <span className={"blog-recent-info"}>
                   <span className={"blog-recent-date"}>
