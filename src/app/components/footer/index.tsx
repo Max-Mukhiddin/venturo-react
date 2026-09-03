@@ -114,6 +114,7 @@ export default function Footer() {
             <Box className={"sf-nav-col"}>
               <span className={"sf-nav-title"}>Help</span>
               <Box className={"sf-nav-links"}>
+                <Link to={"/contact"}>Contact</Link>
                 {authMember ? (
                   <Link to={"/member-page"}>Account</Link>
                 ) : null}

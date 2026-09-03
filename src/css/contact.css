@@ -1,0 +1,283 @@
+/* HikMali Contact Us (2465:1643): the layout keeps the authored three-column
+   contact composition while using only contact details Venturo actually publishes. */
+.contact-page {
+  background: #f0f0f0;
+}
+
+.contact-main {
+  max-width: var(--vt-content-max);
+  margin: 0 auto;
+}
+
+.contact-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 700px) minmax(220px, 1fr) minmax(260px, 390px);
+  gap: clamp(32px, 6.25vw, 120px);
+  padding: 100px var(--vt-gutter) 106px;
+  box-sizing: border-box;
+}
+
+.contact-form-column h2,
+.contact-details h2,
+.contact-location h2 {
+  margin: 0;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  color: #707262;
+}
+
+.contact-lead,
+.contact-detail-block p,
+.contact-location p {
+  margin: 36px 0 0;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #707262;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 32px;
+}
+
+.contact-field-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.contact-field {
+  position: relative;
+  display: block;
+}
+
+.contact-field span {
+  position: absolute;
+  top: 17px;
+  left: 26px;
+  z-index: 1;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #707262;
+  pointer-events: none;
+  transition: opacity 160ms ease-out;
+}
+
+.contact-field input,
+.contact-field textarea {
+  width: 100%;
+  border: 1px solid #aeb192;
+  border-radius: 0;
+  padding: 16px 26px;
+  box-sizing: border-box;
+  background: transparent;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #45473e;
+}
+
+.contact-field input {
+  height: 54px;
+}
+
+.contact-field textarea {
+  height: 188px;
+  resize: vertical;
+}
+
+.contact-field input:focus,
+.contact-field textarea:focus {
+  outline: 2px solid #707262;
+  outline-offset: 1px;
+}
+
+.contact-field input:focus + span,
+.contact-field textarea:focus + span,
+.contact-field input:valid + span,
+.contact-field textarea:valid + span {
+  opacity: 0;
+}
+
+.contact-terms {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 18px;
+  margin-top: 14px;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #707262;
+}
+
+.contact-terms input {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #707262;
+}
+
+.contact-terms a {
+  color: inherit;
+}
+
+.contact-form-error {
+  min-height: 20px;
+  margin: 0;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #9c3d36;
+}
+
+.contact-submit {
+  min-height: 45px;
+  border: 0;
+  padding: 14px 40px;
+  background: #707262;
+  font-family: "Montserrat", "Poppins", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 17px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: background 180ms ease-out;
+}
+
+.contact-submit:hover:not(:disabled) {
+  background: #5d5f51;
+}
+
+.contact-submit:focus-visible {
+  outline: 2px solid #45473e;
+  outline-offset: 3px;
+}
+
+.contact-submit:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.contact-detail-block p {
+  margin-top: 16px;
+  max-width: 270px;
+}
+
+.contact-social-icons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.contact-social-icons img {
+  width: 30px;
+  height: 30px;
+  padding: 7px;
+  border: 1px solid #707262;
+  border-radius: 50%;
+  box-sizing: border-box;
+  object-fit: contain;
+  opacity: 0.82;
+}
+
+.contact-brand-panel {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  min-height: 596px;
+  padding-top: 40px;
+  box-sizing: border-box;
+  background: #d9d9d9;
+}
+
+.contact-brand-panel img {
+  width: 139px;
+  height: 139px;
+  object-fit: contain;
+}
+
+.contact-location {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 577px;
+  padding: 48px var(--vt-gutter);
+  box-sizing: border-box;
+  background:
+    linear-gradient(rgba(112, 114, 98, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(112, 114, 98, 0.05) 1px, transparent 1px),
+    #d9d9d9;
+  background-size: 36px 36px;
+  text-align: center;
+}
+
+.contact-location p {
+  margin-top: 16px;
+}
+
+.contact-benefits {
+  padding: 100px var(--vt-gutter);
+  box-sizing: border-box;
+}
+
+@media (max-width: 900px) {
+  .contact-intro {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 48px 32px;
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+
+  .contact-form-column {
+    grid-column: 1 / -1;
+  }
+
+  .contact-brand-panel {
+    min-height: 420px;
+  }
+
+  .contact-location {
+    min-height: 360px;
+  }
+
+  .contact-benefits {
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+}
+
+@media (max-width: 600px) {
+  .contact-intro {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .contact-field-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .contact-details {
+    gap: 32px;
+  }
+
+  .contact-brand-panel {
+    min-height: 280px;
+  }
+
+  .contact-location {
+    min-height: 280px;
+  }
+}
