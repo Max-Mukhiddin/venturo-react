@@ -166,6 +166,23 @@
   border-radius: 20px;
 }
 
+.home-navbar .user-avatar-fallback,
+.other-navbar .user-avatar-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: #d9dbc5;
+  color: #707262;
+  cursor: pointer;
+}
+
+.home-navbar .user-avatar-fallback svg,
+.other-navbar .user-avatar-fallback svg {
+  font-size: 26px;
+}
+
 /* Active / hover underline — reuses the project's existing nav pattern,
    recoloured to the design's olive. */
 .home-navbar a {
@@ -723,6 +740,17 @@
   width: 40px;
   height: 40px;
   border-radius: 20px;
+}
+
+.basket-badge .MuiBadge-badge {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border: 1px solid #f5f5f5;
+  border-radius: 50%;
+  background: #707262;
+  color: #ffffff;
+  font: 500 11px/18px "Montserrat", "Poppins", Arial, sans-serif;
 }
 
 /* Active / hover underline — same treatment as .home-navbar. */

@@ -1,4 +1,5 @@
 import { Box, Container } from "@mui/material";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
@@ -33,15 +34,15 @@ export default function ActiveUsers() {
         <Box className={"au-row"}>
           {topUsers.length !== 0 ? (
             topUsers.map((member: Member) => {
-              const imagePath = member.memberImage
-                ? `${serverApi}/${member.memberImage}`
-                : "/icons/default-user-au.svg";
               return (
                 <Box key={member._id} className={"au-card"}>
-                  <Box
-                    className={"au-avatar"}
-                    style={{ backgroundImage: `url(${imagePath})` }}
-                  />
+                  {member.memberImage ? (
+                    <Box className={"au-avatar"} style={{ backgroundImage: `url(${serverApi}/${member.memberImage})` }} />
+                  ) : (
+                    <Box className="au-avatar au-avatar-fallback" role="img" aria-label="Default member avatar">
+                      <AccountCircleOutlinedIcon aria-hidden="true" />
+                    </Box>
+                  )}
                   <span className={"au-nickname"}>{member.memberNick}</span>
                 </Box>
               );

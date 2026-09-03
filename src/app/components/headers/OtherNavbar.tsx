@@ -14,6 +14,7 @@ import { useGlobals } from "../../hooks/useGlobals";
 import { serverApi } from "../../../lib/config";
 import React from "react";
 import { Logout } from "@mui/icons-material";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 
 interface OtherNavbarProps {
   cartItems: CartItem[];
@@ -152,18 +153,13 @@ export default function OtherNavbar(props: OtherNavbarProps) {
                 Login
               </Button>
             ) : (
-              <img
-                className="user-avatar"
-                src={
-                  authMember?.memberImage
-                    ? `${serverApi}/${authMember?.memberImage}`
-                    : "/icons/default-user.svg"
-                }
-                alt="Account"
-                aria-haspopup={true}
-                onClick={handleLogoutClick}
-                style={{ cursor: "pointer" }}
-              />
+              authMember?.memberImage ? (
+                <img className="user-avatar" src={`${serverApi}/${authMember.memberImage}`} alt="Account" onClick={handleLogoutClick} style={{ cursor: "pointer" }} />
+              ) : (
+                <button type="button" className="user-avatar user-avatar-fallback" aria-label="Open account menu" aria-haspopup={true} onClick={handleLogoutClick}>
+                  <AccountCircleOutlinedIcon aria-hidden="true" />
+                </button>
+              )
             )}
 
             <Menu

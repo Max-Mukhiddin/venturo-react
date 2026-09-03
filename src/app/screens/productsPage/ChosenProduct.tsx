@@ -93,7 +93,7 @@ export default function ChosenProduct(props: ChosenProDuctProps) {
       <Container className={"sd-inner"}>
         <Box className={"sd-layout"}>
           <Box className={"sd-gallery"}>
-            {images.length > 0 ? (
+            {images.length > 1 ? (
               <Box className={"sd-thumbs"}>
                 {images.map((img, index) => (
                   <button

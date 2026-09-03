@@ -69,6 +69,18 @@
   box-shadow: 4px 4px 4px 0px rgba(0, 0, 0, 0.1);
 }
 
+.homepage .active-users .au-avatar-fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #d9dbc5;
+  color: #707262;
+}
+
+.homepage .active-users .au-avatar-fallback svg {
+  font-size: 88px;
+}
+
 .homepage .active-users .au-nickname {
   font-family: "Montserrat", "Poppins", Arial, sans-serif;
   font-weight: 500;

@@ -40,6 +40,18 @@
   object-fit: cover;
 }
 
+.ma-avatar-fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #d9dbc5;
+  color: #707262;
+}
+
+.ma-avatar-fallback svg {
+  font-size: 76px;
+}
+
 .ma-summary h2,
 .ma-form h2 {
   margin: 24px 0 8px;

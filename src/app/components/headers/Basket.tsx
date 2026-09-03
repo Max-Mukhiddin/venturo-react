@@ -45,7 +45,7 @@ export default function Basket({ cartItems, onAdd, onRemove, onDelete, onDeleteA
         aria-expanded={open ? "true" : undefined}
         onClick={(event) => setAnchorEl(event.currentTarget)}
       >
-        <Badge badgeContent={cartItems.length} color="secondary">
+        <Badge badgeContent={cartItems.length} className="basket-badge">
           <img src="/icons/shopping-cart.svg" alt="" />
         </Badge>
       </IconButton>

@@ -1,5 +1,6 @@
 import React, { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import "../../../css/myAccount.css";
 import { serverApi } from "../../../lib/config";
 import { MyAccountProfile, MyAccountUpdateInput } from "../../../lib/types/member";
@@ -104,7 +105,7 @@ export default function MyAccountPage() {
     }
   };
 
-  const avatarSource = imagePreview || (profile?.memberImage ? `${serverApi}/${profile.memberImage}` : "/icons/default-user.svg");
+  const avatarSource = imagePreview || (profile?.memberImage ? `${serverApi}/${profile.memberImage}` : null);
 
   let content: React.ReactNode;
   if (!authMember) {
@@ -122,7 +123,13 @@ export default function MyAccountPage() {
     content = (
       <section className="ma-profile">
         <aside className="ma-summary">
-          <img className="ma-avatar" src={avatarSource} alt={`${profile.memberNick}'s profile`} />
+          {avatarSource ? (
+            <img className="ma-avatar" src={avatarSource} alt={`${profile.memberNick}'s profile`} />
+          ) : (
+            <span className="ma-avatar ma-avatar-fallback" role="img" aria-label="Default profile avatar">
+              <AccountCircleOutlinedIcon aria-hidden="true" />
+            </span>
+          )}
           <h2>{profile.memberNick}</h2>
           <p>Profile image</p>
           <label className="ma-upload">
