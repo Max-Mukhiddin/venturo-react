@@ -967,6 +967,10 @@
 .basket-summary strong { font-weight: 500; }
 .basket-total { margin-bottom: 16px; padding-top: 14px !important; border-top: 1px solid #aeb192; font-size: 16px !important; }
 .basket-checkout, .basket-clear, .basket-empty a { display: flex; width: 100%; min-height: 45px; box-sizing: border-box; align-items: center; justify-content: center; border: 0; background: #707262; color: #fff; font: 500 14px "Montserrat", "Poppins", Arial, sans-serif; text-decoration: none; cursor: pointer; }
+.basket-checkout { background: #707262; color: #ffffff; }
+.basket-checkout:hover { background: #5d5f51; }
+.basket-checkout:focus-visible { outline: 3px solid #aeb192; outline-offset: 3px; }
+.basket-checkout:disabled { background: #d9dbc5; color: #707262; cursor: not-allowed; }
 .basket-clear { margin-top: 10px; border: 1px solid #707262; background: transparent; color: #707262; }
 .basket-empty { display: flex; min-height: 164px; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 20px; text-align: center; }
 .basket-empty p { margin: 0; font-size: 14px; }
