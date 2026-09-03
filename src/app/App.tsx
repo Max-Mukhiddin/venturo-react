@@ -12,6 +12,7 @@ import ContactPage from "./screens/contactPage";
 import FaqPage from "./screens/faqPage";
 import WishlistPage from "./screens/wishlistPage";
 import MyAccountPage from "./screens/myAccountPage";
+import OrderTrackPage from "./screens/orderTrackPage";
 import BlogPage from "./screens/blogPage";
 import CheckoutPage from "./screens/checkoutPage";
 import useBasket from "./hooks/useBasket";
@@ -119,6 +120,9 @@ function App() {
           </Route>
           <Route path="/my-account">
             <MyAccountPage />
+          </Route>
+          <Route path="/order-track">
+            <OrderTrackPage />
           </Route>
           <Route path="/blog">
             <BlogPage />

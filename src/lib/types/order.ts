@@ -38,6 +38,7 @@ export interface Order {
   orderDelivery: number;
   orderStatus: OrderStatus;
   memberId: string;
+  shippingAddress: ShippingAddress;
   createdAt: Date;
   updatedAt: Date;
   //** from aggregations **/
