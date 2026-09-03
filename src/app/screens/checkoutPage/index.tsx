@@ -59,7 +59,7 @@ export default function CheckoutPage(props: CheckoutPageProps) {
       setOrderBuilder(new Date());
 
       await sweetTopSuccessAlert("Order placed!", 800);
-      history.push("/orders");
+      history.push("/order-track");
     } catch (err) {
       console.log("Error, submitOrderHandler:", err);
       sweetErrorHandling(err).then();

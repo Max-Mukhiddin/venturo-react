@@ -1,14 +1,11 @@
 import React from "react";
-import { Box, Button, Stack } from "@mui/material";
-import IconButton from "@mui/material/IconButton";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { Box } from "@mui/material";
 import Badge from "@mui/material/Badge";
+import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
-import CancelIcon from "@mui/icons-material/Cancel";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { useHistory } from "react-router-dom";
-import { CartItem } from "../../../lib/types/search";
+import { Link, useHistory } from "react-router-dom";
 import { Messages, serverApi } from "../../../lib/config";
+import { CartItem } from "../../../lib/types/search";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
 
@@ -20,159 +17,95 @@ interface BasketProps {
   onDeleteAll: () => void;
 }
 
-export default function Basket(props: BasketProps) {
-  const { cartItems, onAdd, onRemove, onDelete, onDeleteAll } = props;
+export default function Basket({ cartItems, onAdd, onRemove, onDelete, onDeleteAll }: BasketProps) {
   const { authMember } = useGlobals();
   const history = useHistory();
-  const itemsPrice = cartItems.reduce(
-    (a: number, c: CartItem) => a + c.quantity * c.price,
-    0
-  );
-  const shippingCost: number = itemsPrice < 100 ? 5 : 0;
-  const totalPrice = itemsPrice + shippingCost;
-
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
+  const itemsPrice = cartItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
 
-  /** HANDLERS **/
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(e.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
+  const handleClose = () => setAnchorEl(null);
   const proceedOrderHandler = () => {
     try {
       handleClose();
       if (!authMember) throw new Error(Messages.error2);
-
       history.push("/checkout");
     } catch (err) {
-      console.log(err);
       sweetErrorHandling(err).then();
     }
   };
 
   return (
-    <Box className={"hover-line"}>
+    <Box className="hover-line">
       <IconButton
         aria-label="cart"
         id="basic-button"
-        aria-controls={open ? "basic-menu" : undefined}
+        aria-controls={open ? "basket-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
-        onClick={handleClick}
+        onClick={(event) => setAnchorEl(event.currentTarget)}
       >
         <Badge badgeContent={cartItems.length} color="secondary">
-          <img src={"/icons/shopping-cart.svg"} />
+          <img src="/icons/shopping-cart.svg" alt="" />
         </Badge>
       </IconButton>
       <Menu
         anchorEl={anchorEl}
-        id="account-menu"
+        id="basket-menu"
         open={open}
         onClose={handleClose}
-        // onClick={handleClose}
-        PaperProps={{
-          elevation: 0,
-          sx: {
-            overflow: "visible",
-            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-            mt: 1.5,
-            "& .MuiAvatar-root": {
-              width: 32,
-              height: 32,
-              ml: -0.5,
-              mr: 1,
-            },
-            "&:before": {
-              content: '""',
-              display: "block",
-              position: "absolute",
-              top: 0,
-              right: 14,
-              width: 10,
-              height: 10,
-              bgcolor: "background.paper",
-              transform: "translateY(-50%) rotate(45deg)",
-              zIndex: 0,
-            },
-          },
-        }}
+        PaperProps={{ elevation: 0, sx: { overflow: "visible", boxShadow: "none", borderRadius: 0, mt: 1.5 } }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >
-        <Stack className={"basket-frame"}>
-          <Box className={"all-check-box"}>
-            {cartItems.length === 0 ? (
-              <div>Cart is empty!</div>
-            ) : (
-              <Stack flexDirection={"row"}>
-                <div>Cart Products:</div>
-                <DeleteForeverIcon
-                  sx={{ ml: "5px", cursor: "pointer" }}
-                  color="primary"
-                  onClick={() => onDeleteAll()}
-                />
-              </Stack>
-            )}
-          </Box>
-
-          <Box className={"orders-main-wrapper"}>
-            <Box className={"orders-wrapper"}>
-              {cartItems.map((item: CartItem) => {
-                const imagePath = item.image
-                  ? `${serverApi}/${item.image}`
-                  : "/icons/noimage-list.svg";
-                return (
-                  <Box className={"basket-info-box"} key={item._id}>
-                    <div className={"cancel-btn"}>
-                      <CancelIcon
-                        color={"primary"}
-                        onClick={() => onDelete(item)}
-                      />
-                    </div>
-                    <img src={imagePath} className={"product-img"} />
-                    <span className={"product-name"}>{item.name}</span>
-                    <p className={"product-price"}>
-                      {item.price} x {item.quantity}
-                    </p>
-                    <Box sx={{ minWidth: 120 }}>
-                      <div className="col-2">
-                        <button
-                          className="remove"
-                          onClick={() => onRemove(item)}
-                        >
-                          -
-                        </button>{" "}
-                        <button className="add" onClick={() => onAdd(item)}>
-                          +
-                        </button>
-                      </div>
-                    </Box>
-                  </Box>
-                );
-              })}
-            </Box>
-          </Box>
-          {cartItems.length !== 0 ? (
-            <Box className={"basket-order"}>
-              <span className={"price"}>
-                Total: {totalPrice.toFixed(1)} ({itemsPrice} + {shippingCost})
-              </span>
-              <Button
-                onClick={proceedOrderHandler}
-                startIcon={<ShoppingCartIcon />}
-                variant={"contained"}
-              >
-                Order
-              </Button>
-            </Box>
+        <div className="basket-frame">
+          <header className="basket-header">
+            <h2>Cart</h2>
+            <button className="basket-close" onClick={handleClose} aria-label="Close cart">×</button>
+          </header>
+          {cartItems.length === 0 ? (
+            <div className="basket-empty">
+              <p>Your cart is empty.</p>
+              <Link to="/products" onClick={handleClose}>Return to Shop</Link>
+            </div>
           ) : (
-            ""
+            <>
+              <div className="basket-items">
+                {cartItems.map((item) => {
+                  const imagePath = item.image ? `${serverApi}/${item.image}` : "/icons/noimage-list.svg";
+                  const lineTotal = item.price * item.quantity;
+
+                  return (
+                    <article className="basket-item" key={item._id}>
+                      <Link to={`/products/${item._id}`} onClick={handleClose} className="basket-image-link">
+                        <img src={imagePath} alt={item.name} />
+                      </Link>
+                      <div className="basket-item-info">
+                        <Link to={`/products/${item._id}`} onClick={handleClose}>{item.name}</Link>
+                        <span>{`$${item.price.toFixed(2)}`}</span>
+                        <div className="basket-quantity">
+                          <button onClick={() => onRemove(item)} aria-label={`Decrease ${item.name} quantity`}>−</button>
+                          <span>{item.quantity}</span>
+                          <button onClick={() => onAdd(item)} aria-label={`Increase ${item.name} quantity`}>+</button>
+                        </div>
+                      </div>
+                      <div className="basket-item-side">
+                        <button className="basket-remove" onClick={() => onDelete(item)} aria-label={`Remove ${item.name}`}>×</button>
+                        <strong>{`$${lineTotal.toFixed(2)}`}</strong>
+                      </div>
+                    </article>
+                  );
+                })}
+              </div>
+              <footer className="basket-summary">
+                <div><span>Subtotal</span><strong>{`$${itemsPrice.toFixed(2)}`}</strong></div>
+                <div className="basket-total"><span>Total</span><strong>{`$${itemsPrice.toFixed(2)}`}</strong></div>
+                <button className="basket-checkout" onClick={proceedOrderHandler}>Proceed to Order</button>
+                <button className="basket-clear" onClick={onDeleteAll}>Clear Cart</button>
+              </footer>
+            </>
           )}
-        </Stack>
+        </div>
       </Menu>
     </Box>
   );
