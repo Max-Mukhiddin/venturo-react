@@ -23,12 +23,20 @@ const emptyAddress: ShippingAddress = {
 
 export default function CheckoutPage(props: CheckoutPageProps) {
   const { cartItems, onDeleteAll } = props;
-  const { authMember, setOrderBuilder } = useGlobals();
+  const { authMember, authInitializing, setOrderBuilder } = useGlobals();
   const history = useHistory();
   const [address, setAddress] = useState<ShippingAddress>(emptyAddress);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
-  if (!authMember) history.push("/");
+  if (!authInitializing && !authMember) history.push("/");
+
+  if (authInitializing) {
+    return (
+      <div className="checkout-page">
+        <main className="checkout-container">Loading session...</main>
+      </div>
+    );
+  }
 
   const itemsPrice = cartItems.reduce(
     (a: number, c: CartItem) => a + c.quantity * c.price,

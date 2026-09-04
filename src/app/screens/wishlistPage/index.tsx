@@ -10,7 +10,7 @@ import WishlistService from "../../services/WishlistService";
 import FreeShipping from "../homePage/FreeShipping";
 
 export default function WishlistPage({ onAdd }: { onAdd: (item: CartItem) => void }) {
-  const { authMember } = useGlobals();
+  const { authMember, authInitializing } = useGlobals();
   const history = useHistory();
   const [items, setItems] = useState<WishlistItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -63,7 +63,9 @@ export default function WishlistPage({ onAdd }: { onAdd: (item: CartItem) => voi
     });
   };
 
-  const content = !authMember ? (
+  const content = authInitializing ? (
+    <p className="wl-state">Loading session...</p>
+  ) : !authMember ? (
     <div className="wl-empty">
       <p>Sign in to view your wishlist.</p>
       <Link to="/products">Return To Shop</Link>

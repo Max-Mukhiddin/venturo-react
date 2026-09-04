@@ -3,10 +3,10 @@ import { serverApi } from "../../lib/config";
 import {
   LoginInput,
   Member,
-  MemberInput,
   MemberUpdateInput,
   MyAccountProfile,
   MyAccountUpdateInput,
+  SignupInput,
 } from "../../lib/types/member";
 
 class MemberService {
@@ -43,7 +43,7 @@ class MemberService {
     }
   }
 
-  public async signup(input: MemberInput): Promise<Member> {
+  public async signup(input: SignupInput): Promise<Member> {
     try {
       const url = this.path + "/member/signup";
       const result = await axios.post(url, input, { withCredentials: true });

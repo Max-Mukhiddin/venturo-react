@@ -38,7 +38,7 @@ const PAGE_LINKS = [
 
 export default function GlobalHeader(props: GlobalHeaderProps) {
   const { cartItems, onAdd, onRemove, onDelete, onDeleteAll, setLoginOpen, handleLogoutClick, handleCloseLogout, anchorEl, handleLogoutRequest } = props;
-  const { authMember } = useGlobals();
+  const { authMember, authInitializing } = useGlobals();
   const location = useLocation();
   const [desktopMenu, setDesktopMenu] = useState<"activities" | "pages" | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -79,7 +79,7 @@ export default function GlobalHeader(props: GlobalHeaderProps) {
         <div className="vn-actions">
           <NavLink to="/products" className="vn-icon-button" aria-label="Search products"><img src="/icons/hm-search.svg" alt="" /></NavLink>
           <Basket cartItems={cartItems} onAdd={onAdd} onRemove={onRemove} onDelete={onDelete} onDeleteAll={onDeleteAll} />
-          {!authMember ? <button type="button" className="vn-login" onClick={() => setLoginOpen(true)}>Login</button> : authMember.memberImage ? <button type="button" className="vn-avatar-button" aria-label="Open account menu" aria-haspopup="menu" onClick={handleLogoutClick}><img src={`${serverApi}/${authMember.memberImage}`} alt="Account" /></button> : <button type="button" className="vn-avatar-button vn-avatar-fallback" aria-label="Open account menu" aria-haspopup="menu" onClick={handleLogoutClick}><AccountCircleOutlinedIcon aria-hidden="true" /></button>}
+          {authInitializing ? null : !authMember ? <button type="button" className="vn-login" onClick={() => setLoginOpen(true)}>Login</button> : authMember.memberImage ? <button type="button" className="vn-avatar-button" aria-label="Open account menu" aria-haspopup="menu" onClick={handleLogoutClick}><img src={`${serverApi}/${authMember.memberImage}`} alt="Account" /></button> : <button type="button" className="vn-avatar-button vn-avatar-fallback" aria-label="Open account menu" aria-haspopup="menu" onClick={handleLogoutClick}><AccountCircleOutlinedIcon aria-hidden="true" /></button>}
           <button type="button" className="vn-mobile-toggle" aria-label={mobileOpen ? "Close navigation" : "Open navigation"} aria-expanded={mobileOpen} onClick={() => setMobileOpen((open) => !open)}>{mobileOpen ? <CloseIcon aria-hidden="true" /> : <MenuIcon aria-hidden="true" />}</button>
         </div>
       </div></div>

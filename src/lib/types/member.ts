@@ -15,16 +15,26 @@ export interface Member {
   updatedAt: Date;
 }
 
-export interface MemberInput {
-  memberType?: MemberType;
-  memberStatus?: MemberStatus;
+export interface SignupInput {
   memberNick: string;
   memberPhone: string;
   memberPassword: string;
   memberAddress?: string;
   memberDesc?: string;
   memberImage?: string;
-  memberPoints?: number;
+}
+
+export interface AuthMember {
+  _id: string;
+  memberType: string;
+  memberStatus: string;
+  memberNick: string;
+  memberPhone: string;
+  memberAddress?: string;
+  memberDesc?: string;
+  memberImage?: string;
+  createdAt: string | Date;
+  updatedAt: string | Date;
 }
 
 export interface LoginInput {

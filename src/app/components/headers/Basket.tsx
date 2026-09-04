@@ -18,7 +18,7 @@ interface BasketProps {
 }
 
 export default function Basket({ cartItems, onAdd, onRemove, onDelete, onDeleteAll }: BasketProps) {
-  const { authMember } = useGlobals();
+  const { authMember, authInitializing } = useGlobals();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
   const open = Boolean(anchorEl);
@@ -28,6 +28,7 @@ export default function Basket({ cartItems, onAdd, onRemove, onDelete, onDeleteA
   const proceedOrderHandler = () => {
     try {
       handleClose();
+      if (authInitializing) return;
       if (!authMember) throw new Error(Messages.error2);
       history.push("/checkout");
     } catch (err) {

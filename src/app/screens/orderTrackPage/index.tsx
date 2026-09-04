@@ -13,7 +13,7 @@ const formatMoney = (value: number) => `$${value}`;
 const formatDate = (value: Date) => new Date(value).toLocaleDateString();
 
 export default function OrderTrackPage() {
-  const { authMember } = useGlobals();
+  const { authMember, authInitializing } = useGlobals();
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedId, setSelectedId] = useState("");
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
@@ -93,7 +93,9 @@ export default function OrderTrackPage() {
   };
 
   let content: React.ReactNode;
-  if (!authMember) {
+  if (authInitializing) {
+    content = <p className="ot-state">Loading session...</p>;
+  } else if (!authMember) {
     content = <section className="ot-message"><p>Sign in to view your orders.</p><Link to="/products">Continue Shopping</Link></section>;
   } else if (loading) {
     content = <p className="ot-state">Loading your orders...</p>;

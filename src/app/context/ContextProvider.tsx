@@ -1,24 +1,49 @@
-import React, { ReactNode, useState } from "react";
-import Cookies from "universal-cookie";
-import { Member } from "../../lib/types/member";
+import React, { ReactNode, useEffect, useState } from "react";
+import { AuthMember } from "../../lib/types/member";
 import { GlobalContext } from "../hooks/useGlobals";
-import exp from "constants";
+import MemberService from "../services/MemberService";
 
 const ContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const cookies = new Cookies();
-  if (!cookies.get("accessToken")) localStorage.removeItem("memberData");
-
-  const [authMember, setAuthMember] = useState<Member | null>(
-    localStorage.getItem("memberData")
-      ? JSON.parse(localStorage.getItem("memberData") as string)
-      : null
-  );
+  const [authMember, setAuthMember] = useState<AuthMember | null>(null);
+  const [authInitializing, setAuthInitializing] = useState(true);
   const [orderBuilder, setOrderBuilder] = useState<Date>(new Date());
-  console.log("===verify===");
+
+  useEffect(() => {
+    let mounted = true;
+
+    const restoreSession = async () => {
+      try {
+        const member = await new MemberService().getMyAccount();
+        if (!mounted) return;
+
+        setAuthMember(member);
+        localStorage.setItem("memberData", JSON.stringify(member));
+      } catch {
+        if (!mounted) return;
+
+        setAuthMember(null);
+        localStorage.removeItem("memberData");
+      } finally {
+        if (mounted) setAuthInitializing(false);
+      }
+    };
+
+    restoreSession();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <GlobalContext.Provider
-      value={{ authMember, setAuthMember, orderBuilder, setOrderBuilder }}
+      value={{
+        authMember,
+        setAuthMember,
+        authInitializing,
+        orderBuilder,
+        setOrderBuilder,
+      }}
     >
       {children}
     </GlobalContext.Provider>

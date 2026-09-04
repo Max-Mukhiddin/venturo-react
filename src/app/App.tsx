@@ -47,7 +47,7 @@ function App() {
   const handleLogoutRequest = async () => {
     try {
       const member = new MemberService();
-      member.logout();
+      await member.logout();
 
       await sweetTopSuccessAlert("success", 700);
       setAuthMember(null);

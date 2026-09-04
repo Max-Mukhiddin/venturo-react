@@ -16,7 +16,7 @@ const initialForm: MyAccountUpdateInput = {
 };
 
 export default function MyAccountPage() {
-  const { authMember, setAuthMember } = useGlobals();
+  const { authMember, authInitializing, setAuthMember } = useGlobals();
   const [profile, setProfile] = useState<MyAccountProfile | null>(null);
   const [form, setForm] = useState<MyAccountUpdateInput>(initialForm);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -108,7 +108,9 @@ export default function MyAccountPage() {
   const avatarSource = imagePreview || (profile?.memberImage ? `${serverApi}/${profile.memberImage}` : null);
 
   let content: React.ReactNode;
-  if (!authMember) {
+  if (authInitializing) {
+    content = <p className="ma-state">Loading session...</p>;
+  } else if (!authMember) {
     content = (
       <section className="ma-message" aria-live="polite">
         <p>Sign in to view and update your account details.</p>

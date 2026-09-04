@@ -45,7 +45,6 @@ class OrderService {
 
   public async getMyOrders(pageOrInput: number | OrderInquiry = 1, limit = 10): Promise<Order[]> {
     try {
-      axios.defaults.withCredentials = true;
       const url = `${this.path}/order/all`;
       const input = typeof pageOrInput === "number" ? undefined : pageOrInput;
       const page = input?.page || pageOrInput;

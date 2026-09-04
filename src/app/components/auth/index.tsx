@@ -8,7 +8,7 @@ import styled from "styled-components";
 import LoginIcon from "@mui/icons-material/Login";
 import { T } from "../../../lib/types/common";
 import { Messages } from "../../../lib/config";
-import { LoginInput, MemberInput } from "../../../lib/types/member";
+import { LoginInput, SignupInput } from "../../../lib/types/member";
 import MemberService from "../../services/MemberService";
 import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
@@ -79,10 +79,10 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
     try {
       // console.log("inputs:", memberNick, memberPhone, memberPassword);
       const isFulfill =
-        memberNick !== "" && memberPhone !== "" && memberNick !== "";
+        memberNick !== "" && memberPhone !== "" && memberPassword !== "";
       if (!isFulfill) throw new Error(Messages.error3);
 
-      const signupInput: MemberInput = {
+      const signupInput: SignupInput = {
         memberNick: memberNick,
         memberPhone: memberPhone,
         memberPassword: memberPassword,
@@ -103,7 +103,7 @@ export default function AuthenticationModal(props: AuthenticationModalProps) {
 
   const handleLoginRequest = async () => {
     try {
-      const isFulfill = memberNick !== "" && memberNick !== "";
+      const isFulfill = memberNick !== "" && memberPassword !== "";
       if (!isFulfill) throw new Error(Messages.error3);
 
       const loginInput: LoginInput = {
