@@ -1087,6 +1087,12 @@
   color: #707262;
 }
 
+.products-page .chosen-product .sd-add:disabled,
+.products-page .chosen-product .sd-buy:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
 @media (hover: hover) {
   .products-page .chosen-product .sd-add:hover {
     background: #5d5f51;

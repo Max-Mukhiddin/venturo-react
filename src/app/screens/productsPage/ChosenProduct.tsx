@@ -65,11 +65,14 @@ export default function ChosenProduct(props: ChosenProDuctProps) {
   if (!chosenProduct) return null;
 
   const images = chosenProduct.productImages;
+  const outOfStock = chosenProduct.productLeftCount <= 0;
   const mainImage = images[activeImage]
     ? `${serverApi}/${images[activeImage]}`
     : "/icons/noimage-list.svg";
 
   const addToCartHandler = () => {
+    if (outOfStock) return;
+
     onAdd({
       _id: chosenProduct._id,
       quantity: 1,
@@ -80,6 +83,8 @@ export default function ChosenProduct(props: ChosenProDuctProps) {
   };
 
   const buyNowHandler = () => {
+    if (outOfStock) return;
+
     addToCartHandler();
     history.push("/checkout");
   };
@@ -157,13 +162,15 @@ export default function ChosenProduct(props: ChosenProDuctProps) {
               type={"button"}
               className={"sd-add"}
               onClick={addToCartHandler}
+              disabled={outOfStock}
             >
-              Add To Cart
+              {outOfStock ? "Out of Stock" : "Add To Cart"}
             </button>
             <button
               type={"button"}
               className={"sd-buy"}
               onClick={buyNowHandler}
+              disabled={outOfStock}
             >
               Buy Now
             </button>
