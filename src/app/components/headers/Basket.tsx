@@ -54,7 +54,8 @@ export default function Basket({ cartItems, onAdd, onRemove, onDelete, onDeleteA
         id="basket-menu"
         open={open}
         onClose={handleClose}
-        PaperProps={{ elevation: 0, sx: { overflow: "visible", boxShadow: "none", borderRadius: 0, mt: 1.5 } }}
+        MenuListProps={{ disablePadding: true }}
+        PaperProps={{ elevation: 0, sx: { overflow: "visible", boxShadow: "none", borderRadius: 0, mt: 1.5, backgroundColor: "transparent" } }}
         transformOrigin={{ horizontal: "right", vertical: "top" }}
         anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
       >

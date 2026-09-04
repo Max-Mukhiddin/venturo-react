@@ -7,7 +7,8 @@
 /* Shared header: Figma node 2012:3. HomeNavbar supplies the existing hero;
    GlobalHeader owns the same real navigation on every route. */
 .vt-navbar {
-  position: relative;
+  position: sticky;
+  top: 0;
   z-index: 1000;
   width: 100%;
   color: #707262;
@@ -1209,7 +1210,7 @@
   padding: 0;
   border: 1px solid #aeb192;
   border-radius: 0;
-  background: #f5f5f5;
+  background: #f7f7f2;
   box-shadow: 0 12px 28px rgba(57, 59, 48, 0.18);
   color: #707262;
   font-family: "Montserrat", "Poppins", Arial, sans-serif;
@@ -1239,7 +1240,9 @@
 .basket-checkout:hover { background: #5d5f51; }
 .basket-checkout:focus-visible { outline: 3px solid #aeb192; outline-offset: 3px; }
 .basket-checkout:disabled { background: #d9dbc5; color: #707262; cursor: not-allowed; }
-.basket-clear { margin-top: 10px; border: 1px solid #707262; background: transparent; color: #707262; }
+.basket-clear { margin-top: 10px; border: 1px solid #aeb192; background: #d9dbc5; color: #5d5f51; }
+.basket-clear:hover { border-color: #707262; background: #cdd0b3; }
+.basket-clear:focus-visible { outline: 3px solid #707262; outline-offset: 3px; }
 .basket-empty { display: flex; min-height: 164px; flex-direction: column; align-items: center; justify-content: center; gap: 22px; padding: 20px; text-align: center; }
 .basket-empty p { margin: 0; font-size: 14px; }
 .basket-empty a { width: min(240px, 100%); }

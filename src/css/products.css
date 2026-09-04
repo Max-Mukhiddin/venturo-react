@@ -865,8 +865,11 @@
 
 .products-page .sl-search-label,
 .products-page .sl-filter-heading { color: #707262; }
-.products-page .sl-search-input { border-color: #aeb192; }
-.products-page .sl-search-button { border-color: #707262; background: #707262; }
+.products-page .sl-search-row { align-items: stretch; }
+.products-page .sl-search-input { min-height: 44px; box-sizing: border-box; border-color: #aeb192; padding: 0 14px; }
+.products-page .sl-search-button { min-height: 44px; border-color: #707262; padding: 0 18px; background: #707262; color: #fff; font-family: "Montserrat", "Poppins", Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px; transition: background 180ms ease, border-color 180ms ease; }
+.products-page .sl-search-button:hover { border-color: #5d5f51; background: #5d5f51; }
+.products-page .sl-search-button:focus-visible { outline: 3px solid #707262; outline-offset: 3px; }
 .products-page .sl-filter-chip { border-color: #aeb192; color: #707262; background: #f0f0f0; }
 .products-page .sl-filter-chip[aria-pressed="true"] { border-color: #707262; background: #707262; }
 
