@@ -4,7 +4,7 @@ import "../../../css/orderTrack.css";
 import { serverApi } from "../../../lib/config";
 import { Order, OrderItem } from "../../../lib/types/order";
 import { Product } from "../../../lib/types/product";
-import { OrderStatus } from "../../../lib/enums/order.enum";
+import { OrderStatus, PaymentMethod } from "../../../lib/enums/order.enum";
 import Breadcrumb from "../../components/breadcrumb";
 import { useGlobals } from "../../hooks/useGlobals";
 import OrderService from "../../services/OrderService";
@@ -18,6 +18,8 @@ const formatOrderDate = (value: Date) => new Date(value).toLocaleDateString("en-
 });
 const formatStatus = (status: OrderStatus) =>
   status === OrderStatus.DELETE ? "Cancelled" : status;
+const formatPaymentMethod = (paymentMethod?: PaymentMethod) =>
+  paymentMethod === PaymentMethod.PAY_ON_DELIVERY ? "Pay on Delivery" : "Not recorded";
 
 const normalizeOrderDetail = (order: Order): Order => ({
   ...order,
@@ -185,7 +187,7 @@ export default function OrderTrackPage({ onLoginOpen }: { onLoginOpen: () => voi
             <header className="ot-result-header"><div><p>Current status</p><strong className={`ot-status ot-status-${selectedOrder.orderStatus.toLowerCase()}`}>{formatStatus(selectedOrder.orderStatus)}</strong></div><div><p>Ordered</p><strong>{formatDate(selectedOrder.createdAt)}</strong></div><div><p>Last updated</p><strong>{formatDate(selectedOrder.updatedAt)}</strong></div></header>
             <div className="ot-detail-grid">
               <section><h2>Order Items</h2><ul>{selectedOrderItems.map(renderItem)}</ul></section>
-              <aside><h2>Order Summary</h2><dl><div><dt>Products</dt><dd>{formatMoney(selectedOrder.orderTotal - selectedOrder.orderDelivery)}</dd></div><div><dt>Delivery</dt><dd>{formatMoney(selectedOrder.orderDelivery)}</dd></div><div><dt>Total</dt><dd>{formatMoney(selectedOrder.orderTotal)}</dd></div></dl><h2>Shipping Address</h2><address>{selectedOrder.shippingAddress.street}<br />{selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state} {selectedOrder.shippingAddress.zip}<br />{selectedOrder.shippingAddress.country}</address></aside>
+              <aside><h2>Order Summary</h2><dl><div><dt>Products</dt><dd>{formatMoney(selectedOrder.orderTotal - selectedOrder.orderDelivery)}</dd></div><div><dt>Delivery</dt><dd>{formatMoney(selectedOrder.orderDelivery)}</dd></div><div><dt>Total</dt><dd>{formatMoney(selectedOrder.orderTotal)}</dd></div></dl><h2>Payment Method</h2><p className="ot-payment-method">{formatPaymentMethod(selectedOrder.orderPaymentMethod)}</p><h2>Shipping Address</h2><address>{selectedOrder.shippingAddress.street}<br />{selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state} {selectedOrder.shippingAddress.zip}<br />{selectedOrder.shippingAddress.country}</address></aside>
             </div>
             {mutationError ? <p className="ot-mutation-error" role="alert">{mutationError}</p> : null}
             {selectedOrder.orderStatus === OrderStatus.PENDING || selectedOrder.orderStatus === OrderStatus.PROCESS ? <div className="ot-actions">{selectedOrder.orderStatus === OrderStatus.PENDING ? <button disabled={Boolean(updating)} onClick={() => updateStatus(OrderStatus.PROCESS)}>{updating === OrderStatus.PROCESS ? "Continuing..." : "Continue Order"}</button> : null}<button className="ot-cancel" disabled={Boolean(updating)} onClick={() => updateStatus(OrderStatus.DELETE)}>{updating === OrderStatus.DELETE ? "Cancelling..." : "Cancel Order"}</button></div> : null}

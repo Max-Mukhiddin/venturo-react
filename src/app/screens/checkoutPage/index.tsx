@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
 import { ShippingAddress } from "../../../lib/types/order";
+import { PaymentMethod } from "../../../lib/enums/order.enum";
 import { Messages, serverApi } from "../../../lib/config";
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
@@ -67,7 +68,7 @@ export default function CheckoutPage(props: CheckoutPageProps) {
 
       setSubmitting(true);
       const order = new OrderService();
-      await order.createOrder(cartItems, address);
+      await order.createOrder(cartItems, address, PaymentMethod.PAY_ON_DELIVERY);
 
       onDeleteAll();
       setOrderBuilder(new Date());
@@ -106,6 +107,13 @@ export default function CheckoutPage(props: CheckoutPageProps) {
               <label>ZIP Code<input value={address.zip} onChange={handleAddressChange("zip")} autoComplete="postal-code" /></label>
               <label>Country<input value={address.country} onChange={handleAddressChange("country")} autoComplete="country-name" /></label>
             </div>
+            <section className="checkout-payment" aria-labelledby="payment-heading">
+              <h3 id="payment-heading">Payment Method</h3>
+              <label className="checkout-payment-option">
+                <input type="radio" name="payment-method" value={PaymentMethod.PAY_ON_DELIVERY} defaultChecked />
+                <span><strong>Pay on Delivery</strong><small>Pay when your order is delivered.</small></span>
+              </label>
+            </section>
           </section>
 
           <aside className={"checkout-summary"} aria-labelledby="summary-heading">

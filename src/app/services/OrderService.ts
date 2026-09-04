@@ -1,7 +1,9 @@
 import axios from "axios";
 import { serverApi } from "../../lib/config";
+import { PaymentMethod } from "../../lib/enums/order.enum";
 import { CartItem } from "../../lib/types/search";
 import {
+  CreateOrderInput,
   Order,
   OrderInquiry,
   OrderItemInput,
@@ -18,7 +20,8 @@ class OrderService {
 
   public async createOrder(
     input: CartItem[],
-    shippingAddress: ShippingAddress
+    shippingAddress: ShippingAddress,
+    orderPaymentMethod: PaymentMethod
   ): Promise<Order> {
     try {
       const items: OrderItemInput[] = input.map((cartItem: CartItem) => {
@@ -30,9 +33,14 @@ class OrderService {
       });
 
       const url = `${this.path}/order/create`;
+      const orderInput: CreateOrderInput = {
+        shippingAddress,
+        items,
+        orderPaymentMethod,
+      };
       const result = await axios.post(
         url,
-        { shippingAddress, items },
+        orderInput,
         { withCredentials: true }
       );
       console.log("createOrder:", result);

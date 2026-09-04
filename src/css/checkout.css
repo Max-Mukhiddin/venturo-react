@@ -10,6 +10,12 @@
 .checkout-fields input { box-sizing: border-box; width: 100%; min-height: 58px; padding: 12px 14px; border: 1px solid #aeb192; border-radius: 0; outline-offset: 3px; background: #ffffff; color: #42433a; font: 400 14px/20px "Montserrat", "Poppins", Arial, sans-serif; }
 .checkout-fields input:focus { border-color: #707262; outline: 2px solid #aeb192; }
 .checkout-wide { grid-column: 1 / -1; }
+.checkout-payment { margin-top: 32px; padding-top: 28px; border-top: 1px solid #d9dbc5; }
+.checkout-payment h3 { margin: 0 0 16px; font: 500 18px/24px "Montserrat", "Poppins", Arial, sans-serif; }
+.checkout-payment-option { display: flex; gap: 12px; padding: 16px; align-items: flex-start; border: 1px solid #707262; background: #f7f7f2; cursor: pointer; }
+.checkout-payment-option input { width: 18px; height: 18px; margin: 1px 0 0; accent-color: #707262; }
+.checkout-payment-option span { display: flex; gap: 3px; flex-direction: column; font: 400 14px/20px "Montserrat", "Poppins", Arial, sans-serif; }
+.checkout-payment-option strong { font-weight: 500; }.checkout-payment-option small { font-size: 13px; }
 .checkout-items { border-top: 1px solid #d9dbc5; }
 .checkout-item { display: grid; grid-template-columns: 88px minmax(0, 1fr) auto; align-items: center; gap: 16px; padding: 16px 0; border-bottom: 1px solid #d9dbc5; }
 .checkout-item-img { width: 88px; height: 88px; object-fit: contain; background: #ffffff; }

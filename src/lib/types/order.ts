@@ -1,5 +1,5 @@
 
-import { OrderStatus } from "../enums/order.enum";
+import { OrderStatus, PaymentMethod } from "../enums/order.enum";
 import { Product } from "./product";
 
 export interface ShippingAddress {
@@ -20,6 +20,7 @@ export interface OrderItemInput {
 export interface CreateOrderInput {
   shippingAddress: ShippingAddress;
   items: OrderItemInput[];
+  orderPaymentMethod: PaymentMethod;
 }
 
 export interface OrderItem {
@@ -37,6 +38,8 @@ export interface Order {
   orderTotal: number;
   orderDelivery: number;
   orderStatus: OrderStatus;
+  // Historical orders predate payment-method storage.
+  orderPaymentMethod?: PaymentMethod;
   memberId: string;
   shippingAddress: ShippingAddress;
   createdAt: Date;
