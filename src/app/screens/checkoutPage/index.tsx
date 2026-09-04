@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { CartItem } from "../../../lib/types/search";
 import { ShippingAddress } from "../../../lib/types/order";
@@ -11,6 +11,7 @@ import "../../../css/checkout.css";
 interface CheckoutPageProps {
   cartItems: CartItem[];
   onDeleteAll: () => void;
+  onLoginOpen: () => void;
 }
 
 const emptyAddress: ShippingAddress = {
@@ -22,13 +23,18 @@ const emptyAddress: ShippingAddress = {
 };
 
 export default function CheckoutPage(props: CheckoutPageProps) {
-  const { cartItems, onDeleteAll } = props;
+  const { cartItems, onDeleteAll, onLoginOpen } = props;
   const { authMember, authInitializing, setOrderBuilder } = useGlobals();
   const history = useHistory();
   const [address, setAddress] = useState<ShippingAddress>(emptyAddress);
   const [submitting, setSubmitting] = useState<boolean>(false);
 
-  if (!authInitializing && !authMember) history.push("/");
+  useEffect(() => {
+    if (!authInitializing && !authMember) {
+      onLoginOpen();
+      history.replace("/");
+    }
+  }, [authInitializing, authMember, history, onLoginOpen]);
 
   if (authInitializing) {
     return (

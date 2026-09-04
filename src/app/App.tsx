@@ -35,6 +35,7 @@ function App() {
 
   const handleSignupClose = () => setSignupOpen(false);
   const handleLoginClose = () => setLoginOpen(false);
+  const handleLoginOpen = () => setLoginOpen(true);
 
   const handleLogoutClick = (e: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(e.currentTarget);
@@ -97,7 +98,7 @@ function App() {
             <ProductsPage onAdd={onAdd} />
           </Route>
           <Route path="/checkout">
-            <CheckoutPage cartItems={cartItems} onDeleteAll={onDeleteAll} />
+            <CheckoutPage cartItems={cartItems} onDeleteAll={onDeleteAll} onLoginOpen={handleLoginOpen} />
           </Route>
           <Route path="/contact">
             <ContactPage />
@@ -106,13 +107,13 @@ function App() {
             <FaqPage />
           </Route>
           <Route path="/wishlist">
-            <WishlistPage onAdd={onAdd} />
+            <WishlistPage onAdd={onAdd} onLoginOpen={handleLoginOpen} />
           </Route>
           <Route path="/my-account">
-            <MyAccountPage />
+            <MyAccountPage onLoginOpen={handleLoginOpen} />
           </Route>
           <Route path="/order-track">
-            <OrderTrackPage />
+            <OrderTrackPage onLoginOpen={handleLoginOpen} />
           </Route>
           <Route path="/blog">
             <BlogPage />

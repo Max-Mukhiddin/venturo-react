@@ -9,7 +9,7 @@ import { useGlobals } from "../../hooks/useGlobals";
 import WishlistService from "../../services/WishlistService";
 import FreeShipping from "../homePage/FreeShipping";
 
-export default function WishlistPage({ onAdd }: { onAdd: (item: CartItem) => void }) {
+export default function WishlistPage({ onAdd, onLoginOpen }: { onAdd: (item: CartItem) => void; onLoginOpen: () => void }) {
   const { authMember, authInitializing } = useGlobals();
   const history = useHistory();
   const [items, setItems] = useState<WishlistItem[]>([]);
@@ -67,7 +67,7 @@ export default function WishlistPage({ onAdd }: { onAdd: (item: CartItem) => voi
     <p className="wl-state">Loading session...</p>
   ) : !authMember ? (
     <div className="wl-empty">
-      <p>Sign in to view your wishlist.</p>
+      <p><button className="wl-auth-link" type="button" onClick={onLoginOpen}>Sign in</button> to view your wishlist.</p>
       <Link to="/products">Return To Shop</Link>
     </div>
   ) : loading ? (

@@ -217,6 +217,16 @@
   margin: 0;
 }
 
+.ma-auth-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #5d5f51;
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+}
+
 .ma-message a {
   width: min(300px, calc(100% - 48px));
 }

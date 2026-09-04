@@ -34,6 +34,16 @@
   margin: 0;
 }
 
+.wl-auth-link {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #5d5f51;
+  cursor: pointer;
+  font: inherit;
+  text-decoration: underline;
+}
+
 .wl-empty a,
 .wl-add {
   display: inline-flex;

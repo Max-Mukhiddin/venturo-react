@@ -4,9 +4,8 @@ import Badge from "@mui/material/Badge";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import { Link, useHistory } from "react-router-dom";
-import { Messages, serverApi } from "../../../lib/config";
+import { serverApi } from "../../../lib/config";
 import { CartItem } from "../../../lib/types/search";
-import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
 
 interface BasketProps {
@@ -15,9 +14,10 @@ interface BasketProps {
   onRemove: (item: CartItem) => void;
   onDelete: (item: CartItem) => void;
   onDeleteAll: () => void;
+  onLoginOpen: () => void;
 }
 
-export default function Basket({ cartItems, onAdd, onRemove, onDelete, onDeleteAll }: BasketProps) {
+export default function Basket({ cartItems, onAdd, onRemove, onDelete, onDeleteAll, onLoginOpen }: BasketProps) {
   const { authMember, authInitializing } = useGlobals();
   const history = useHistory();
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
@@ -26,14 +26,13 @@ export default function Basket({ cartItems, onAdd, onRemove, onDelete, onDeleteA
 
   const handleClose = () => setAnchorEl(null);
   const proceedOrderHandler = () => {
-    try {
-      handleClose();
-      if (authInitializing) return;
-      if (!authMember) throw new Error(Messages.error2);
-      history.push("/checkout");
-    } catch (err) {
-      sweetErrorHandling(err).then();
+    handleClose();
+    if (authInitializing) return;
+    if (!authMember) {
+      onLoginOpen();
+      return;
     }
+    history.push("/checkout");
   };
 
   return (

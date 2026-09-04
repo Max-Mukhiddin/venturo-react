@@ -12,7 +12,7 @@ import OrderService from "../../services/OrderService";
 const formatMoney = (value: number) => `$${value}`;
 const formatDate = (value: Date) => new Date(value).toLocaleDateString();
 
-export default function OrderTrackPage() {
+export default function OrderTrackPage({ onLoginOpen }: { onLoginOpen: () => void }) {
   const { authMember, authInitializing } = useGlobals();
   const [orders, setOrders] = useState<Order[]>([]);
   const [selectedId, setSelectedId] = useState("");
@@ -96,7 +96,7 @@ export default function OrderTrackPage() {
   if (authInitializing) {
     content = <p className="ot-state">Loading session...</p>;
   } else if (!authMember) {
-    content = <section className="ot-message"><p>Sign in to view your orders.</p><Link to="/products">Continue Shopping</Link></section>;
+    content = <section className="ot-message"><p><button className="ot-auth-link" type="button" onClick={onLoginOpen}>Sign in</button> to view your orders.</p><Link to="/products">Continue Shopping</Link></section>;
   } else if (loading) {
     content = <p className="ot-state">Loading your orders...</p>;
   } else if (error && !selectedOrder) {

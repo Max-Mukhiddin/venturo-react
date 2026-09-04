@@ -1,40 +1,9 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
-import { Fab, Stack, TextField } from "@mui/material";
-import styled from "styled-components";
-import LoginIcon from "@mui/icons-material/Login";
-import { T } from "../../../lib/types/common";
+import React, { FormEvent, useCallback, useEffect, useState } from "react";
+import "../../../css/auth.css";
 import { Messages } from "../../../lib/config";
 import { LoginInput, SignupInput } from "../../../lib/types/member";
-import MemberService from "../../services/MemberService";
-import { sweetErrorHandling } from "../../../lib/sweetAlert";
 import { useGlobals } from "../../hooks/useGlobals";
-
-const useStyles = makeStyles((theme) => ({
-  modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 2, 2),
-  },
-}));
-
-const ModalImg = styled.img`
-  width: 62%;
-  height: 100%;
-  border-radius: 10px;
-  background: #000;
-  margin-top: 9px;
-  margin-left: 10px;
-`;
+import MemberService from "../../services/MemberService";
 
 interface AuthenticationModalProps {
   signupOpen: boolean;
@@ -43,200 +12,184 @@ interface AuthenticationModalProps {
   handleLoginClose: () => void;
 }
 
+interface LoginForm {
+  memberNick: string;
+  memberPassword: string;
+}
+
+interface SignupForm extends LoginForm {
+  memberPhone: string;
+}
+
+const emptyLogin: LoginForm = { memberNick: "", memberPassword: "" };
+const emptySignup: SignupForm = {
+  memberNick: "",
+  memberPhone: "",
+  memberPassword: "",
+};
+
 export default function AuthenticationModal(props: AuthenticationModalProps) {
   const { signupOpen, loginOpen, handleSignupClose, handleLoginClose } = props;
-  const classes = useStyles();
-  const [memberNick, setMemberNick] = useState<string>("");
-  const [memberPhone, setMemberPhone] = useState<string>("");
-  const [memberPassword, setMemberPassword] = useState<string>("initialState");
   const { setAuthMember } = useGlobals();
+  const [loginForm, setLoginForm] = useState<LoginForm>(emptyLogin);
+  const [signupForm, setSignupForm] = useState<SignupForm>(emptySignup);
+  const [loginError, setLoginError] = useState("");
+  const [signupError, setSignupError] = useState("");
+  const [submitting, setSubmitting] = useState<"login" | "signup" | null>(null);
+  const open = loginOpen || signupOpen;
 
-  /** HANDLERS **/
+  const closeModal = useCallback(() => {
+    handleLoginClose();
+    handleSignupClose();
+    setLoginError("");
+    setSignupError("");
+  }, [handleLoginClose, handleSignupClose]);
 
-  const handleUsername = (e: T) => {
-    setMemberNick(e.target.value);
-  };
+  useEffect(() => {
+    if (!open) {
+      setLoginForm(emptyLogin);
+      setSignupForm(emptySignup);
+      setSubmitting(null);
+    }
+  }, [open]);
 
-  const handlePhone = (e: T) => {
-    // console.log(e.target.value);
-    setMemberPhone(e.target.value);
-  };
+  useEffect(() => {
+    if (!open) return;
 
-  const handlePassword = (e: T) => {
-    // console.log(e.target.value);
-    setMemberPassword(e.target.value);
-  };
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") closeModal();
+    };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", closeOnEscape);
 
-  const handlePasswordKeyDown = (e: T) => {
-    if (e.key === "Enter" && signupOpen) {
-      handleSignupRequest().then();
-    } else if (e.key === "Enter" && loginOpen) {
-      handleLoginRequest().then();
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [closeModal, open]);
+
+  const submitLogin = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoginError("");
+
+    if (!loginForm.memberNick || !loginForm.memberPassword) {
+      setLoginError(Messages.error3);
+      return;
+    }
+
+    setSubmitting("login");
+    try {
+      const input: LoginInput = { ...loginForm };
+      const member = await new MemberService().login(input);
+      setAuthMember(member);
+      closeModal();
+    } catch {
+      setLoginError("Unable to sign in. Please check your details and try again.");
+    } finally {
+      setSubmitting(null);
     }
   };
 
-  const handleSignupRequest = async () => {
-    try {
-      // console.log("inputs:", memberNick, memberPhone, memberPassword);
-      const isFulfill =
-        memberNick !== "" && memberPhone !== "" && memberPassword !== "";
-      if (!isFulfill) throw new Error(Messages.error3);
+  const submitSignup = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSignupError("");
 
-      const signupInput: SignupInput = {
-        memberNick: memberNick,
-        memberPhone: memberPhone,
-        memberPassword: memberPassword,
-      };
-
-      const member = new MemberService();
-      const result = await member.signup(signupInput);
-
-      // saving authenticated user
-      setAuthMember(result);
-      handleSignupClose();
-    } catch (err) {
-      console.log("Error handleSignupRequest:", err);
-      handleSignupClose();
-      sweetErrorHandling(err).then();
+    if (!signupForm.memberNick || !signupForm.memberPhone || !signupForm.memberPassword) {
+      setSignupError(Messages.error3);
+      return;
     }
-  };
 
-  const handleLoginRequest = async () => {
+    setSubmitting("signup");
     try {
-      const isFulfill = memberNick !== "" && memberPassword !== "";
-      if (!isFulfill) throw new Error(Messages.error3);
-
-      const loginInput: LoginInput = {
-        memberNick: memberNick,
-        memberPassword: memberPassword,
-      };
-
-      const member = new MemberService();
-      const result = await member.login(loginInput);
-
-      // saving authenticated user
-      setAuthMember(result);
-      handleLoginClose();
-    } catch (err) {
-      console.log("Error handleLoginRequest:", err);
-      handleLoginClose();
-      sweetErrorHandling(err).then();
+      const input: SignupInput = { ...signupForm };
+      const member = await new MemberService().signup(input);
+      setAuthMember(member);
+      closeModal();
+    } catch {
+      setSignupError("Unable to create your account. Please review your details and try again.");
+    } finally {
+      setSubmitting(null);
     }
   };
 
   return (
-    <div>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={signupOpen}
-        onClose={handleSignupClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={signupOpen}>
-          <Stack
-            className={classes.paper}
-            direction={"row"}
-            sx={{ width: "800px" }}
-          >
-            <ModalImg src={"/img/auth.webp"} alt="camera" />
-            <Stack sx={{ marginLeft: "69px", alignItems: "center" }}>
-              <h2>Signup Form</h2>
-              <TextField
-                sx={{ marginTop: "7px" }}
-                id="signup-nick"
-                label="username"
-                variant="outlined"
-                onChange={handleUsername}
-              />
-              <TextField
-                sx={{ my: "17px" }}
-                id="signup-phone"
-                label="phone number"
-                variant="outlined"
-                onChange={handlePhone}
-              />
-              <TextField
-                id="signup-password"
-                label="password"
-                variant="outlined"
-                onChange={handlePassword}
-                onKeyDown={handlePasswordKeyDown}
-              />
-              <Fab
-                sx={{ marginTop: "30px", width: "120px" }}
-                variant="extended"
-                color="primary"
-                onClick={handleSignupRequest}
-              >
-                <LoginIcon sx={{ mr: 1 }} />
-                Signup
-              </Fab>
-            </Stack>
-          </Stack>
-        </Fade>
-      </Modal>
-
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
-        open={loginOpen}
-        onClose={handleLoginClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={loginOpen}>
-          <Stack
-            className={classes.paper}
-            direction={"row"}
-            sx={{ width: "700px" }}
-          >
-            <ModalImg src={"/img/auth.webp"} alt="camera" />
-            <Stack
-              sx={{
-                marginLeft: "65px",
-                marginTop: "25px",
-                alignItems: "center",
-              }}
-            >
-              <h2>Login Form</h2>
-              <TextField
-                id="login-nick"
-                label="username"
-                variant="outlined"
-                sx={{ my: "10px" }}
-                onChange={handleUsername}
-              />
-              <TextField
-                id={"login-password"}
-                label={"password"}
-                variant={"outlined"}
-                type={"password"}
-                onChange={handlePassword}
-                onKeyDown={handlePasswordKeyDown}
-              />
-              <Fab
-                sx={{ marginTop: "27px", width: "120px" }}
-                variant={"extended"}
-                color={"primary"}
-                onClick={handleLoginRequest}
-              >
-                <LoginIcon sx={{ mr: 1 }} />
-                Login
-              </Fab>
-            </Stack>
-          </Stack>
-        </Fade>
-      </Modal>
+    <div
+      className="auth-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Venturo account access"
+      hidden={!open}
+    >
+      <button className="auth-modal-backdrop" type="button" aria-label="Close authentication" onClick={closeModal} />
+      <section className="auth-surface">
+        <button className="auth-close" type="button" aria-label="Close authentication" onClick={closeModal}>×</button>
+        <div className="auth-forms">
+          <form className="auth-form" onSubmit={submitLogin} noValidate>
+            <h3>Login</h3>
+            <label htmlFor="login-nick">Username <span aria-hidden="true">*</span></label>
+            <input
+              id="login-nick"
+              name="memberNick"
+              autoComplete="username"
+              value={loginForm.memberNick}
+              onChange={(event) => setLoginForm((current) => ({ ...current, memberNick: event.target.value }))}
+              required
+            />
+            <label htmlFor="login-password">Password <span aria-hidden="true">*</span></label>
+            <input
+              id="login-password"
+              name="memberPassword"
+              type="password"
+              autoComplete="current-password"
+              value={loginForm.memberPassword}
+              onChange={(event) => setLoginForm((current) => ({ ...current, memberPassword: event.target.value }))}
+              required
+            />
+            {loginError ? <p className="auth-error" role="alert">{loginError}</p> : null}
+            <button className="auth-submit" type="submit" disabled={submitting === "login"}>
+              {submitting === "login" ? "Signing in..." : "Login"}
+            </button>
+          </form>
+          <form className="auth-form auth-form-register" onSubmit={submitSignup} noValidate>
+            <h3>Register</h3>
+            <label htmlFor="signup-nick">Username <span aria-hidden="true">*</span></label>
+            <input
+              id="signup-nick"
+              name="memberNick"
+              autoComplete="username"
+              value={signupForm.memberNick}
+              onChange={(event) => setSignupForm((current) => ({ ...current, memberNick: event.target.value }))}
+              required
+            />
+            <label htmlFor="signup-phone">Phone <span aria-hidden="true">*</span></label>
+            <input
+              id="signup-phone"
+              name="memberPhone"
+              type="tel"
+              autoComplete="tel"
+              value={signupForm.memberPhone}
+              onChange={(event) => setSignupForm((current) => ({ ...current, memberPhone: event.target.value }))}
+              required
+            />
+            <label htmlFor="signup-password">Password <span aria-hidden="true">*</span></label>
+            <input
+              id="signup-password"
+              name="memberPassword"
+              type="password"
+              autoComplete="new-password"
+              value={signupForm.memberPassword}
+              onChange={(event) => setSignupForm((current) => ({ ...current, memberPassword: event.target.value }))}
+              required
+            />
+            <p className="auth-note">Create an account with your Venturo username, phone number, and password.</p>
+            {signupError ? <p className="auth-error" role="alert">{signupError}</p> : null}
+            <button className="auth-submit" type="submit" disabled={submitting === "signup"}>
+              {submitting === "signup" ? "Creating account..." : "Register"}
+            </button>
+          </form>
+        </div>
+      </section>
     </div>
   );
 }

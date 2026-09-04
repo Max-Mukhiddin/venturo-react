@@ -15,7 +15,7 @@ const initialForm: MyAccountUpdateInput = {
   memberDesc: "",
 };
 
-export default function MyAccountPage() {
+export default function MyAccountPage({ onLoginOpen }: { onLoginOpen: () => void }) {
   const { authMember, authInitializing, setAuthMember } = useGlobals();
   const [profile, setProfile] = useState<MyAccountProfile | null>(null);
   const [form, setForm] = useState<MyAccountUpdateInput>(initialForm);
@@ -113,7 +113,7 @@ export default function MyAccountPage() {
   } else if (!authMember) {
     content = (
       <section className="ma-message" aria-live="polite">
-        <p>Sign in to view and update your account details.</p>
+        <p><button className="ma-auth-link" type="button" onClick={onLoginOpen}>Sign in</button> to view and update your account details.</p>
         <Link to="/products">Continue Shopping</Link>
       </section>
     );

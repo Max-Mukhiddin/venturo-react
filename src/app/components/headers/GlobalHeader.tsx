@@ -78,7 +78,7 @@ export default function GlobalHeader(props: GlobalHeaderProps) {
         </nav>
         <div className="vn-actions">
           <NavLink to="/products" className="vn-icon-button" aria-label="Search products"><img src="/icons/hm-search.svg" alt="" /></NavLink>
-          <Basket cartItems={cartItems} onAdd={onAdd} onRemove={onRemove} onDelete={onDelete} onDeleteAll={onDeleteAll} />
+          <Basket cartItems={cartItems} onAdd={onAdd} onRemove={onRemove} onDelete={onDelete} onDeleteAll={onDeleteAll} onLoginOpen={() => setLoginOpen(true)} />
           {authInitializing ? null : !authMember ? <button type="button" className="vn-login" onClick={() => setLoginOpen(true)}>Login</button> : authMember.memberImage ? <button type="button" className="vn-avatar-button" aria-label="Open account menu" aria-haspopup="menu" onClick={handleLogoutClick}><img src={`${serverApi}/${authMember.memberImage}`} alt="Account" /></button> : <button type="button" className="vn-avatar-button vn-avatar-fallback" aria-label="Open account menu" aria-haspopup="menu" onClick={handleLogoutClick}><AccountCircleOutlinedIcon aria-hidden="true" /></button>}
           <button type="button" className="vn-mobile-toggle" aria-label={mobileOpen ? "Close navigation" : "Open navigation"} aria-expanded={mobileOpen} onClick={() => setMobileOpen((open) => !open)}>{mobileOpen ? <CloseIcon aria-hidden="true" /> : <MenuIcon aria-hidden="true" />}</button>
         </div>
