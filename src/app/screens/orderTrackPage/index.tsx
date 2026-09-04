@@ -11,6 +11,38 @@ import OrderService from "../../services/OrderService";
 
 const formatMoney = (value: number) => `$${value}`;
 const formatDate = (value: Date) => new Date(value).toLocaleDateString();
+const formatOrderDate = (value: Date) => new Date(value).toLocaleDateString("en-US", {
+  month: "short",
+  day: "numeric",
+  year: "numeric",
+});
+const formatStatus = (status: OrderStatus) =>
+  status === OrderStatus.DELETE ? "Cancelled" : status;
+
+const normalizeOrderDetail = (order: Order): Order => ({
+  ...order,
+  orderItems: order.orderItems ?? [],
+  productData: order.productData ?? [],
+});
+
+const formatOrderLabel = (order: Order) => {
+  const productNames = Array.from(
+    new Set(
+      (order.productData ?? [])
+        .map((product) => product.productName)
+        .filter(Boolean)
+    )
+  );
+  const primaryLabel = productNames.length === 0
+    ? `Order …${order._id.slice(-5)}`
+    : productNames.length === 1
+      ? productNames[0]
+      : productNames.length === 2
+        ? `${productNames[0]} + ${productNames[1]}`
+        : `${productNames[0]} + ${productNames.length - 1} more`;
+
+  return `${primaryLabel} · ${formatOrderDate(order.createdAt)} · ${formatStatus(order.orderStatus)}`;
+};
 
 export default function OrderTrackPage({ onLoginOpen }: { onLoginOpen: () => void }) {
   const { authMember, authInitializing } = useGlobals();
@@ -21,6 +53,7 @@ export default function OrderTrackPage({ onLoginOpen }: { onLoginOpen: () => voi
   const [detailLoading, setDetailLoading] = useState(false);
   const [error, setError] = useState(false);
   const [updating, setUpdating] = useState<OrderStatus | null>(null);
+  const [mutationError, setMutationError] = useState<string | null>(null);
 
   const loadOrders = useCallback(() => {
     if (!authMember) return;
@@ -31,8 +64,9 @@ export default function OrderTrackPage({ onLoginOpen }: { onLoginOpen: () => voi
     new OrderService()
       .getMyOrders()
       .then((data) => {
-        setOrders(data);
-        if (data.length === 1) setSelectedId(data[0]._id);
+        const loadedOrders = Array.isArray(data) ? data.map(normalizeOrderDetail) : [];
+        setOrders(loadedOrders);
+        if (loadedOrders.length === 1) setSelectedId(loadedOrders[0]._id);
       })
       .catch(() => setError(true))
       .finally(() => setLoading(false));
@@ -47,10 +81,11 @@ export default function OrderTrackPage({ onLoginOpen }: { onLoginOpen: () => voi
 
     setDetailLoading(true);
     setError(false);
+    setMutationError(null);
     setSelectedOrder(null);
     new OrderService()
       .getOrderDetail(selectedId)
-      .then(setSelectedOrder)
+      .then((order) => setSelectedOrder(normalizeOrderDetail(order)))
       .catch(() => setError(true))
       .finally(() => setDetailLoading(false));
   }, [authMember, selectedId]);
@@ -60,23 +95,52 @@ export default function OrderTrackPage({ onLoginOpen }: { onLoginOpen: () => voi
   }, [loadSelectedOrder]);
 
   const updateStatus = async (status: OrderStatus) => {
-    if (!selectedOrder) return;
+    if (!selectedOrder || updating) return;
 
     setUpdating(status);
     setError(false);
+    setMutationError(null);
+    let statusUpdated = false;
     try {
-      const updated = await new OrderService().updateOrder(selectedOrder._id, status);
-      setSelectedOrder(updated);
-      setOrders((previous) => previous.map((order) => order._id === updated._id ? updated : order));
+      const orderService = new OrderService();
+      await orderService.updateOrder(selectedOrder._id, status);
+      statusUpdated = true;
+
+      // The update response is an unpopulated Order document. Reload its
+      // aggregate detail before replacing UI state used by the item renderer.
+      const refreshedOrder = normalizeOrderDetail(
+        await orderService.getOrderDetail(selectedOrder._id)
+      );
+      setSelectedOrder(refreshedOrder);
+      setOrders((previous) =>
+        previous.map((order) =>
+          order._id === refreshedOrder._id
+            ? {
+                ...order,
+                orderStatus: refreshedOrder.orderStatus,
+                updatedAt: refreshedOrder.updatedAt,
+                orderItems: refreshedOrder.orderItems,
+                productData: refreshedOrder.productData,
+              }
+            : order
+        )
+      );
     } catch {
-      setError(true);
+      setMutationError(
+        statusUpdated
+          ? "Order status was updated, but its details could not be refreshed. Please reload."
+          : "Order status could not be updated. Please try again."
+      );
     } finally {
       setUpdating(null);
     }
   };
 
+  const selectedProducts = selectedOrder?.productData ?? [];
+  const selectedOrderItems = selectedOrder?.orderItems ?? [];
+
   const renderItem = (item: OrderItem) => {
-    const product = selectedOrder?.productData.find((entry: Product) => entry._id === item.productId);
+    const product = selectedProducts.find((entry: Product) => entry._id === item.productId);
     const image = product?.productImages?.[0];
 
     return (
@@ -111,19 +175,20 @@ export default function OrderTrackPage({ onLoginOpen }: { onLoginOpen: () => voi
           <label htmlFor="order-select">Your orders</label>
           <select id="order-select" value={selectedId} onChange={(event) => setSelectedId(event.target.value)}>
             <option value="">Select an order</option>
-            {orders.map((order) => <option key={order._id} value={order._id}>{order._id} · {formatDate(order.createdAt)} · {order.orderStatus}</option>)}
+            {orders.map((order) => <option key={order._id} value={order._id}>{formatOrderLabel(order)}</option>)}
           </select>
         </section>
         {detailLoading ? <p className="ot-state">Loading order details...</p> : null}
         {error && selectedId ? <p className="ot-state">Order details could not be loaded. <button onClick={loadSelectedOrder}>Retry</button></p> : null}
         {selectedOrder && !detailLoading ? (
           <section className="ot-result">
-            <header className="ot-result-header"><div><p>Current status</p><strong className={`ot-status ot-status-${selectedOrder.orderStatus.toLowerCase()}`}>{selectedOrder.orderStatus}</strong></div><div><p>Ordered</p><strong>{formatDate(selectedOrder.createdAt)}</strong></div><div><p>Last updated</p><strong>{formatDate(selectedOrder.updatedAt)}</strong></div></header>
+            <header className="ot-result-header"><div><p>Current status</p><strong className={`ot-status ot-status-${selectedOrder.orderStatus.toLowerCase()}`}>{formatStatus(selectedOrder.orderStatus)}</strong></div><div><p>Ordered</p><strong>{formatDate(selectedOrder.createdAt)}</strong></div><div><p>Last updated</p><strong>{formatDate(selectedOrder.updatedAt)}</strong></div></header>
             <div className="ot-detail-grid">
-              <section><h2>Order Items</h2><ul>{selectedOrder.orderItems.map(renderItem)}</ul></section>
+              <section><h2>Order Items</h2><ul>{selectedOrderItems.map(renderItem)}</ul></section>
               <aside><h2>Order Summary</h2><dl><div><dt>Products</dt><dd>{formatMoney(selectedOrder.orderTotal - selectedOrder.orderDelivery)}</dd></div><div><dt>Delivery</dt><dd>{formatMoney(selectedOrder.orderDelivery)}</dd></div><div><dt>Total</dt><dd>{formatMoney(selectedOrder.orderTotal)}</dd></div></dl><h2>Shipping Address</h2><address>{selectedOrder.shippingAddress.street}<br />{selectedOrder.shippingAddress.city}, {selectedOrder.shippingAddress.state} {selectedOrder.shippingAddress.zip}<br />{selectedOrder.shippingAddress.country}</address></aside>
             </div>
-            {selectedOrder.orderStatus === OrderStatus.PENDING || selectedOrder.orderStatus === OrderStatus.PROCESS ? <div className="ot-actions">{selectedOrder.orderStatus === OrderStatus.PENDING ? <button disabled={Boolean(updating)} onClick={() => updateStatus(OrderStatus.PROCESS)}>Continue Order</button> : null}<button className="ot-cancel" disabled={Boolean(updating)} onClick={() => updateStatus(OrderStatus.DELETE)}>{updating === OrderStatus.DELETE ? "Cancelling..." : "Cancel Order"}</button></div> : null}
+            {mutationError ? <p className="ot-mutation-error" role="alert">{mutationError}</p> : null}
+            {selectedOrder.orderStatus === OrderStatus.PENDING || selectedOrder.orderStatus === OrderStatus.PROCESS ? <div className="ot-actions">{selectedOrder.orderStatus === OrderStatus.PENDING ? <button disabled={Boolean(updating)} onClick={() => updateStatus(OrderStatus.PROCESS)}>{updating === OrderStatus.PROCESS ? "Continuing..." : "Continue Order"}</button> : null}<button className="ot-cancel" disabled={Boolean(updating)} onClick={() => updateStatus(OrderStatus.DELETE)}>{updating === OrderStatus.DELETE ? "Cancelling..." : "Cancel Order"}</button></div> : null}
           </section>
         ) : null}
       </>
