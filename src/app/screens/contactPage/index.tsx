@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import "../../../css/contact.css";
 import { ContactMessageInput } from "../../../lib/types/contact";
 import { sweetErrorHandling, sweetTopSuccessAlert } from "../../../lib/sweetAlert";
@@ -30,7 +29,7 @@ export default function ContactPage() {
     event.preventDefault();
 
     if (!agreedToTerms) {
-      setFormError("Please agree to the terms before sending your message.");
+      setFormError("Please confirm before sending your message.");
       return;
     }
 
@@ -122,7 +121,7 @@ export default function ContactPage() {
                   checked={agreedToTerms}
                   onChange={(event) => setAgreedToTerms(event.target.checked)}
                 />
-                <span>I agree with the <Link to="/help">terms &amp; conditions</Link></span>
+                <span>I confirm this message is ready to send to Venturo.</span>
               </label>
 
               <p className="contact-form-error" role="alert" aria-live="polite">

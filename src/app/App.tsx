@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Box } from "@mui/material";
-import { Link, Route, Router, Switch, useLocation } from "react-router-dom";
+import { Route, Switch, useLocation } from "react-router-dom";
 import HomePage from "./screens/homePage";
 import ProductsPage from "./screens/productsPage/index";
 import OtherNavbar from "./components/headers/OtherNavbar";
 import HomeNavbar from "./components/headers/HomeNavbar";
 import Footer from "./components/footer";
-import HelpPage from "./screens/helpPage";
 import ContactPage from "./screens/contactPage";
 import FaqPage from "./screens/faqPage";
 import WishlistPage from "./screens/wishlistPage";
@@ -20,10 +19,8 @@ import { sweetErrorHandling, sweetTopSuccessAlert } from "../lib/sweetAlert";
 import { Messages } from "../lib/config";
 import MemberService from "./services/MemberService";
 import { useGlobals } from "./hooks/useGlobals";
-import "../css/app.css";
 import "../css/navbar.css";
 import "../css/footer.css";
-import { T } from "../lib/types/common";
 
 function App() {
   const location = useLocation(); // returns Object
@@ -101,9 +98,6 @@ function App() {
           </Route>
           <Route path="/checkout">
             <CheckoutPage cartItems={cartItems} onDeleteAll={onDeleteAll} />
-          </Route>
-          <Route path="/help">
-            <HelpPage />
           </Route>
           <Route path="/contact">
             <ContactPage />
