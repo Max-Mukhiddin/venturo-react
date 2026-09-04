@@ -126,11 +126,13 @@ export default function CheckoutPage(props: CheckoutPageProps) {
                 const lineTotal = item.price * item.quantity;
                 return (
                   <article key={item._id} className={"checkout-item"}>
-                    <img
-                      src={imagePath}
-                      alt={item.name}
-                      className={"checkout-item-img"}
-                    />
+                    <div className="checkout-item-image-frame">
+                      <img
+                        src={imagePath}
+                        alt={item.name}
+                        className={"checkout-item-img"}
+                      />
+                    </div>
                     <div className="checkout-item-info">
                       <span className={"checkout-item-name"}>{item.name}</span>
                       <span className={"checkout-item-qty"}>{item.quantity} × ${item.price.toFixed(2)}</span>

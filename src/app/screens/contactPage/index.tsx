@@ -154,8 +154,8 @@ export default function ContactPage() {
             </div>
           </aside>
 
-          <aside className="contact-brand-panel" aria-label="Venturo Adventure Gear Co.">
-            <img src="/icons/venturo-badge.svg" alt="Venturo Adventure Gear Co." />
+          <aside className="contact-brand-panel" aria-label="Decorative outdoor trail image">
+            <img src="/img/contact-trail.jpg" alt="" />
           </aside>
         </section>
 
