@@ -589,15 +589,6 @@
   font: inherit;
 }
 
-.products-page .sl-search-button {
-  border: 1px solid #22251f;
-  padding: 0.75rem 1rem;
-  color: #fff;
-  background: #22251f;
-  font: inherit;
-  cursor: pointer;
-}
-
 .products-page .sl-category-controls {
   display: flex;
   flex-wrap: wrap;
@@ -865,11 +856,15 @@
 
 .products-page .sl-search-label,
 .products-page .sl-filter-heading { color: #707262; }
-.products-page .sl-search-row { align-items: stretch; }
-.products-page .sl-search-input { min-height: 44px; box-sizing: border-box; border-color: #aeb192; padding: 0 14px; }
-.products-page .sl-search-button { min-width: 0; min-height: 44px; flex: 0 0 auto; border-color: #707262; border-radius: 10px; padding: 0 12px; background: #707262; color: #fff; font-family: "Montserrat", "Poppins", Arial, sans-serif; font-size: 14px; font-weight: 500; line-height: 20px; transition: background 180ms ease, border-color 180ms ease; }
-.products-page .sl-search-button:hover { border-color: #5d5f51; background: #5d5f51; }
-.products-page .sl-search-button:focus-visible { outline: 3px solid #707262; outline-offset: 3px; }
+.products-page .sl-search-row { min-height: 56px; align-items: stretch; overflow: hidden; border: 1px solid #aeb192; border-radius: 20px; background: #fff; transition: border-color 180ms ease, box-shadow 180ms ease; }
+.products-page .sl-search-row:hover { border-color: #707262; }
+.products-page .sl-search-row:focus-within { border-color: #707262; box-shadow: 0 0 0 2px rgba(112, 114, 98, 0.22); }
+.products-page .sl-search-input { min-height: 0; box-sizing: border-box; border: 0; padding: 0 18px; background: transparent; }
+.products-page .sl-search-input:focus-visible { outline: 0; }
+.products-page .sl-search-button { display: grid; width: 56px; min-width: 56px; padding: 0; place-items: center; border: 0; border-radius: 0; background: transparent; cursor: pointer; }
+.products-page .sl-search-button img { width: 25px; height: 25px; opacity: 0.78; }
+.products-page .sl-search-button:hover img { opacity: 1; }
+.products-page .sl-search-button:focus-visible { outline: 2px solid #707262; outline-offset: -5px; }
 .products-page .sl-filter-chip { border-color: #aeb192; color: #707262; background: #f0f0f0; }
 .products-page .sl-filter-chip[aria-pressed="true"] { border-color: #707262; background: #707262; }
 

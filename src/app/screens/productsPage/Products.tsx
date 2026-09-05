@@ -223,7 +223,9 @@ export default function Products({ onAdd }: ProductsProps) {
                 onChange={(event) => setSearchText(event.target.value)}
                 placeholder="Search products"
               />
-              <button className="sl-search-button" type="submit">Search</button>
+              <button className="sl-search-button" type="submit" aria-label="Submit product search">
+                <img src="/icons/hm-search.svg" alt="" />
+              </button>
             </div>
           </form>
 
