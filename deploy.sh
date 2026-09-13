@@ -2,9 +2,9 @@
 
 #### PRODUCTION
 
-# git reset --hard
-# git checkout main
-# git pull origin main
+git reset --hard
+git checkout main
+git pull origin main
 
 
 npm i yarn -g 
