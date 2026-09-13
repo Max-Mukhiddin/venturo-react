@@ -17,14 +17,6 @@ import { serverApi } from "../../../lib/config";
  * The "20% Off" badge has no backend counterpart (no discount field on
  * `Product`) and is dropped, same resolution as every prior card.
  *
- * The six "+" marker icons and the vertical tick decoration are purely
- * decorative in the source (no href, no hover state) and are hidden below
- * 900px, matching the confirmed mobile frame, which has neither them nor
- * the "Highlights" heading at all — so the background photo (real,
- * sourced from Unsplash — credit + license in docs/ai/COMPLETED_TASKS.md,
- * backend repo) is the only overlay-legibility concern on desktop; the
- * product card already has its own solid #f5f5f5 fill.
- *
  * The card itself was missing its product photo entirely (name/desc/
  * button only) — a real gap confirmed against the actual HikMali
  * reference theme, where this card shows the product image the same way
@@ -35,19 +27,6 @@ import { serverApi } from "../../../lib/config";
  * overlay those two grid sections use (this is a single hero card, not
  * a repeating row, and the reference shows the caption always visible).
  */
-// top values are percentages of the 800px-tall 1920 reference frame
-// (168/800, 185/800, ...), not fixed px — .highlights is fluid-height
-// (aspect-ratio: 2.4), so a fixed px top clips at narrower desktop
-// widths. See the matching comment on .hl-heading/.hl-tick in home.css.
-const CROSS_POSITIONS = [
-  { left: "calc(50% + 36px)", top: "21%" },
-  { left: "calc(25% + 173px)", top: "23.125%" },
-  { left: "calc(25% + 151px)", top: "48.75%" },
-  { left: "calc(75% - 51px)", top: "54.25%" },
-  { left: "calc(75% - 35px)", top: "88.5%" },
-  { left: "calc(41.67% + 77px)", top: "75.5%" },
-];
-
 interface HighlightsProps {
   onAdd: (item: CartItem) => void;
 }
@@ -83,15 +62,6 @@ export default function Highlights(props: HighlightsProps) {
       />
 
       <span className={"hl-heading"}>Highlights</span>
-      <span className={"hl-tick"} />
-
-      {CROSS_POSITIONS.map((pos, index) => (
-        <span
-          key={index}
-          className={"hl-cross"}
-          style={{ left: pos.left, top: pos.top }}
-        />
-      ))}
 
       <Container className={"hl-inner"}>
         {product ? (

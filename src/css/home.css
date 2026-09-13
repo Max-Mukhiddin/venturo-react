@@ -678,10 +678,9 @@
    only mobile node sharing the background asset name `AdobeStock_505354052`).
    Background is 2.4:1 at both the desktop (1920x800) and mobile
    (757.1x315.5) anchors, so one aspect-ratio rule covers every width.
-   The heading, tick decoration and six decorative "+" markers exist only
-   in the desktop frame — confirmed absent (not omitted) in the mobile
-   node, so they're hidden below the structural breakpoint rather than
-   scaled down.
+   The heading exists only in the desktop frame — confirmed absent (not
+   omitted) in the mobile node, so it is hidden below the structural
+   breakpoint rather than scaled down.
    ========================================================================== */
 
 /* min-height guarantees the section is never shorter than the single
@@ -689,7 +688,7 @@
    390x554 block (no second anchor to scale it against, held constant,
    same precedent as everywhere else this rebuild), so if the section
    were allowed to shrink below 800px, the percentage-positioned heading/
-   tick/cross below would move up into the card's own fixed footprint
+   heading below would move up into the card's own fixed footprint
    instead of clearing it (confirmed live: at 1440 without this, the
    heading landed inside the card's 0-554px span and was hidden behind
    its opaque background). Reset for the mobile structural breakpoint,
@@ -716,11 +715,10 @@
    frame (595/800, 708/800, ...) rather than fixed px, since .highlights
    is fluid-height (aspect-ratio: 2.4) — a fixed px top clips almost
    entirely at narrower desktop widths (confirmed live: the heading was
-   reduced to a ~5px sliver at 1440, and .hl-tick's fixed height, below,
-   overflowed the section even at the 1920 anchor itself). Percentage
+   reduced to a ~5px sliver at 1440). Percentage
    resolves correctly against aspect-ratio's computed height, and there
    is no second real anchor to clamp() between — these elements simply
-   don't exist below the 900px structural breakpoint (display: none),
+   doesn't exist below the 900px structural breakpoint (display: none),
    so a straight proportional scale is the correct fix, not a two-point
    interpolation. */
 .homepage .highlights .hl-heading {
@@ -732,55 +730,6 @@
   line-height: 32px;
   font-weight: 600;
   color: #ffffff;
-}
-
-/* Replicates the real Figma structure exactly: a 112x12 box rotated 90deg
-   (not a naturally-tall 12x112 bar, which was the bug — that approximation
-   used the wrong reference point and overflowed the section even at the
-   1920 anchor, since Figma's y=708 is the PRE-rotation top-left, not the
-   final visual top). Rotating the correctly-fluid-positioned box in CSS
-   reproduces the identical visual result without hand-computing the
-   rotated bounding box's offset. */
-.homepage .highlights .hl-tick {
-  position: absolute;
-  left: var(--vt-gutter);
-  top: 88.5%;
-  width: 112px;
-  height: 12px;
-  transform: rotate(90deg);
-  transform-origin: center;
-  background: rgba(255, 255, 255, 0.6);
-}
-
-/* Decorative markers only — no href, no hover state in the source. */
-.homepage .highlights .hl-cross {
-  position: absolute;
-  width: 44px;
-  height: 44px;
-  pointer-events: none;
-}
-
-.homepage .highlights .hl-cross::before,
-.homepage .highlights .hl-cross::after {
-  content: "";
-  position: absolute;
-  background: rgba(255, 255, 255, 0.7);
-}
-
-.homepage .highlights .hl-cross::before {
-  left: 50%;
-  top: 0;
-  width: 2px;
-  height: 100%;
-  transform: translateX(-50%);
-}
-
-.homepage .highlights .hl-cross::after {
-  top: 50%;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  transform: translateY(-50%);
 }
 
 .homepage .highlights .hl-inner {
@@ -869,8 +818,8 @@
 
 /* Structural breakpoint — keep in sync with --vt-bp-structural.
    Confirmed mobile frame (7:148): background stacks on top full-width,
-   card sits as a normal block below it, heading/tick/crosses don't exist
-   at all — not scaled down, genuinely absent. */
+   card sits as a normal block below it, and the heading doesn't exist at
+   all — not scaled down, genuinely absent. */
 @media (max-width: 900px) {
   .homepage .highlights {
     aspect-ratio: auto;
@@ -885,9 +834,7 @@
     aspect-ratio: 2.4;
   }
 
-  .homepage .highlights .hl-heading,
-  .homepage .highlights .hl-tick,
-  .homepage .highlights .hl-cross {
+  .homepage .highlights .hl-heading {
     display: none;
   }
 
