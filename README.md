@@ -1,46 +1,97 @@
-# Getting Started with Create React App
+# Venturo Web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) TS template.
+Frontend for **Venturo**, a full-stack outdoor e-commerce platform built with React and TypeScript.
 
-## Available Scripts
+The application provides the customer-facing commerce experience and connects to the Venturo backend for authentication, catalog data, checkout-oriented workflows, real-time functionality, and administration.
 
-In the project directory, you can run:
+> Live product: https://venturo.network/  
+> Backend repository: https://github.com/Max-Mukhiddin/venturo  
+> Portfolio: https://max-mukhiddin.github.io/homepage/
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **React 18**
+- **TypeScript**
+- **Redux Toolkit** + React Redux
+- **Material UI**
+- **Styled Components**
+- Axios
+- React Router
+- Socket.IO Client
+- Swiper
+- SweetAlert2
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Product Areas
 
-### `npm test`
+### Storefront
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Product discovery
+- Product detail flows
+- Responsive commerce UI
+- Cart and checkout-oriented experiences
 
-### `npm run build`
+### State Management
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Redux Toolkit is used for application state and async data flows across the storefront.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Real-Time Integration
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Socket.IO client support enables real-time communication with the backend where required.
 
-### `npm run eject`
+### UI System
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The frontend combines Material UI and Styled Components for reusable layouts, controls, and page-level styling.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Architecture
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```text
+React + TypeScript
+       |
+       v
+Redux Toolkit / Axios
+       |
+       v
+Express API + Socket.IO
+       |
+       v
+MongoDB
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## Local Development
 
-## Learn More
+### Install
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```bash
+npm install
+```
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Run
+
+```bash
+npm start
+```
+
+### Build
+
+```bash
+npm run build
+```
+
+### Serve production build
+
+```bash
+npm run start:prod
+```
+
+## Project Background
+
+Venturo was developed after learning full-stack application structure through the Burak course project. The earlier project served as a learning base; Venturo applies those concepts to a separate commerce product with its own design, user flows, functionality, and production deployment.
+
+## Author
+
+**Mukhiddin “Max” Solijonov**  
+Full-Stack · DevOps · AI Engineer  
+South Korea
+
+- Portfolio: https://max-mukhiddin.github.io/homepage/
+- GitHub: https://github.com/Max-Mukhiddin
